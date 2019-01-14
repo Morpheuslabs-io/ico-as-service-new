@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Airdrop - Morpheus Labs</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <!-- Bootstrap css-->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- bootstrap javascript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <link href="stylesheets/app.css" rel="stylesheet">
+
+    <style>
+        #options {
+            height: 40px;
+            width: 90%;
+            font-size: 1.2em;
+        }
+
+        #selecttag {
+            font-size: 1.7em;
+        }
+
+        #submit {
+            width: 20%;
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <h1>Simple Airdrop</h1>
+            <h2>Mopheus Labs</h2>
+            <br>
+            <form id="airdrop-form" name="airdrop_form">
+                <label for="csv-data">List address and amount line by line</label>
+                <div id="csv-data" class="form-control">0x833B4A87E3108429CbAdc06d3f4020e455818Af2,49000000000000000000
+0xe8c19Eb95149638314e98d2C830411D777A8ebA8,49000000000000000000
+0xD82d2D14150489d76f21b15e5C0aE3Bfb5228dfc,49000000000000000000
+0x4A87fD8bAd897bc087ca75Bbb77c02e2C1f49a9f,49000000000000000000
+0xE3dd637572f0E9c3D6CE9ced96B88B0831541b64,49000000000000000000
+                </div>
+                <div style="padding-left: 3%;margin-bottom: 20px;margin-top: 5px;">
+                    For examples,<br/>
+                    <code>0xe8c19Eb95149638314e98d2C830411D777A8ebA8,49000000000000000000</code><br/>
+                    <code>0xD82d2D14150489d76f21b15e5C0aE3Bfb5228dfc,49000000000000000000</code><br/>
+                    <code>0x4A87fD8bAd897bc087ca75Bbb77c02e2C1f49a9f,49000000000000000000</code><br/>
+                    <code>.......</code>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="batch-size">Batch Size</label>
+                        <input type="number" placeholder="Batch Size" class="form-control" id="batch-size"
+                               name="batch_size" value="25" required>
+                        <code style="padding-left: 3%;margin-bottom: 20px;margin-top: 5px;">
+                            Batch Size should be equal or less than the numbers of addresses.
+                        </code>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="gas-price">Gas Price</label>
+                        <input type="number" placeholder="Gas Price" class="form-control" id="gas-price"
+                               name="gas_price" value="40000000000" required>
+                        <code style="padding-left: 3%;margin-bottom: 20px;margin-top: 5px;">
+                            Gas price should be set properly. If this is small, transaction will be failed.
+                        </code>
+                    </div>
+                </div>
+                <button type="submit" id="submit" class="btn btn-primary">AIRDROP</button>
+            </form>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
+            <label for="console">Status</label>
+            <textarea id="console" class="form-control" readonly rows="7" style="cursor: initial;">
+            </textarea>
+        </div>
+    </div>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.3.3/ace.js"></script>
+<script src="javascript/script.js"></script>
+</body>
+</html>

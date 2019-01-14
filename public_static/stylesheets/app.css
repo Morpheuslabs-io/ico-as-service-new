@@ -1,0 +1,56 @@
+body {
+    font-family: "Open Sans", sans-serif;
+    padding-top: 30px;
+}
+
+input {
+    width: 500px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+button {
+    font-size: 16px;
+    padding: 5px;
+}
+
+h1, h2 {
+    vertical-align: middle;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+h2 {
+    color: #AAA;
+    font-size: 32px;
+}
+
+h3 {
+    font-weight: normal;
+    color: #AAA;
+    font-size: 24px;
+}
+
+.black {
+    color: black;
+}
+
+#balance {
+    color: black;
+}
+
+.hint {
+    color: #666;
+    text-align: center;
+
+}
+
+button#send {
+    display: block;
+    margin: 0 auto;
+
+}
+#csv-data{
+    height: 300px;
+}
