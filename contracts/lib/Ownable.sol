@@ -11,6 +11,16 @@ pragma solidity ^0.4.19;
 contract Ownable {
   address public owner;
 
+  bool public isParamSet = false;
+
+  /**
+   * @dev Throws if called by any account other than the owner.
+   */
+  modifier paramNotSet() {
+    require(isParamSet == false);
+    _;
+  }
+
   event OwnershipRenounced(address indexed previousOwner);
   event OwnershipTransferred(
     address indexed previousOwner,

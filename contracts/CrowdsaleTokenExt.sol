@@ -28,8 +28,6 @@ contract CrowdsaleTokenExt is ReleasableToken, MintableTokenExt {
     /* Minimum ammount of tokens every buyer can buy. */
     uint public minCap;
 
-    bool public isParamSet = false;
-
     constructor() {
 
     }
@@ -43,10 +41,7 @@ contract CrowdsaleTokenExt is ReleasableToken, MintableTokenExt {
      * @param _decimals Number of decimal places
      * @param _mintable Are new tokens created over the crowdsale or do we distribute only the initial supply? Note that when the token becomes transferable the minting always ends.
      */
-    function setParam(string _name, string _symbol, uint _initialSupply, uint _decimals, bool _mintable, uint _globalMinCap) public onlyOwner {
-
-        // Allow to set params only once
-        require (isParamSet == false);
+    function setParam(string _name, string _symbol, uint _initialSupply, uint _decimals, bool _mintable, uint _globalMinCap) public onlyOwner paramNotSet {
 
         // No more new supply allowed after the token creation
         if (!_mintable) {
@@ -62,6 +57,8 @@ contract CrowdsaleTokenExt is ReleasableToken, MintableTokenExt {
         totalSupply = _initialSupply;
         decimals = _decimals;
         minCap = _globalMinCap;
+
+        isParamSet = true;
 
         if (totalSupply > 0) {
             

@@ -29,9 +29,15 @@ contract FlatPricingExt is PricingStrategy, Ownable {
         tier = _tier;
     }
 
-    constructor(uint _oneTokenInWei) public {
+    constructor() public {
+        
+    }
+
+    function setParam(uint _oneTokenInWei) public onlyOwner paramNotSet {
         require(_oneTokenInWei > 0);
         oneTokenInWei = _oneTokenInWei;
+
+        isParamSet = true;
     }
 
     function updateRate(uint newOneTokenInWei) public onlyTier {

@@ -7,22 +7,33 @@ import "./lib/FinalizeAgent.sol";
 import "./lib/SafeMathLibExt.sol";
 import "./CrowdsaleTokenExt.sol";
 import "./MintedTokenCappedCrowdsaleExt.sol";
+import "./lib/Ownable.sol";
 
 
 /**
  * The default behavior for the crowdsale end.
  * Unlock tokens.
  */
-contract ReservedTokensFinalizeAgent is FinalizeAgent {
+contract ReservedTokensFinalizeAgent is FinalizeAgent, Ownable {
     using SafeMathLibExt for uint;
     CrowdsaleTokenExt public token;
     CrowdsaleExt public crowdsale;
 
     uint public distributedReservedTokensDestinationsLen = 0;
 
-    constructor(CrowdsaleTokenExt _token, CrowdsaleExt _crowdsale) public {
+    constructor() public {
+        
+    }
+
+    function setParam(CrowdsaleTokenExt _token, CrowdsaleExt _crowdsale) public onlyOwner paramNotSet {
+
+        require(_token != address(0));
+        require(_crowdsale != address(0));
+
         token = _token;
         crowdsale = _crowdsale;
+
+        isParamSet = true;
     }
 
     /** Check that we can release the token */
