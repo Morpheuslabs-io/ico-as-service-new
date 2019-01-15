@@ -15,6 +15,7 @@ Global.globalize = function () {
   console.log("Environment: " + env);
   let rawdata;
   let settingData;
+  
   if (env === "rinkeby") {
     rawdata = fs.readFileSync('./setting/testnet.json');  
     settingData = JSON.parse(rawdata);
@@ -23,14 +24,19 @@ Global.globalize = function () {
     rawdata = fs.readFileSync('./setting/mainnet.json');  
     settingData = JSON.parse(rawdata);
   }
+
   global.OWNER_ADDR = settingData.OWNER_ADDR;
   global.privKeyStrHexOwner = getPrivKey(settingData.OWNER_ADDR, settingData.OWNER_KEY_FILE_FOLDER, settingData.OWNER_PASSPHRASE);
-
+  global.GAS_LIMIT = settingData.GAS_LIMIT;
+  global.GAS_PRICE = settingData.GAS_PRICE;
 }
 
 Global.initContract = function (artifacts) {
   global.SafeMathLibExtContract = artifacts.require("SafeMathLibExt");
   global.CrowdsaleTokenExtContract = artifacts.require("CrowdsaleTokenExt");
+  global.FlatPricingExtContract = artifacts.require("FlatPricingExt");
+  global.MintedTokenCappedCrowdsaleExtContract = artifacts.require("MintedTokenCappedCrowdsaleExt");
+  global.ReservedTokensFinalizeAgentContract = artifacts.require("ReservedTokensFinalizeAgent");
 
   console.log('Global.initContract - done');
 }

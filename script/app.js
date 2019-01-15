@@ -5,7 +5,6 @@ const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
 const fs = require("fs");
 
-const utils = require('./utils')
 const controller= require('./controller');
 
 const global = require('./global');
@@ -22,9 +21,9 @@ app.listen(port, () => {
     console.log("Express Listening at http://localhost:" + port);
 });
 
-app.post('/test/icotoken', async function (req, res) {
+app.post('/test/deploycontract', async function (req, res) {
     try {
-        await controller.createIcoToken(req, res);
+        await controller.deploycontract(req, res);
     }
     catch (err) {
         console.log(err);
