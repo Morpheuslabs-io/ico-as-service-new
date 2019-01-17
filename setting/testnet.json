@@ -3,5 +3,6 @@
   "OWNER_PASSPHRASE": "123456789",
   "OWNER_KEY_FILE_FOLDER": "./keyfile/testnet",
   "GAS_PRICE":  40010000000,
-  "GAS_LIMIT":  7000000
+  "GAS_LIMIT":  7000000,
+  "DB_FILE_PATH": "../database/sqlite.db"
 }

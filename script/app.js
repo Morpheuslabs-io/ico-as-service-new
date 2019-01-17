@@ -9,6 +9,7 @@ const controller= require('./controller');
 
 const global = require('./global');
 global.initContract(artifacts);
+global.initDb();
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,6 +25,16 @@ app.listen(port, () => {
 app.post('/test/deploycontract', async function (req, res) {
     try {
         await controller.deploycontract(req, res);
+    }
+    catch (err) {
+        console.log(err);
+    }
+    
+});
+
+app.post('/test/deploycontractminted', async function (req, res) {
+    try {
+        await controller.deploycontractminted(req, res);
     }
     catch (err) {
         console.log(err);
