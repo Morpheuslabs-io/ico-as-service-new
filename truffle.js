@@ -4,7 +4,8 @@ var env = process.env.NODE_ENV;
 var privKeyArr = [];
 
 if (env) {
-    require('./script/global').globalize();
+    var global = require('./script/global')
+    global.globalize();
     privKeyArr.push(global.privKeyStrHexOwner);
 }
 

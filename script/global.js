@@ -2,7 +2,7 @@ const keythereum = require("keythereum");
 const fs = require('fs');
 const SqliteHandler = require("./sqlite.js")
 
-var Global = function () { }
+var global = { }
 
 getPrivKey = function (addr, keyFileFolder, passphrase) {
   let keyObject = keythereum.importFromFile(addr, keyFileFolder);
@@ -11,7 +11,7 @@ getPrivKey = function (addr, keyFileFolder, passphrase) {
   return privKeyStrHex;
 }
 
-Global.globalize = function () {
+global.globalize = function () {
   var env = process.env.NODE_ENV;
   console.log("Environment: " + env);
   let rawdata;
@@ -36,7 +36,7 @@ Global.globalize = function () {
   global.PREDEPLOY_MAX = settingData.PREDEPLOY_MAX;
 }
 
-Global.initContract = function (artifacts) {
+global.initContract = function (artifacts) {
   global.SafeMathLibExtContract = artifacts.require("SafeMathLibExt");
   global.CrowdsaleTokenExtContract = artifacts.require("CrowdsaleTokenExt");
   global.FlatPricingExtContract = artifacts.require("FlatPricingExt");
@@ -50,12 +50,13 @@ Global.initContract = function (artifacts) {
   global.CONTRACT.FLATPRICING = 'FlatPricingExt';
   global.CONTRACT.FINALIZEDAGENT = 'ReservedTokensFinalizeAgent';
 
-  console.log('Global.initContract - done');
+  console.log('global.initContract done');
 }
 
-Global.initDb = async function() {
+global.initDb = async function() {
   await SqliteHandler.loadDB(global.DB_FILE_PATH);
   global.SqliteHandler = SqliteHandler;
+  global.INIT_DB = true;
 
   let testData = {};
   testData[global.CONTRACT.TOKEN] = '0x7f072d2f783146f7acab4ac5d5f04aa1f70969e3';
@@ -66,4 +67,4 @@ Global.initDb = async function() {
   global.testData = testData;
 }
 
-module.exports = Global;
+module.exports = global;

@@ -1,7 +1,7 @@
 const utils = require('./utils')
 const dateFormat = require('dateformat');
 
-exports.deploycontracts = async (currGasPrice) => {
+exports.deploycontracts = async (currGasPrice, global) => {
 
   // Only for test
   // await global.SqliteHandler.push(JSON.stringify(global.testData));

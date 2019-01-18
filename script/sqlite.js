@@ -5,6 +5,7 @@ var db = null;
 var SqliteHandler = {
   async loadDB(dbFilePath) {
     try {
+      console.log('loadDB - path:', dbFilePath);
       db = new sqlite3.Database(dbFilePath);
       await db.runAsync("CREATE TABLE IF NOT EXISTS address (id INTEGER PRIMARY KEY AUTOINCREMENT, data TEXT)");
       console.log('loadDB OK');
@@ -42,7 +43,6 @@ var SqliteHandler = {
     return addressListStr;
   },
   async predeployAmount() {
-
     let result = await db.allAsync("SELECT count(*) AS rows FROM address");
     let cnt = result[0] ? result[0].rows : 0;
     console.log('predeployAmount: ', cnt);
