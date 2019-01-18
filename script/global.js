@@ -32,6 +32,8 @@ Global.globalize = function () {
   global.GAS_PRICE = settingData.GAS_PRICE;
 
   global.DB_FILE_PATH = settingData.DB_FILE_PATH;
+  global.PREDEPLOY_INTERVAL = settingData.PREDEPLOY_INTERVAL;
+  global.PREDEPLOY_MAX = settingData.PREDEPLOY_MAX;
 }
 
 Global.initContract = function (artifacts) {

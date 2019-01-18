@@ -296,6 +296,3 @@ exports.deploycontract = async (req, res, next) => {
     await global.SqliteHandler.push(JSON.stringify(addressMap));
 }
 
-function dummy(param) {
-  
-}

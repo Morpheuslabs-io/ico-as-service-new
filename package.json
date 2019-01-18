@@ -22,6 +22,7 @@
     "mongodb": "^3.0.4",
     "mongoose": "^5.0.10",
     "mysql": "^2.15.0",
+    "node-cron": "^2.0.3",
     "nodemon": "^1.14.12",
     "path": "^0.12.7",
     "solc": "^0.4.15",
@@ -48,11 +49,10 @@
   },
   "scripts": {
     "build": "rm -rf build && truffle compile --all",
-    "deploy-rinkeby": "NODE_ENV=rinkeby truffle migrate --reset --network rinkeby",
-    "deploy-mainnet": "NODE_ENV=mainnet truffle migrate --reset --network mainnet",
-    "rinkeby": "NODE_ENV=rinkeby nodemon script/app.js --network rinkeby",
-    "mainnet": "NODE_ENV=mainnet nodemon script/app.js --network mainnet",
-    "dev": "lite-server"
+    "server-rinkeby": "NODE_ENV=rinkeby nodemon script/app.js --network rinkeby",
+    "server-mainnet": "NODE_ENV=mainnet nodemon script/app.js --network mainnet",
+    "cron-rinkeby": "NODE_ENV=rinkeby nodemon script/cronjob.js --network rinkeby",
+    "cron-mainnet": "NODE_ENV=mainnet nodemon script/cronjob.js --network mainnet"
   },
   "author": "",
   "license": "ISC",

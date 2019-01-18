@@ -18,9 +18,9 @@ var SqliteHandler = {
   },
   async push(addressListStr) {
 
-    console.log('push - addressList:', addressListStr);
     await db.runAsync("INSERT INTO address (data) VALUES (" + "'" + addressListStr + "')");
-    console.log('push OK');
+
+    console.log('push OK - addressList:', addressListStr);
   },
   async pop() {
     let addressListStr=null;
@@ -37,17 +37,27 @@ var SqliteHandler = {
 
     await db.runAsync(`DELETE FROM address WHERE ROWID=${rowId}`);
 
+    console.log('pop OK - addressList:', addressListStr);
+
     return addressListStr;
+  },
+  async predeployAmount() {
+
+    let result = await db.allAsync("SELECT count(*) AS rows FROM address");
+    let cnt = result[0] ? result[0].rows : 0;
+    console.log('predeployAmount: ', cnt);
+    return cnt;
   }
 }
 
-async function main() {
-  await SqliteHandler.loadDB('./database/sqlite.db');
-  await SqliteHandler.push('123456');
-  await SqliteHandler.push('789');
-  await SqliteHandler.pop();
-  await SqliteHandler.close();
-}
+// async function main() {
+//   await SqliteHandler.loadDB('./database/sqlite.db');
+//   await SqliteHandler.push('123456');
+//   await SqliteHandler.push('789');
+//   await SqliteHandler.pop();
+//   await SqliteHandler.predeployAmount();
+//   await SqliteHandler.close();
+// }
 
 // main();
 
