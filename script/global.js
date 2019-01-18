@@ -45,6 +45,7 @@ global.initContract = function (artifacts) {
 
   // Define enum for accessing the predeployed contracts
   global.CONTRACT = {};
+  global.CONTRACT.ADDRESS_MAP_CNT = 4;
   global.CONTRACT.TOKEN = 'CrowdsaleTokenExt';
   global.CONTRACT.CROWDSALE = 'MintedTokenCappedCrowdsaleExt';
   global.CONTRACT.FLATPRICING = 'FlatPricingExt';

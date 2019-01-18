@@ -36,7 +36,7 @@ Utils.checkCurrentGasPrice = async function () {
         gas = await Utils.getGasPriceETHC();
     }
     let currentGasPrice = gas * (10 ** 9); //wei
-    console.log('checkCurrentGasPrice - res:', currentGasPrice);
+    console.log('checkCurrentGasPrice:', currentGasPrice);
     return currentGasPrice;
 }
 
