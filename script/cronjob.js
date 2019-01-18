@@ -36,7 +36,7 @@ var jobId = crontab.scheduleJob("*/1 * * * *", async function(){
       return;
     }
 
-    await contract.deployContracts(currGasPrice, global);
+    await contract.deployContracts(currGasPrice, global, true);
 
     console.log('cron job pausing ...');
 
