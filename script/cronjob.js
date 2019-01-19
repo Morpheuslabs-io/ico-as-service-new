@@ -11,7 +11,7 @@ var isCronRunning = false;
 
 sleep.sleep(5);
 
-var jobId = crontab.scheduleJob("*/1 * * * *", async function(){
+var jobId = crontab.scheduleJob(global.PREDEPLOY_INTERVAL, async function(){
     
     if (isCronRunning) {
       // console.log('Cron job exits because previous cron job still running');
@@ -22,7 +22,7 @@ var jobId = crontab.scheduleJob("*/1 * * * *", async function(){
     console.log('cron job running ...');
     isCronRunning = true;
 
-    let predeployCnt = await global.SqliteHandler.predeployAmount();
+    let predeployCnt = await global.SqliteHandler.predeployed('address1');
     if (predeployCnt >= global.PREDEPLOY_MAX)
     {
       console.log('cron job - Already predeployed: ' + predeployCnt + ' sets');
@@ -32,11 +32,16 @@ var jobId = crontab.scheduleJob("*/1 * * * *", async function(){
     let currGasPrice = await utils.checkCurrentGasPrice();
     if (currGasPrice > global.PREDEPLOY_GAS_PRICE_MAX)
     {
-      console.log(`cron job - current gas price (${currGasPrice}) > maxGasPrice (${global.PREDEPLOY_GAS_PRICE_MAX})`);
+      console.log(`cron job - current gas price (${currGasPrice}) > maxGasPrice (${global.PREDEPLOY_GAS_PRICE_MAX}) - Not deploy contracts`);
       return;
     }
 
-    await contract.deployContracts(currGasPrice, global, true);
+    let gasOpt = {
+      gasPrice: currGasPrice,
+      gas: global.GAS_LIMIT
+    };
+
+    await contract.deployContracts(gasOpt, global, true);
 
     console.log('cron job pausing ...');
 

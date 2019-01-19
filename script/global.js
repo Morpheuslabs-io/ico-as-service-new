@@ -34,6 +34,7 @@ global.globalize = function () {
   global.DB_FILE_PATH = settingData.DB_FILE_PATH;
   global.PREDEPLOY_INTERVAL = settingData.PREDEPLOY_INTERVAL;
   global.PREDEPLOY_MAX = settingData.PREDEPLOY_MAX;
+  global.PREDEPLOY_MAX_MULTIPLES = settingData.PREDEPLOY_MAX_MULTIPLES;
 }
 
 global.initContract = function (artifacts) {

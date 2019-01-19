@@ -109,8 +109,8 @@ exports.deploycontract = async (req, res, next) => {
     console.log('/test/deploycontract');
 
     // Only for test
-    // await global.SqliteHandler.push(JSON.stringify(global.testData));
-    // let addressListStr = await global.SqliteHandler.pop();
+    // await global.SqliteHandler.pushAddress1(JSON.stringify(global.testData));
+    // let addressListStr = await global.SqliteHandler.popAddress1();
     // let jsonObj = JSON.parse(addressListStr);
     // console.log('token addr: ', jsonObj[global.CONTRACT.TOKEN]);
     // return;
@@ -293,6 +293,6 @@ exports.deploycontract = async (req, res, next) => {
     var duration = (endTime - startTime)/1000;
     console.log('\n Total duration: %ds', duration);
 
-    await global.SqliteHandler.push(JSON.stringify(addressMap));
+    await global.SqliteHandler.pushAddress1(JSON.stringify(addressMap));
 }
 

@@ -2,33 +2,8 @@ const utils = require('./utils')
 const dateFormat = require('dateformat');
 var sleep = require('sleep');
 
-exports.deployContracts = async (currGasPrice, global, storeDb) => {
-
-  // Only for test
-  // await global.SqliteHandler.push(JSON.stringify(global.testData));
-  // let addressListStr = await global.SqliteHandler.pop();
-  // let jsonObj = JSON.parse(addressListStr);
-  // console.log('token addr: ', jsonObj[global.CONTRACT.TOKEN]);
-  // return;
-
-  if (!currGasPrice || currGasPrice == 0) {
-    currGasPrice = await utils.checkCurrentGasPrice();
-    // In this case, increase current gasPrice by 10 times for faster deployment
-    currGasPrice *= 10;
-  }
-
-  let gasOpt = {
-    gasPrice: currGasPrice,
-    gas: global.GAS_LIMIT
-  };
-
-  var startTime = new Date();
-  var startDate = dateFormat(startTime, "yyyy-mm-dd h:MM:ss");
-  console.log("\n Started deployment of ICO wizard contracts" +
-    "\nTime: " + startDate);
-
-  let addressMap = {};
-
+// Deploy only once
+deploySafeMathLib = async (gasOpt, global) => {
   let SafeMathLibExtInst = null;
   let SafeMathLibExtInstAddr = null;
 
@@ -45,6 +20,11 @@ exports.deployContracts = async (currGasPrice, global, storeDb) => {
     console.log('SafeMathLibExt creation retry');
   }
 
+  return SafeMathLibExtInstAddr;
+}
+
+// Deploy only once
+deployCrowdsaleToken = async (gasOpt, global, SafeMathLibExtInstAddr) => {
   while (1) {
     try {
       await global.CrowdsaleTokenExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
@@ -66,7 +46,6 @@ exports.deployContracts = async (currGasPrice, global, storeDb) => {
       CrowdsaleTokenExtInstAddr = CrowdsaleTokenExtInst.address;
       console.log('CrowdsaleTokenExt creation OK - address:', CrowdsaleTokenExtInstAddr);
 
-      addressMap[global.CONTRACT.TOKEN] = CrowdsaleTokenExtInstAddr;
       break;
     } catch (err) {
       console.log('CrowdsaleTokenExt creation error: ', err);
@@ -75,36 +54,11 @@ exports.deployContracts = async (currGasPrice, global, storeDb) => {
     console.log('CrowdsaleTokenExt creation retry');
   }
 
-  while (1) {
-    try {
-      await global.FlatPricingExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
-      console.log('FlatPricingExtContract link with SafeMathLibExt - OK');
-      break;
-    } catch (err) {
-      console.log('FlatPricingExtContract link with SafeMathLibExt - error: ', err);
-    }
-    sleep.sleep(5);
-    console.log('FlatPricingExtContract link retry');
-  }
+  return CrowdsaleTokenExtInstAddr;
+}
 
-  let FlatPricingExtInst = null;
-  let FlatPricingExtInstAddr = null;
-
-  while (1) {
-    try {
-      FlatPricingExtInst = await global.FlatPricingExtContract.new(gasOpt);
-      FlatPricingExtInstAddr = FlatPricingExtInst.address;
-      console.log('FlatPricingExt creation OK - address:', FlatPricingExtInstAddr);
-
-      addressMap[global.CONTRACT.FLATPRICING] = FlatPricingExtInstAddr;
-      break;
-    } catch (err) {
-      console.log('FlatPricingExt creation error: ', err);
-    }
-    sleep.sleep(5);
-    console.log('FlatPricingExt creation retry');
-  }
-
+// Deploy multiple times
+deployCrowdsale = async (gasOpt, global, SafeMathLibExtInstAddr) => {
   while (1) {
     try {
       await global.MintedTokenCappedCrowdsaleExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
@@ -126,7 +80,6 @@ exports.deployContracts = async (currGasPrice, global, storeDb) => {
       MintedTokenCappedCrowdsaleExtInstAddr = MintedTokenCappedCrowdsaleExtInst.address;
       console.log('MintedTokenCappedCrowdsaleExtContract creation OK - address:', MintedTokenCappedCrowdsaleExtInstAddr);
 
-      addressMap[global.CONTRACT.CROWDSALE] = MintedTokenCappedCrowdsaleExtInstAddr;
       break;
     } catch (err) {
       console.log('MintedTokenCappedCrowdsaleExtContract creation error: ', err);
@@ -135,6 +88,45 @@ exports.deployContracts = async (currGasPrice, global, storeDb) => {
     console.log('MintedTokenCappedCrowdsaleExtContract creation retry');
   }
 
+  return MintedTokenCappedCrowdsaleExtInstAddr;
+}
+
+// Deploy multiple times
+deployFlatPricing = async (gasOpt, global, SafeMathLibExtInstAddr) => {
+  while (1) {
+    try {
+      await global.FlatPricingExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
+      console.log('FlatPricingExtContract link with SafeMathLibExt - OK');
+      break;
+    } catch (err) {
+      console.log('FlatPricingExtContract link with SafeMathLibExt - error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('FlatPricingExtContract link retry');
+  }
+
+  let FlatPricingExtInst = null;
+  let FlatPricingExtInstAddr = null;
+
+  while (1) {
+    try {
+      FlatPricingExtInst = await global.FlatPricingExtContract.new(gasOpt);
+      FlatPricingExtInstAddr = FlatPricingExtInst.address;
+      console.log('FlatPricingExt creation OK - address:', FlatPricingExtInstAddr);
+
+      break;
+    } catch (err) {
+      console.log('FlatPricingExt creation error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('FlatPricingExt creation retry');
+  }
+
+  return FlatPricingExtInstAddr;
+}
+
+// Deploy multiple times
+deployFinalizedAgent = async (gasOpt, global, SafeMathLibExtInstAddr) => {
   while (1) {
     try {
       await global.ReservedTokensFinalizeAgentContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
@@ -156,7 +148,6 @@ exports.deployContracts = async (currGasPrice, global, storeDb) => {
       ReservedTokensFinalizeAgentInstAddr = ReservedTokensFinalizeAgentInst.address;
       console.log('ReservedTokensFinalizeAgentContract creation OK - address:', ReservedTokensFinalizeAgentInstAddr);
 
-      addressMap[global.CONTRACT.FINALIZEDAGENT] = ReservedTokensFinalizeAgentInstAddr;
       break;
     } catch (err) {
       console.log('ReservedTokensFinalizeAgentContract creation error: ', err);
@@ -165,18 +156,59 @@ exports.deployContracts = async (currGasPrice, global, storeDb) => {
     console.log('ReservedTokensFinalizeAgentContract creation retry');
   }
 
-  while (1) {
-    try {
-      let inst = await global.ReservedTokensFinalizeAgentContract.at(ReservedTokensFinalizeAgentInstAddr);
-      await inst.setParam(CrowdsaleTokenExtInstAddr, MintedTokenCappedCrowdsaleExtInstAddr, gasOpt);
+  return ReservedTokensFinalizeAgentInstAddr;
 
-      console.log('ReservedTokensFinalizeAgentContract setParam OK');
-      break;
-    } catch (err) {
-      console.log('ReservedTokensFinalizeAgentContract setParam error: ', err);
-    }
-    sleep.sleep(5);
-    console.log('ReservedTokensFinalizeAgentContract setParam retry');
+  // while (1) {
+  //   try {
+  //     let inst = await global.ReservedTokensFinalizeAgentContract.at(ReservedTokensFinalizeAgentInstAddr);
+  //     await inst.setParam(CrowdsaleTokenExtInstAddr, MintedTokenCappedCrowdsaleExtInstAddr, gasOpt);
+
+  //     console.log('ReservedTokensFinalizeAgentContract setParam OK');
+  //     break;
+  //   } catch (err) {
+  //     console.log('ReservedTokensFinalizeAgentContract setParam error: ', err);
+  //   }
+  //   sleep.sleep(5);
+  //   console.log('ReservedTokensFinalizeAgentContract setParam retry');
+  // }
+}
+
+exports.deployContracts = async (gasOpt, global) => {
+
+  // Only for test
+  // await global.SqliteHandler.pushAddress1(JSON.stringify(global.testData));
+  // let addressListStr = await global.SqliteHandler.popAddress1();
+  // let jsonObj = JSON.parse(addressListStr);
+  // console.log('token addr: ', jsonObj[global.CONTRACT.TOKEN]);
+  // return;
+
+  var startTime = new Date();
+  var startDate = dateFormat(startTime, "yyyy-mm-dd h:MM:ss");
+  console.log("\n Started deployment of ICO wizard contracts" +
+    "\nTime: " + startDate);
+
+  let address1Map = {};
+  let address2Map = {};
+
+  let SafeMathLibExtInstAddr = await deploySafeMathLib(gasOpt, global);
+
+  let CrowdsaleTokenExtInstAddr = await deployCrowdsaleToken(gasOpt, global, SafeMathLibExtInstAddr);
+  address1Map[global.CONTRACT.TOKEN] = CrowdsaleTokenExtInstAddr;
+  
+  // Store into db (table "address1")
+  await global.SqliteHandler.push(JSON.stringify(address1Map), 'address1');
+
+  for (let i = 1; i <= global.PREDEPLOY_MAX_MULTIPLES; i++) {
+    let MintedTokenCappedCrowdsaleExtInstAddr = await deployCrowdsale(gasOpt, global, SafeMathLibExtInstAddr);
+    let FlatPricingExtInstAddr = await deployFlatPricing(gasOpt, global, SafeMathLibExtInstAddr);
+    let ReservedTokensFinalizeAgentInstAddr = await deployFinalizedAgent(gasOpt, global, SafeMathLibExtInstAddr);
+
+    address2Map[global.CONTRACT.CROWDSALE] = MintedTokenCappedCrowdsaleExtInstAddr;
+    address2Map[global.CONTRACT.FLATPRICING] = FlatPricingExtInstAddr;
+    address2Map[global.CONTRACT.FINALIZEDAGENT] = ReservedTokensFinalizeAgentInstAddr;
+
+    // Store into db (table "address2")
+    await global.SqliteHandler.push(JSON.stringify(address2Map), 'address2');
   }
 
   var endTime = new Date();
@@ -186,60 +218,62 @@ exports.deployContracts = async (currGasPrice, global, storeDb) => {
 
   var duration = ((endTime - startTime) / 1000) / 60;
   console.log('\n Total duration: %d minutes', duration);
-
-  // Store the predeployed set of contracts into sqlite db
-  let addressMapCnt = Object.keys(addressMap).length;
-  if (addressMapCnt == global.CONTRACT.ADDRESS_MAP_CNT) {
-    if (!storeDb) {
-      return addressMap;
-    }
-
-    try {
-      await global.SqliteHandler.push(JSON.stringify(addressMap));
-    } catch (err) {
-      console.log('Store addressMap into db error: ', err);
-    }
-  } else {
-    console.log('\n Error - Predeployed contracts not enough');
-  }
-
 }
 
-exports.getPredeployedContracts = async (global) => {
-  let addressMap = null;
-  try {
-    let cnt = await global.SqliteHandler.predeployAmount();
-    if (cnt == 0) {
-      console.log('No predeployed contract ---> start deployment now');
-      addressMap = await exports.deployContracts(null, global);
-      return addressMap;
-    }
-  } catch (err) {
-    console.log('SqliteHandler.predeployAmount - error: ', err);
+// exports.getPredeployedContracts = async (global) => {
+//   let addressMap = null;
+//   try {
+//     let cnt = await global.SqliteHandler.predeployed('address1');
+//     if (cnt == 0) {
+//       console.log('No predeployed contract ---> start deployment now');
+//       addressMap = await exports.deployContracts(null, global);
+//       return addressMap;
+//     }
+//   } catch (err) {
+//     console.log('SqliteHandler.predeployAmount - error: ', err);
+//   }
+
+//   try {
+//     let addressListStr = await global.SqliteHandler.popAddress1();
+//     addressMap = JSON.parse(addressListStr);
+//     return addressMap;
+//   } catch (err) {
+//     console.log('SqliteHandler.pop - error: ', err);
+//   }
+
+//   if (addressMap == null) {
+//     console.log('Cannot retrieve predeployed contract ---> start deployment now');
+//     addressMap = await exports.deployContracts(null, global);
+//     return addressMap;
+//   }
+// }
+
+exports.setParamForContracts = async (step2, step3, global) => {
+
+  console.log('setParamForContracts started');
+
+  let address1MapStr = await global.SqliteHandler.pop('address1');
+  if (!address1MapStr) {
+    let errMsg = 'Cannot get the predeployed contract';
+    console.log('setParamForContracts - error: ', errMsg);
+    return {error: errMsg};
   }
 
-  try {
-    let addressListStr = await global.SqliteHandler.pop();
-    addressMap = JSON.parse(addressListStr);
-    return addressMap;
-  } catch (err) {
-    console.log('SqliteHandler.pop - error: ', err);
+  let address2MapStr = await global.SqliteHandler.pop('address2');
+  if (!address2MapStr) {
+    let errMsg = 'Cannot get the predeployed contract';
+    console.log('setParamForContracts - error: ', errMsg);
+    return {error: errMsg};
   }
 
-  if (addressMap == null) {
-    console.log('Cannot retrieve predeployed contract ---> start deployment now');
-    addressMap = await exports.deployContracts(null, global);
-    return addressMap;
-  }
-}
+  let address1Map = JSON.parse(address1MapStr);
+  let address2Map = JSON.parse(address2MapStr);
 
-exports.setParamsForContracts = async (step2, step3, global) => {
-
-  let addressMap = await exports.getPredeployedContracts(global);
-  if (!addressMap) {
-    console.log('setParamsForContracts aborted');
-    return false;
-  }
+  let currGasPrice = await utils.checkCurrentGasPrice();
+  let gasOpt = {
+    gasPrice: currGasPrice,
+    gas: global.GAS_LIMIT
+  };
 
   const {
     name,
@@ -256,21 +290,28 @@ exports.setParamsForContracts = async (step2, step3, global) => {
     tiers
   } = step3;
 
+  // Accumulate initial supply
   let initSupply = 0;
   for (let i = 0; i < tiers.length; i++) {
     initSupply += parseFloat(tiers[i].supply);
   }
 
-  let crowdsaleTokenInstance = await crowdsaleTokenContract.new(name, ticker, initSupply, decimals, true, mincap, {
-    from: web3.eth.accounts[0],
-    gasPrice: gasPrice * 1000000000,
-    gas: 6000000
-  });
-  console.log(`CrowdsaleToken Contract Deployed: ${crowdsaleTokenInstance.address}`);
-  setDeploy({
-    ...this.props.deploy,
-    token: crowdsaleTokenInstance.address,
-  });
+  let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
+  let crowdsaleTokenInstance = null;
+
+  while (1) {
+    try {
+      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
+      await crowdsaleTokenInstance.setParam(name, ticker, initSupply, decimals, true, mincap, gasOpt);
+      console.log('CrowdsaleTokenExt - setParam OK');
+      break;
+    } catch (err) {
+      console.log('CrowdsaleTokenExt - setParam Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('CrowdsaleTokenExt - setParam Retry');
+  }
+
 
   let pricingStrategyInstance = [];
   for (let i = 0; i < tiers.length; i++) {

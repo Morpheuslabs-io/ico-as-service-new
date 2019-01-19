@@ -7,5 +7,6 @@
   "DB_FILE_PATH": "../database/sqlite.db",
   "PREDEPLOY_INTERVAL": "*/1 * * * *",
   "PREDEPLOY_MAX": 10,
+  "PREDEPLOY_MAX_MULTIPLES": 5,  
   "PREDEPLOY_GAS_PRICE_MAX": 5000000000 
 }
