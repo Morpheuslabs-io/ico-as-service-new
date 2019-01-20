@@ -1,6 +1,7 @@
 const utils = require('./utils')
 const dateFormat = require('dateformat');
 var sleep = require('sleep');
+var moment = require('moment');
 
 // Deploy only once
 deploySafeMathLib = async (gasOpt, global) => {
@@ -220,60 +221,142 @@ exports.deployContracts = async (gasOpt, global) => {
   console.log('\n Total duration: %d minutes', duration);
 }
 
-// exports.getPredeployedContracts = async (global) => {
-//   let addressMap = null;
-//   try {
-//     let cnt = await global.SqliteHandler.predeployed('address1');
-//     if (cnt == 0) {
-//       console.log('No predeployed contract ---> start deployment now');
-//       addressMap = await exports.deployContracts(null, global);
-//       return addressMap;
-//     }
-//   } catch (err) {
-//     console.log('SqliteHandler.predeployAmount - error: ', err);
-//   }
+setReservedTokenForCrowdsaleToken = async (gasOpt, global, param, address1Map) => {
+  const {
+      addrs, inTokens, inPercentageUnit, inPercentageDecimals
+  } = param;
 
-//   try {
-//     let addressListStr = await global.SqliteHandler.popAddress1();
-//     addressMap = JSON.parse(addressListStr);
-//     return addressMap;
-//   } catch (err) {
-//     console.log('SqliteHandler.pop - error: ', err);
-//   }
+  let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
+  let crowdsaleTokenInstance = null;
+  while (1) {
+    try {
+      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
+      await crowdsaleTokenInstance.setReservedTokensListMultiple(addrs, inTokens, inPercentageUnit, inPercentageDecimals, gasOpt);
+      console.log('CrowdsaleTokenExt - setReservedToken OK');
+      break;
+    } catch (err) {
+      console.log('CrowdsaleTokenExt - setReservedToken Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('CrowdsaleTokenExt - setReservedToken Retry');
+  }
+}
 
-//   if (addressMap == null) {
-//     console.log('Cannot retrieve predeployed contract ---> start deployment now');
-//     addressMap = await exports.deployContracts(null, global);
-//     return addressMap;
-//   }
-// }
+setParamCrowdsaleToken = async (gasOpt, global, param, address1Map) => {
+  const {
+    name,
+    ticker,
+    decimals,
+    mincap,
+    initSupply
+  } = param;
+
+  let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
+  let crowdsaleTokenInstance = null;
+  while (1) {
+    try {
+      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
+      await crowdsaleTokenInstance.setParam(name, ticker, initSupply, decimals, true, mincap, gasOpt);
+      console.log('CrowdsaleTokenExt - setParam OK');
+      break;
+    } catch (err) {
+      console.log('CrowdsaleTokenExt - setParam Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('CrowdsaleTokenExt - setParam Retry');
+  }
+}
+
+setParamCrowdsale = async (gasOpt, global, paramCrowdsale, address2Map) => {
+  const {
+    name,
+    token,
+    pricingStrategy,
+    multisigWallet,
+    start,
+    end,
+    minimumFundingGoal,
+    maximumSellableTokens,
+    isWhiteListed
+  } = paramCrowdsale;
+
+  let crowdsaleContract = global.MintedTokenCappedCrowdsaleExtContract;
+  let crowdsaleInstance = null;
+  while (1) {
+    try {
+      let crowdsaleInstance = await crowdsaleContract.at(address2Map[global.CONTRACT.CROWDSALE]);
+      await crowdsaleInstance.setParam(name, token, pricingStrategy, multisigWallet, start, end, minimumFundingGoal, maximumSellableTokens, isWhiteListed, gasOpt);
+      console.log('MintedTokenCappedCrowdsaleExt - setParam OK');
+      break;
+    } catch (err) {
+      console.log('MintedTokenCappedCrowdsaleExt - setParam Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('MintedTokenCappedCrowdsaleExt - setParam Retry');
+  }
+}
+
+setParamPricingStrategy = async (gasOpt, global, paramPricing, address2Map) => {
+  
+  const {
+    rate,
+    tokenAddr
+  } = paramPricing;
+
+  let PricingStrategyContract = global.FlatPricingExtContract;
+  let PricingStrategyInstance = null;
+  while (1) {
+    try {
+      let PricingStrategyInstance = await PricingStrategyContract.at(address2Map[global.CONTRACT.FLATPRICING]);
+      await PricingStrategyInstance.setParam(rate, gasOpt);
+      await PricingStrategyInstance.setTier(tokenAddr, gasOpt);
+      console.log('FlatPricingExt - setParam OK');
+      break;
+    } catch (err) {
+      console.log('FlatPricingExt - setParam Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('FlatPricingExt - setParam Retry');
+  }
+
+}
+
+setParamFinalizedAgent = async (gasOpt, global, paramFinalizedAgent, address2Map) => {
+  
+  const {
+    tokenAddr,
+    crowdsaleAddr
+  } = paramFinalizedAgent;
+
+  let FinalizedAgentContract = global.ReservedTokensFinalizeAgentContract;
+  let FinalizedAgentInstance = null;
+  while (1) {
+    try {
+      let FinalizedAgentInstance = await FinalizedAgentContract.at(address2Map[global.CONTRACT.FINALIZEDAGENT]);
+      await FinalizedAgentInstance.setParam(tokenAddr, crowdsaleAddr, gasOpt);
+      console.log('ReservedTokensFinalizeAgent - setParam OK');
+      break;
+    } catch (err) {
+      console.log('ReservedTokensFinalizeAgent - setParam Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('ReservedTokensFinalizeAgent - setParam Retry');
+  }
+
+}
+
+countDecimalPlaces = num => {
+  const match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
+
+  if (!match[0] && !match[1] && !match[2]) return 0;
+
+  const digitsAfterDecimal = match[1] ? match[1].length : 0;
+  const adjust = match[2] ? +match[2] : 0;
+
+  return Math.max(0, digitsAfterDecimal - adjust);
+};
 
 exports.setParamForContracts = async (step2, step3, global) => {
-
-  console.log('setParamForContracts started');
-
-  let address1MapStr = await global.SqliteHandler.pop('address1');
-  if (!address1MapStr) {
-    let errMsg = 'Cannot get the predeployed contract';
-    console.log('setParamForContracts - error: ', errMsg);
-    return {error: errMsg};
-  }
-
-  let address2MapStr = await global.SqliteHandler.pop('address2');
-  if (!address2MapStr) {
-    let errMsg = 'Cannot get the predeployed contract';
-    console.log('setParamForContracts - error: ', errMsg);
-    return {error: errMsg};
-  }
-
-  let address1Map = JSON.parse(address1MapStr);
-  let address2Map = JSON.parse(address2MapStr);
-
-  let currGasPrice = await utils.checkCurrentGasPrice();
-  let gasOpt = {
-    gasPrice: currGasPrice,
-    gas: global.GAS_LIMIT
-  };
 
   const {
     name,
@@ -290,99 +373,107 @@ exports.setParamForContracts = async (step2, step3, global) => {
     tiers
   } = step3;
 
+  console.log('setParamForContracts started');
+
+  let address1MapStr = await global.SqliteHandler.pop('address1');
+  if (!address1MapStr) {
+    let errMsg = 'Cannot get the predeployed contract';
+    console.log('setParamForContracts - error: ', errMsg);
+    return {error: errMsg};
+  }
+  let address1Map = JSON.parse(address1MapStr);
+
+  let address2MapList = [];
+  for (let i = 0; i < tiers.length; i++) {
+    let address2MapStr = await global.SqliteHandler.pop('address2');
+    if (!address2MapStr) {
+      let errMsg = 'Cannot get the predeployed contract';
+      console.log('setParamForContracts - error: ', errMsg);
+      return {error: errMsg};
+    }
+    let address2Map = JSON.parse(address2MapStr);
+    address2MapList.push(address2Map);
+  }
+  
+  let currGasPrice = await utils.checkCurrentGasPrice();
+  let gasOpt = {
+    gasPrice: currGasPrice,
+    gas: global.GAS_LIMIT
+  };
+
   // Accumulate initial supply
   let initSupply = 0;
   for (let i = 0; i < tiers.length; i++) {
     initSupply += parseFloat(tiers[i].supply);
   }
 
-  let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
-  let crowdsaleTokenInstance = null;
+  let paramCrowdsaleToken = {
+    name,
+    ticker,
+    decimals,
+    mincap,
+    initSupply
+  };
 
-  while (1) {
-    try {
-      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
-      await crowdsaleTokenInstance.setParam(name, ticker, initSupply, decimals, true, mincap, gasOpt);
-      console.log('CrowdsaleTokenExt - setParam OK');
-      break;
-    } catch (err) {
-      console.log('CrowdsaleTokenExt - setParam Error: ', err);
-    }
-    sleep.sleep(5);
-    console.log('CrowdsaleTokenExt - setParam Retry');
-  }
+  let crowdsaleTokenInstAddr = address1Map[global.CONTRACT.TOKEN];
+  await setParamCrowdsaleToken(gasOpt, global, paramCrowdsaleToken, address1Map);
 
-
-  let pricingStrategyInstance = [];
+  let pricingStrategyAddrList = [];
   for (let i = 0; i < tiers.length; i++) {
-    const instance = await pricingStrategyContract.new(tiers[i].rate, gasOpt);
-    pricingStrategyInstance.push(instance);
-    console.log(`PricingStrategy Contract(${i + 1}) Deployed: ${instance.address}`);
-    let d_tiers = this.props.deploy.d_tiers;
-    d_tiers[i].pricing_strategy = pricingStrategyInstance[i].address;
-    setDeploy({
-      ...this.props.deploy,
-      d_tiers,
-    });
+    let address2Map = address2MapList[i];
+
+    const paramPricing = {
+      rate: tiers[i].rate,
+      tokenAddr: crowdsaleTokenInstAddr
+    };
+
+    await setParamPricingStrategy(gasOpt, global, paramPricing, address2Map);
+    pricingStrategyAddrList.push(address2Map[global.CONTRACT.FLATPRICING]);
   }
 
-  let mintedTokenCrowdsaleInstance = [];
+  let crowdsaleAddrList = [];
   for (let i = 0; i < tiers.length; i++) {
-    const _name = tiers[i].tierName;
-    const _token = crowdsaleTokenInstance.address;
-    const _pricingStrategy = pricingStrategyInstance[i].address;
-    const _multisigWallet = wallet_address;
-    const _start = moment(tiers[i].startDate.format('YYYY-MM-DD') + ' ' + tiers[i].startTime.format('HH:mm:SS'), 'YYYY-MM-DD HH:mm:SS').unix();
-    const _end = moment(tiers[i].endDate.format('YYYY-MM-DD') + ' ' + tiers[i].endTime.format('HH:mm:SS'), 'YYYY-MM-DD HH:mm:SS').unix();
-    const _minimumFundingGoal = 100;
-    const _maximumSellableTokens = 10000;
-    const _isWhiteListed = tiers[i].whitelist.length > 0;
-    console.log(_isWhiteListed);
+    let address2Map = address2MapList[i];
+    
+    const name = tiers[i].tierName;
+    const token = crowdsaleTokenInstAddr;
+    const pricingStrategy = pricingStrategyAddrList[i];
+    const multisigWallet = wallet_address;
+    const start = moment(tiers[i].startDate.format('YYYY-MM-DD') + ' ' + tiers[i].startTime.format('HH:mm:SS'), 'YYYY-MM-DD HH:mm:SS').unix();
+    const end = moment(tiers[i].endDate.format('YYYY-MM-DD') + ' ' + tiers[i].endTime.format('HH:mm:SS'), 'YYYY-MM-DD HH:mm:SS').unix();
+    const minimumFundingGoal = 100;
+    const maximumSellableTokens = 10000;
+    const isWhiteListed = tiers[i].whitelist.length > 0;
 
-    const instance = await mintedTokenCappedCrowdsaleExtContract.new(_name, _token, _pricingStrategy, _multisigWallet, _start, _end, _minimumFundingGoal, _maximumSellableTokens, _isWhiteListed, {
-      from: web3.eth.accounts[0],
-      gasPrice: gasPrice * 1000000000 * 10,
-      gas: 7000000
-    });
-    mintedTokenCrowdsaleInstance.push(instance);
-    console.log(`Minted Token CrowdsaleEx Contract(${i + 1}) Deployed: ${instance.address}`);
-    let d_tiers = this.props.deploy.d_tiers;
-    d_tiers[i].crowdsale = mintedTokenCrowdsaleInstance[i].address;
-    setDeploy({
-      ...this.props.deploy,
-      d_tiers,
-    });
+    let paramCrowdsale = {
+      name,
+      token,
+      pricingStrategy,
+      multisigWallet,
+      start,
+      end,
+      minimumFundingGoal,
+      maximumSellableTokens,
+      isWhiteListed
+    };
+
+    await setParamCrowdsale(gasOpt, global, paramCrowdsale, address2Map);
+
+    crowdsaleAddrList.push(address2Map[global.CONTRACT.CROWDSALE]);
   }
 
-  setDeploy({
-    ...this.props.deploy,
-    crowdsale_address: true,
-  });
-
-  let finalizeAgentInstance = [];
+  let finalizeAgentAddrList = [];
   for (let i = 0; i < tiers.length; i++) {
-    const instance = await finalizeAgentContract.new(crowdsaleTokenInstance.address, mintedTokenCrowdsaleInstance[i].address, gasOpt);
-    finalizeAgentInstance.push(instance);
-    console.log(`FinalizeAgent Contract(${i + 1}) Deployed: ${instance.address}`);
-    let d_tiers = this.props.deploy.d_tiers;
-    d_tiers[i].finalize_agent = finalizeAgentInstance[i].address;
-    setDeploy({
-      ...this.props.deploy,
-      d_tiers,
-    });
-  }
+    let address2Map = address2MapList[i];
 
-  // Register tier address for Pricing strategy
-  for (let i = 0; i < pricingStrategyInstance.length; i++) {
-    let contractX = web3.eth.contract(pricingStrategyInstance[i].abi).at(pricingStrategyInstance[i].address);
-    let tx = await this.promisify(cb => contractX.setTier(crowdsaleTokenInstance.address, gasOpt, cb));
-    console.log(`Register tier address for Pricing strategy(${i + 1})`);
-    let d_tiers = this.props.deploy.d_tiers;
-    d_tiers[i].register_tiers = tx;
-    setDeploy({
-      ...this.props.deploy,
-      d_tiers,
-    });
+    let paramFinalizedAgent = {
+      tokenAddr:      crowdsaleTokenInstAddr,
+      crowdsaleAddr:  crowdsaleAddrList
+    };
+
+    await setParamFinalizedAgent(gasOpt, global, paramFinalizedAgent, address2Map);
+
+    finalizeAgentAddrList.push(address2Map[global.CONTRACT.FINALIZEDAGENT]);
   }
 
   // Register addresses for Reserved Tokens
@@ -391,6 +482,7 @@ exports.setParamForContracts = async (step2, step3, global) => {
     let inTokens = [];
     let inPercentageUnit = [];
     let inPercentageDecimals = [];
+    
     for (let i = 0; i < reserved_token.length; i++) {
       let _inTokens = 0;
       let _inPercentageDecimals = 0;
@@ -406,23 +498,12 @@ exports.setParamForContracts = async (step2, step3, global) => {
       inPercentageUnit.push(_inPercentageUnit ? _inPercentageUnit : 0);
       inPercentageDecimals.push(_inPercentageDecimals ? _inPercentageDecimals : 0);
     }
-    let contractX = web3.eth.contract(crowdsaleTokenInstance.abi).at(crowdsaleTokenInstance.address);
-    let tx = await this.promisify(cb => contractX.setReservedTokensListMultiple(addrs, inTokens, inPercentageUnit, inPercentageDecimals, gasOpt, cb));
-    console.log(`Register addresses for Reserved Tokens`);
-    setDeploy({
-      ...this.props.deploy,
-      reserve_token: true,
-    });
-  }
 
-  // Register Crowdsales addresses
-  for (let i = 0; i < mintedTokenCrowdsaleInstance.length; i++) {
-    let d_tiers = this.props.deploy.d_tiers;
-    d_tiers[i].register_crowdsale = true;
-    setDeploy({
-      ...this.props.deploy,
-      d_tiers,
-    });
+    let paramReservedTokenForToken = {
+      addrs, inTokens, inPercentageUnit, inPercentageDecimals
+    };
+
+    await setReservedTokenForCrowdsaleToken(gasOpt, global, paramReservedTokenForToken, address1Map);
   }
 
   // Allow Crowdsale Contract to Mint Tokens
