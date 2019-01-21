@@ -616,8 +616,8 @@ exports.setParamForContracts = async (step2, step3, global) => {
     const token = crowdsaleTokenInstAddr;
     const pricingStrategy = pricingStrategyAddrList[i];
     const multisigWallet = wallet_address;
-    const start = moment(tiers[i].startDate.format('YYYY-MM-DD') + ' ' + tiers[i].startTime.format('HH:mm:SS'), 'YYYY-MM-DD HH:mm:SS').unix();
-    const end = moment(tiers[i].endDate.format('YYYY-MM-DD') + ' ' + tiers[i].endTime.format('HH:mm:SS'), 'YYYY-MM-DD HH:mm:SS').unix();
+    const start = moment(tiers[i].startDate + ' ' + tiers[i].startTime, 'YYYY-MM-DD HH:mm:SS').unix();
+    const end = moment(tiers[i].endDate + ' ' + tiers[i].endTime, 'YYYY-MM-DD HH:mm:SS').unix();
     const minimumFundingGoal = 100;
     const maximumSellableTokens = 10000;
     const isWhiteListed = tiers[i].whitelist.length > 0;
