@@ -117,6 +117,15 @@ contract MintableTokenExt is StandardTokenExt {
     MintingAgentChanged(addr, state);
   }
 
+  /**
+   * Owner can allow a crowdsale contract to mint new tokens.
+   */
+  function setMintAgentMany(address[] addrList) onlyOwner canMint public {
+    for (uint i = 0; i < addrList.length; i++) {
+      setMintAgent(addrList[i], true);
+    }
+  }
+
   function setReservedTokensList(address addr, uint inTokens, uint inPercentageUnit, uint inPercentageDecimals) private canMint onlyOwner {
     assert(addr != address(0));
     if (!isAddressReserved(addr)) {

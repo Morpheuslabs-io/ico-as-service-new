@@ -174,6 +174,88 @@ deployFinalizedAgent = async (gasOpt, global, SafeMathLibExtInstAddr) => {
   // }
 }
 
+transferOwnershipToken = async (gasOpt, global, ownerWallet, tokenAddr) => {
+  let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
+  let crowdsaleTokenInstance = null;
+  while (1) {
+    try {
+      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(tokenAddr);
+      await crowdsaleTokenInstance.transferOwnership(ownerWallet, gasOpt);
+      console.log('CrowdsaleTokenExt - transferOwnership OK');
+      break;
+    } catch (err) {
+      console.log('CrowdsaleTokenExt - transferOwnership Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('CrowdsaleTokenExt - transferOwnership Retry');
+  }
+}
+
+transferOwnershipCrowdsale = async (gasOpt, global, ownerWallet, crowdsaleAddr) => {
+  let crowdsaleContract = global.MintedTokenCappedCrowdsaleExtContract;
+  let crowdsaleInstance = null;
+  while (1) {
+    try {
+      let crowdsaleInstance = await crowdsaleContract.at(crowdsaleAddr);
+      await crowdsaleInstance.transferOwnership(ownerWallet, gasOpt);
+      console.log('MintedTokenCappedCrowdsaleExt - transferOwnership OK');
+      break;
+    } catch (err) {
+      console.log('MintedTokenCappedCrowdsaleExt - transferOwnership Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('MintedTokenCappedCrowdsaleExt - transferOwnership Retry');
+  }
+}
+
+transferOwnershipFlatPricing = async (gasOpt, global, ownerWallet, flatPricingAddr) => {
+  let FlatPricingContract = global.FlatPricingExtContract;
+  let FlatPricingInstance = null;
+  while (1) {
+    try {
+      let FlatPricingInstance = await FlatPricingContract.at(flatPricingAddr);
+      await FlatPricingInstance.transferOwnership(ownerWallet, gasOpt);
+      console.log('FlatPricingExt - transferOwnership OK');
+      break;
+    } catch (err) {
+      console.log('FlatPricingExt - transferOwnership Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('FlatPricingExt - transferOwnership Retry');
+  }
+}
+
+transferOwnershipFinalizeAgent = async (gasOpt, global, ownerWallet, finalizedAgentAddr) => {
+  let FinalizedAgentContract = global.ReservedTokensFinalizeAgentContract;
+  let FinalizedAgentInstance = null;
+  while (1) {
+    try {
+      let FinalizedAgentInstance = await FinalizedAgentContract.at(finalizedAgentAddr);
+      await FinalizedAgentInstance.transferOwnership(ownerWallet, gasOpt);
+      console.log('ReservedTokensFinalizeAgent - transferOwnership OK');
+      break;
+    } catch (err) {
+      console.log('ReservedTokensFinalizeAgent - transferOwnership Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('ReservedTokensFinalizeAgent - transferOwnership Retry');
+  }
+}
+
+transferOwnershipAll = async (gasOpt, global, ownerWallet, address1Map, address2MapList) => {
+  await transferOwnershipToken(gasOpt, global, ownerWallet, address1Map[global.CONTRACT.TOKEN]);
+  
+  for (let i = 0; i < address2MapList.length; i++) {
+    let address2Map = address2MapList[i];
+    
+    await transferOwnershipCrowdsale(gasOpt, global, ownerWallet, address2Map[global.CONTRACT.CROWDSALE]);
+
+    await transferOwnershipFlatPricing(gasOpt, global, ownerWallet, address2Map[global.CONTRACT.FLATPRICING]);
+
+    await transferOwnershipFinalizeAgent(gasOpt, global, ownerWallet, address2Map[global.CONTRACT.FINALIZEDAGENT]);
+  }
+}
+
 exports.deployContracts = async (gasOpt, global) => {
 
   // Only for test
@@ -221,6 +303,42 @@ exports.deployContracts = async (gasOpt, global) => {
   console.log('\n Total duration: %d minutes', duration);
 }
 
+setReleaseAgentForCrowdsaleToken = async (gasOpt, global, releaseAgent, address1Map) => {
+  
+  let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
+  let crowdsaleTokenInstance = null;
+  while (1) {
+    try {
+      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
+      await crowdsaleTokenInstance.setReleaseAgent(releaseAgent, gasOpt);
+      console.log('CrowdsaleTokenExt - setReleaseAgent OK');
+      break;
+    } catch (err) {
+      console.log('CrowdsaleTokenExt - setReleaseAgent Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('CrowdsaleTokenExt - setReleaseAgent Retry');
+  }
+}
+
+setMintAgentManyForCrowdsaleToken = async (gasOpt, global, mintAgentList, address1Map) => {
+  
+  let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
+  let crowdsaleTokenInstance = null;
+  while (1) {
+    try {
+      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
+      await crowdsaleTokenInstance.setMintAgentMany(mintAgentList, gasOpt);
+      console.log('CrowdsaleTokenExt - setMintAgentMany OK');
+      break;
+    } catch (err) {
+      console.log('CrowdsaleTokenExt - setMintAgentMany Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('CrowdsaleTokenExt - setMintAgentMany Retry');
+  }
+}
+
 setReservedTokenForCrowdsaleToken = async (gasOpt, global, param, address1Map) => {
   const {
       addrs, inTokens, inPercentageUnit, inPercentageDecimals
@@ -264,6 +382,45 @@ setParamCrowdsaleToken = async (gasOpt, global, param, address1Map) => {
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setParam Retry');
+  }
+}
+
+setWhitelistForCrowdsale = async (gasOpt, global, paramWhitelist, address2Map) => {
+  const {
+    addrs, statuses, minCaps, maxCaps
+  } = paramWhitelist;
+
+  let crowdsaleContract = global.MintedTokenCappedCrowdsaleExtContract;
+  let crowdsaleInstance = null;
+  while (1) {
+    try {
+      let crowdsaleInstance = await crowdsaleContract.at(address2Map[global.CONTRACT.CROWDSALE]);
+      await crowdsaleInstance.setEarlyParticipantWhitelistMultiple(addrs, statuses, minCaps, maxCaps, gasOpt);
+      console.log('MintedTokenCappedCrowdsaleExt - setEarlyParticipantWhitelistMultiple OK');
+      break;
+    } catch (err) {
+      console.log('MintedTokenCappedCrowdsaleExt - setEarlyParticipantWhitelistMultiple Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('MintedTokenCappedCrowdsaleExt - setEarlyParticipantWhitelistMultiple Retry');
+  }
+}
+
+setFinalizedAgentForCrowdsale = async (gasOpt, global, finalizedAgentAddr, address2Map) => {
+
+  let crowdsaleContract = global.MintedTokenCappedCrowdsaleExtContract;
+  let crowdsaleInstance = null;
+  while (1) {
+    try {
+      let crowdsaleInstance = await crowdsaleContract.at(address2Map[global.CONTRACT.CROWDSALE]);
+      await crowdsaleInstance.setFinalizeAgent(finalizedAgentAddr, gasOpt);
+      console.log('MintedTokenCappedCrowdsaleExt - setFinalizeAgent OK');
+      break;
+    } catch (err) {
+      console.log('MintedTokenCappedCrowdsaleExt - setFinalizeAgent Error: ', err);
+    }
+    sleep.sleep(5);
+    console.log('MintedTokenCappedCrowdsaleExt - setFinalizeAgent Retry');
   }
 }
 
@@ -355,6 +512,24 @@ countDecimalPlaces = num => {
 
   return Math.max(0, digitsAfterDecimal - adjust);
 };
+
+toFixed = (x) => {
+  if (Math.abs(x) < 1.0) {
+    let e = parseInt(x.toString().split('e-')[1], 10);
+    if (e) {
+      x *= Math.pow(10, e - 1);
+      x = '0.' + (new Array(e)).join('0') + x.toString().substring(2);
+    }
+  } else {
+    let e = parseInt(x.toString().split('+')[1], 10);
+    if (e > 20) {
+      e -= 20;
+      x /= Math.pow(10, e);
+      x += (new Array(e + 1)).join('0');
+    }
+  }
+  return x;
+}
 
 exports.setParamForContracts = async (step2, step3, global) => {
 
@@ -476,7 +651,7 @@ exports.setParamForContracts = async (step2, step3, global) => {
     finalizeAgentAddrList.push(address2Map[global.CONTRACT.FINALIZEDAGENT]);
   }
 
-  // Register addresses for Reserved Tokens
+  // Set reserved tokens for the crowdsale token
   if (reserved_token.length !== 0) {
     let addrs = [];
     let inTokens = [];
@@ -507,102 +682,49 @@ exports.setParamForContracts = async (step2, step3, global) => {
   }
 
   // Allow Crowdsale Contract to Mint Tokens
-  for (let i = 0; i < mintedTokenCrowdsaleInstance.length; i++) {
-    let contractX = web3.eth.contract(crowdsaleTokenInstance.abi).at(crowdsaleTokenInstance.address);
-    let tx = await this.promisify(cb => contractX.setMintAgent(mintedTokenCrowdsaleInstance[i].address, true, gasOpt, cb));
-    console.log(`Allow Crowdsale Contract to Mint Tokens(${i + 1})`);
-    let d_tiers = this.props.deploy.d_tiers;
-    d_tiers[i].allow_crowdsale = tx;
-    setDeploy({
-      ...this.props.deploy,
-      d_tiers,
-    });
-  }
+  await setMintAgentManyForCrowdsaleToken(gasOpt, global, crowdsaleAddrList, address1Map);
 
   // Allow Finalize Agent Contract to Mint Token
-  for (let i = 0; i < finalizeAgentInstance.length; i++) {
-    let contractX = web3.eth.contract(crowdsaleTokenInstance.abi).at(crowdsaleTokenInstance.address);
-    let tx = await this.promisify(cb => contractX.setMintAgent(finalizeAgentInstance[i].address, true, gasOpt, cb));
-    console.log(`Allow Finalize Agent Contract to Mint Token(${i + 1})`);
-    let d_tiers = this.props.deploy.d_tiers;
-    d_tiers[i].allow_finalize = tx;
-    setDeploy({
-      ...this.props.deploy,
-      d_tiers,
-    });
+  await setMintAgentManyForCrowdsaleToken(gasOpt, global, finalizeAgentAddrList, address1Map);
 
-    d_tiers[i].register_whitelisted = true;
-    setDeploy({
-      ...this.props.deploy,
-      d_tiers,
-    });
-  }
-
-  // Register whitelisted addresses
+  // Register whitelisted addresses for crowdsale
+  // Set FinalizedAgent for crowdsale
   if (enableWhitelisting === 'yes') {
-    for (let i = 0; i < mintedTokenCrowdsaleInstance.length; i++) {
+    for (let i = 0; i < crowdsaleAddrList.length; i++) {
+
+      let address2Map = address2MapList[i];
+
       let addrs = [];
       let statuses = [];
       let minCaps = [];
       let maxCaps = [];
+      
       for (let j = 0; j < tiers[i].whitelist.length; j++) {
         addrs.push(tiers[i].whitelist[j].w_address);
         statuses.push(true);
         minCaps.push(tiers[i].whitelist[j].w_min * 10 ** decimals ? toFixed((tiers[i].whitelist[j].w_min * 10 ** decimals).toString()) : 0);
         maxCaps.push(tiers[i].whitelist[j].w_max * 10 ** decimals ? toFixed((tiers[i].whitelist[j].w_max * 10 ** decimals).toString()) : 0);
       }
-      let contractX = web3.eth.contract(mintedTokenCrowdsaleInstance[i].abi).at(mintedTokenCrowdsaleInstance[i].address);
-      let tx = await this.promisify(cb => contractX.setEarlyParticipantWhitelistMultiple(addrs, statuses, minCaps, maxCaps, gasOpt, cb));
 
-      let d_tiers = this.props.deploy.d_tiers;
-      d_tiers[i].register_whitelisted = true;
-      setDeploy({
-        ...this.props.deploy,
-        d_tiers,
-      });
+      let paramWhitelist = {
+        addrs, statuses, minCaps, maxCaps
+      };
+
+      await setWhitelistForCrowdsale(gasOpt, global, paramWhitelist, address2Map);
+      await setFinalizedAgentForCrowdsale(gasOpt, global, finalizeAgentAddrList[i], address2Map);
     }
   }
 
-  // Register Finalize Agent Contract addresses
-  for (let i = 0; i < mintedTokenCrowdsaleInstance.length; i++) {
-    let contractX = web3.eth.contract(mintedTokenCrowdsaleInstance[i].abi).at(mintedTokenCrowdsaleInstance[i].address);
-    let tx = await this.promisify(cb => contractX.setFinalizeAgent(finalizeAgentInstance[i].address, gasOpt, cb));
-    console.log(`Register Finalize Agent Contract addresses(${i + 1})`);
-    let d_tiers = this.props.deploy.d_tiers;
-    d_tiers[i].register_finalize = tx;
-    setDeploy({
-      ...this.props.deploy,
-      d_tiers,
-    });
-  }
+  // Set releaseAgent for token
+  // QUESTION? there's only 1 token but loop over finalizedAgentList??
+  // Maybe, missing the releaseAgent input from frontend??
+  // Temporarily, borrow the first finalizedAgent
+  let releaseAgent = finalizeAgentAddrList[0];
+  await setReleaseAgentForCrowdsaleToken(gasOpt, global, releaseAgent, address1Map);
 
-  // Register Token release addresses
-  for (let i = 0; i < finalizeAgentInstance.length; i++) {
-    let contractX = web3.eth.contract(crowdsaleTokenInstance.abi).at(crowdsaleTokenInstance.address);
-    let tx = await this.promisify(cb => contractX.setReleaseAgent(finalizeAgentInstance[i].address, gasOpt, cb));
-    console.log(`Register Token release addresses(${i + 1})`);
-    let d_tiers = this.props.deploy.d_tiers;
-    d_tiers[i].register_token = tx;
-    setDeploy({
-      ...this.props.deploy,
-      d_tiers,
-    });
-  }
-
-  // Vesting Token
-  console.log(`Token Vesting Contract Deployed`);
-  setDeploy({
-    ...this.props.deploy,
-    vesting: true,
-  });
-
+  // QUESTION? No handling for Vesting Token
+  
   // Transfer ownership to wallet address
-  let contractX = web3.eth.contract(crowdsaleTokenInstance.abi).at(crowdsaleTokenInstance.address);
-  let tx = await this.promisify(cb => contractX.transferOwnership(wallet_address, gasOpt, cb));
-  console.log(`Transfer ownership to wallet address`);
-  setDeploy({
-    ...this.props.deploy,
-    ownership: tx,
-  });
-
+  await transferOwnershipAll(gasOpt, global, wallet_address, address1Map, address2MapList);
+  
 }
