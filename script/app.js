@@ -42,4 +42,12 @@ app.post('/test/deploycontractminted', async function (req, res) {
     
 });
 
+// app.post('/test/setparam', async function (req, res) {
+//   await controller.setparamtest(global);
+// });
+
+app.post('/setparam', async function (req, res) {
+  await controller.setparam(req, res, global);
+});
+
 module.exports = function (deployer) {}

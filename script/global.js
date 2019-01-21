@@ -55,8 +55,8 @@ global.initContract = function (artifacts) {
   console.log('global.initContract done');
 }
 
-global.initDb = async function() {
-  await SqliteHandler.loadDB(global.DB_FILE_PATH);
+global.initDb = async function(dbFilePath) {
+  await SqliteHandler.loadDB(dbFilePath || global.DB_FILE_PATH);
   global.SqliteHandler = SqliteHandler;
   global.INIT_DB = true;
 

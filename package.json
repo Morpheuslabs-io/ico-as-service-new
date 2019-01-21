@@ -55,7 +55,8 @@
     "server-rinkeby": "NODE_ENV=rinkeby nodemon script/app.js --network rinkeby",
     "server-mainnet": "NODE_ENV=mainnet nodemon script/app.js --network mainnet",
     "cron-rinkeby": "NODE_ENV=rinkeby nodemon script/cronjob.js --network rinkeby",
-    "cron-mainnet": "NODE_ENV=mainnet nodemon script/cronjob.js --network mainnet"
+    "cron-mainnet": "NODE_ENV=mainnet nodemon script/cronjob.js --network mainnet",
+    "test-rinkeby": "NODE_ENV=rinkeby nodemon script/test.js --network rinkeby"
   },
   "author": "",
   "license": "ISC",

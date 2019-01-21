@@ -559,6 +559,7 @@ exports.setParamForContracts = async (step2, step3, global) => {
   let address1Map = JSON.parse(address1MapStr);
 
   let address2MapList = [];
+  let address2MapStrList = [];
   for (let i = 0; i < tiers.length; i++) {
     let address2MapStr = await global.SqliteHandler.pop('address2');
     if (!address2MapStr) {
@@ -568,6 +569,7 @@ exports.setParamForContracts = async (step2, step3, global) => {
     }
     let address2Map = JSON.parse(address2MapStr);
     address2MapList.push(address2Map);
+    address2MapStrList.push(address2MapStr);
   }
   
   let currGasPrice = await utils.checkCurrentGasPrice();
@@ -727,4 +729,10 @@ exports.setParamForContracts = async (step2, step3, global) => {
   // Transfer ownership to wallet address
   await transferOwnershipAll(gasOpt, global, wallet_address, address1Map, address2MapList);
   
+  // Returned data
+  let contractAddrList = {
+    address1MapStr,
+    address2MapStrList
+  };
+  return contractAddrList;
 }
