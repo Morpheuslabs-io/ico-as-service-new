@@ -9,6 +9,7 @@
     "asyncawait": "^1.0.6",
     "body-parser": "^1.17.2",
     "connect-multiparty": "^2.2.0",
+    "cors": "^2.8.5",
     "dateformat": "^3.0.3",
     "dotenv": "^5.0.1",
     "ethereumjs-wallet": "^0.6.0",
