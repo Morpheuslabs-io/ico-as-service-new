@@ -1,5 +1,6 @@
 let express = require('express');
 let app = express();
+let cors = require('cors');
 let bodyParser = require('body-parser');
 const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // parse application/json
 app.use(bodyParser.json());
 app.use('/', express.static('public_static'));
+app.use(cors());
 
 const port = 4000 || process.env.PORT;
 app.listen(port, () => {
