@@ -15,7 +15,7 @@ deploySafeMathLib = async (gasOpt, global) => {
       console.log('SafeMathLibExt creation OK - address:', SafeMathLibExtInstAddr);
       break;
     } catch (err) {
-      console.log('SafeMathLibExt creation error: ', err);
+      console.log('SafeMathLibExt creation error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('SafeMathLibExt creation retry');
@@ -32,7 +32,7 @@ deployCrowdsaleToken = async (gasOpt, global, SafeMathLibExtInstAddr) => {
       console.log('CrowdsaleTokenExt link with SafeMathLibExt - OK');
       break;
     } catch (err) {
-      console.log('CrowdsaleTokenExt link with SafeMathLibExt - error: ', err);
+      console.log('CrowdsaleTokenExt link with SafeMathLibExt - error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt link retry');
@@ -49,7 +49,7 @@ deployCrowdsaleToken = async (gasOpt, global, SafeMathLibExtInstAddr) => {
 
       break;
     } catch (err) {
-      console.log('CrowdsaleTokenExt creation error: ', err);
+      console.log('CrowdsaleTokenExt creation error: ', (err.message || ''), err);
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt creation retry');
@@ -66,7 +66,7 @@ deployCrowdsale = async (gasOpt, global, SafeMathLibExtInstAddr) => {
       console.log('MintedTokenCappedCrowdsaleExtContract link with SafeMathLibExt - OK');
       break;
     } catch (err) {
-      console.log('MintedTokenCappedCrowdsaleExtContract link with SafeMathLibExt - error: ', err);
+      console.log('MintedTokenCappedCrowdsaleExtContract link with SafeMathLibExt - error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExtContract link retry');
@@ -83,7 +83,7 @@ deployCrowdsale = async (gasOpt, global, SafeMathLibExtInstAddr) => {
 
       break;
     } catch (err) {
-      console.log('MintedTokenCappedCrowdsaleExtContract creation error: ', err);
+      console.log('MintedTokenCappedCrowdsaleExtContract creation error: ', (err.message || ''), err);
     }
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExtContract creation retry');
@@ -100,7 +100,7 @@ deployFlatPricing = async (gasOpt, global, SafeMathLibExtInstAddr) => {
       console.log('FlatPricingExtContract link with SafeMathLibExt - OK');
       break;
     } catch (err) {
-      console.log('FlatPricingExtContract link with SafeMathLibExt - error: ', err);
+      console.log('FlatPricingExtContract link with SafeMathLibExt - error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('FlatPricingExtContract link retry');
@@ -117,7 +117,7 @@ deployFlatPricing = async (gasOpt, global, SafeMathLibExtInstAddr) => {
 
       break;
     } catch (err) {
-      console.log('FlatPricingExt creation error: ', err);
+      console.log('FlatPricingExt creation error: ', (err.message || ''), err);
     }
     sleep.sleep(5);
     console.log('FlatPricingExt creation retry');
@@ -134,7 +134,7 @@ deployFinalizedAgent = async (gasOpt, global, SafeMathLibExtInstAddr) => {
       console.log('ReservedTokensFinalizeAgentContract link with SafeMathLibExt - OK');
       break;
     } catch (err) {
-      console.log('ReservedTokensFinalizeAgentContract link with SafeMathLibExt - error: ', err);
+      console.log('ReservedTokensFinalizeAgentContract link with SafeMathLibExt - error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('ReservedTokensFinalizeAgentContract link retry');
@@ -151,7 +151,7 @@ deployFinalizedAgent = async (gasOpt, global, SafeMathLibExtInstAddr) => {
 
       break;
     } catch (err) {
-      console.log('ReservedTokensFinalizeAgentContract creation error: ', err);
+      console.log('ReservedTokensFinalizeAgentContract creation error: ', (err.message || ''), err);
     }
     sleep.sleep(5);
     console.log('ReservedTokensFinalizeAgentContract creation retry');
@@ -167,7 +167,7 @@ deployFinalizedAgent = async (gasOpt, global, SafeMathLibExtInstAddr) => {
   //     console.log('ReservedTokensFinalizeAgentContract setParam OK');
   //     break;
   //   } catch (err) {
-  //     console.log('ReservedTokensFinalizeAgentContract setParam error: ', err);
+  //     console.log('ReservedTokensFinalizeAgentContract setParam error: ', (err.message || ''), err);
   //   }
   //   sleep.sleep(5);
   //   console.log('ReservedTokensFinalizeAgentContract setParam retry');
@@ -184,7 +184,7 @@ transferOwnershipToken = async (gasOpt, global, ownerWallet, tokenAddr) => {
       console.log('CrowdsaleTokenExt - transferOwnership OK');
       break;
     } catch (err) {
-      console.log('CrowdsaleTokenExt - transferOwnership Error: ', err);
+      console.log('CrowdsaleTokenExt - transferOwnership Error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - transferOwnership Retry');
@@ -201,7 +201,7 @@ transferOwnershipCrowdsale = async (gasOpt, global, ownerWallet, crowdsaleAddr) 
       console.log('MintedTokenCappedCrowdsaleExt - transferOwnership OK');
       break;
     } catch (err) {
-      console.log('MintedTokenCappedCrowdsaleExt - transferOwnership Error: ', err);
+      console.log('MintedTokenCappedCrowdsaleExt - transferOwnership Error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExt - transferOwnership Retry');
@@ -218,7 +218,7 @@ transferOwnershipFlatPricing = async (gasOpt, global, ownerWallet, flatPricingAd
       console.log('FlatPricingExt - transferOwnership OK');
       break;
     } catch (err) {
-      console.log('FlatPricingExt - transferOwnership Error: ', err);
+      console.log('FlatPricingExt - transferOwnership Error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('FlatPricingExt - transferOwnership Retry');
@@ -235,7 +235,7 @@ transferOwnershipFinalizeAgent = async (gasOpt, global, ownerWallet, finalizedAg
       console.log('ReservedTokensFinalizeAgent - transferOwnership OK');
       break;
     } catch (err) {
-      console.log('ReservedTokensFinalizeAgent - transferOwnership Error: ', err);
+      console.log('ReservedTokensFinalizeAgent - transferOwnership Error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('ReservedTokensFinalizeAgent - transferOwnership Retry');
@@ -317,7 +317,7 @@ setReleaseAgentForCrowdsaleToken = async (gasOpt, global, releaseAgent, address1
       console.log('CrowdsaleTokenExt - setReleaseAgent OK');
       break;
     } catch (err) {
-      console.log('CrowdsaleTokenExt - setReleaseAgent Error: ', err);
+      console.log('CrowdsaleTokenExt - setReleaseAgent Error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setReleaseAgent Retry');
@@ -335,7 +335,7 @@ setMintAgentManyForCrowdsaleToken = async (gasOpt, global, mintAgentList, addres
       console.log('CrowdsaleTokenExt - setMintAgentMany OK');
       break;
     } catch (err) {
-      console.log('CrowdsaleTokenExt - setMintAgentMany Error: ', err);
+      console.log('CrowdsaleTokenExt - setMintAgentMany Error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setMintAgentMany Retry');
@@ -356,7 +356,7 @@ setReservedTokenForCrowdsaleToken = async (gasOpt, global, param, address1Map) =
       console.log('CrowdsaleTokenExt - setReservedToken OK');
       break;
     } catch (err) {
-      console.log('CrowdsaleTokenExt - setReservedToken Error: ', err);
+      console.log('CrowdsaleTokenExt - setReservedToken Error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setReservedToken Retry');
@@ -381,7 +381,7 @@ setParamCrowdsaleToken = async (gasOpt, global, param, address1Map) => {
       console.log('CrowdsaleTokenExt - setParam OK');
       break;
     } catch (err) {
-      console.log('CrowdsaleTokenExt - setParam Error: ', err);
+      console.log('CrowdsaleTokenExt - setParam Error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setParam Retry');
@@ -402,7 +402,7 @@ setWhitelistForCrowdsale = async (gasOpt, global, paramWhitelist, address2Map) =
       console.log('MintedTokenCappedCrowdsaleExt - setEarlyParticipantWhitelistMultiple OK');
       break;
     } catch (err) {
-      console.log('MintedTokenCappedCrowdsaleExt - setEarlyParticipantWhitelistMultiple Error: ', err);
+      console.log('MintedTokenCappedCrowdsaleExt - setEarlyParticipantWhitelistMultiple Error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExt - setEarlyParticipantWhitelistMultiple Retry');
@@ -449,7 +449,7 @@ setParamCrowdsale = async (gasOpt, global, paramCrowdsale, address2Map) => {
       console.log('MintedTokenCappedCrowdsaleExt - setParam OK');
       break;
     } catch (err) {
-      console.log('MintedTokenCappedCrowdsaleExt - setParam Error: ', err);
+      console.log('MintedTokenCappedCrowdsaleExt - setParam Error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExt - setParam Retry');
@@ -473,7 +473,7 @@ setParamPricingStrategy = async (gasOpt, global, paramPricing, address2Map) => {
       console.log('FlatPricingExt - setParam OK');
       break;
     } catch (err) {
-      console.log('FlatPricingExt - setParam Error: ', err);
+      console.log('FlatPricingExt - setParam Error: ', (err.message || ''));
     }
     sleep.sleep(5);
     console.log('FlatPricingExt - setParam Retry');
@@ -593,8 +593,9 @@ exports.setParamForContracts = async (step2, step3, global) => {
   // Returned data
   let returnedData = buildReturnedData(address1MapStr, address2MapStrList, global);
   
-  // TEST
-  return returnedData;
+  if (global.JUST_RETURN_PREDEPLOY == 1) {
+    return returnedData;
+  }
   
   let currGasPrice = await utils.checkCurrentGasPrice();
   let gasOpt = {

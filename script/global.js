@@ -36,6 +36,7 @@ global.globalize = function () {
   global.PREDEPLOY_MAX = settingData.PREDEPLOY_MAX;
   global.PREDEPLOY_MAX_MULTIPLES = settingData.PREDEPLOY_MAX_MULTIPLES;
   global.PREDEPLOY_GAS_PRICE_MAX = settingData.PREDEPLOY_GAS_PRICE_MAX;
+  global.JUST_RETURN_PREDEPLOY = settingData.JUST_RETURN_PREDEPLOY;
 }
 
 global.initContract = function (artifacts) {
