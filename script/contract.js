@@ -281,6 +281,9 @@ exports.deployContracts = async (gasOpt, global) => {
   // Store into db (table "address1")
   await global.SqliteHandler.push(JSON.stringify(address1Map), 'address1');
 
+  // TEST
+  //return;
+
   for (let i = 1; i <= global.PREDEPLOY_MAX_MULTIPLES; i++) {
     let MintedTokenCappedCrowdsaleExtInstAddr = await deployCrowdsale(gasOpt, global, SafeMathLibExtInstAddr);
     let FlatPricingExtInstAddr = await deployFlatPricing(gasOpt, global, SafeMathLibExtInstAddr);
@@ -531,6 +534,21 @@ toFixed = (x) => {
   return x;
 }
 
+buildReturnedData = (address1MapStr, address2MapStrList, global) => {
+  let data = '';
+  let address1Map = JSON.parse(address1MapStr);
+  data += global.CONTRACT.TOKEN + ': ' + address1Map[global.CONTRACT.TOKEN] + '\n\n';
+
+  for (let i=0; i < address2MapStrList.length; i++) {
+    let address2MapStr = address2MapStrList[i];
+    let address2Map = JSON.parse(address2MapStr);
+    data += global.CONTRACT.CROWDSALE + ': ' + address2Map[global.CONTRACT.CROWDSALE] + '\n\n';
+    data += global.CONTRACT.FLATPRICING + ': ' + address2Map[global.CONTRACT.FLATPRICING] + '\n\n';
+    data += global.CONTRACT.FINALIZEDAGENT + ': ' + address2Map[global.CONTRACT.FINALIZEDAGENT] + '\n\n\n';
+  }
+  return data;
+}
+
 exports.setParamForContracts = async (step2, step3, global) => {
 
   const {
@@ -571,6 +589,12 @@ exports.setParamForContracts = async (step2, step3, global) => {
     address2MapList.push(address2Map);
     address2MapStrList.push(address2MapStr);
   }
+
+  // Returned data
+  let returnedData = buildReturnedData(address1MapStr, address2MapStrList, global);
+  
+  // TEST
+  return returnedData;
   
   let currGasPrice = await utils.checkCurrentGasPrice();
   let gasOpt = {
@@ -729,10 +753,5 @@ exports.setParamForContracts = async (step2, step3, global) => {
   // Transfer ownership to wallet address
   await transferOwnershipAll(gasOpt, global, wallet_address, address1Map, address2MapList);
   
-  // Returned data
-  let contractAddrList = {
-    address1MapStr,
-    address2MapStrList
-  };
-  return contractAddrList;
+  return returnedData;
 }

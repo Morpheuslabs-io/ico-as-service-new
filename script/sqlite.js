@@ -50,6 +50,7 @@ var SqliteHandler = {
 
       let queryDelete = 'DELETE FROM ' + addressTableName + ' WHERE ROWID=' + rowId;
       try {
+        // TEST
         await db.runAsync(queryDelete);
         console.log('pop ' + addressTableName + ' OK - addressList:', addressListStr);
       } catch (err) {
