@@ -26,6 +26,7 @@ var jobId = crontab.scheduleJob(global.PREDEPLOY_INTERVAL, async function(){
     if (predeployCnt >= global.PREDEPLOY_MAX)
     {
       console.log('cron job - Already predeployed: ' + predeployCnt + ' sets');
+      isCronRunning = false;
       return;
     }
 
@@ -33,6 +34,7 @@ var jobId = crontab.scheduleJob(global.PREDEPLOY_INTERVAL, async function(){
     if (currGasPrice > global.PREDEPLOY_GAS_PRICE_MAX)
     {
       console.log(`cron job - current gas price (${currGasPrice}) > maxGasPrice (${global.PREDEPLOY_GAS_PRICE_MAX}) - Not deploy contracts`);
+      isCronRunning = false;
       return;
     }
 
