@@ -281,8 +281,9 @@ exports.deployContracts = async (gasOpt, global) => {
   // Store into db (table "address1")
   await global.SqliteHandler.push(JSON.stringify(address1Map), 'address1');
 
-  // TEST
-  //return;
+  if (global.DEPLOY_ONLY_TOKEN) {
+    return;
+  }
 
   for (let i = 1; i <= global.PREDEPLOY_MAX_MULTIPLES; i++) {
     let MintedTokenCappedCrowdsaleExtInstAddr = await deployCrowdsale(gasOpt, global, SafeMathLibExtInstAddr);
@@ -536,8 +537,12 @@ toFixed = (x) => {
 
 buildReturnedData = (address1MapStr, address2MapStrList, global) => {
   let data = '';
+  let dataToken = '';
+  let dataCrowdsale = [];
+
   let address1Map = JSON.parse(address1MapStr);
   data += global.CONTRACT.TOKEN + ': ' + address1Map[global.CONTRACT.TOKEN] + '\n\n';
+  dataToken = address1Map[global.CONTRACT.TOKEN];
 
   for (let i=0; i < address2MapStrList.length; i++) {
     let address2MapStr = address2MapStrList[i];
@@ -545,8 +550,10 @@ buildReturnedData = (address1MapStr, address2MapStrList, global) => {
     data += global.CONTRACT.CROWDSALE + ': ' + address2Map[global.CONTRACT.CROWDSALE] + '\n\n';
     data += global.CONTRACT.FLATPRICING + ': ' + address2Map[global.CONTRACT.FLATPRICING] + '\n\n';
     data += global.CONTRACT.FINALIZEDAGENT + ': ' + address2Map[global.CONTRACT.FINALIZEDAGENT] + '\n\n\n';
+
+    dataCrowdsale.push(address2Map[global.CONTRACT.CROWDSALE]);
   }
-  return data;
+  return {data, dataToken, dataCrowdsale};
 }
 
 exports.setParamForContracts = async (step2, step3, global) => {
