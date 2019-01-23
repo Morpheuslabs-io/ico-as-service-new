@@ -19,6 +19,7 @@ deploySafeMathLib = async (gasOpt, global) => {
     }
     sleep.sleep(5);
     console.log('SafeMathLibExt creation retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
   return SafeMathLibExtInstAddr;
@@ -36,6 +37,7 @@ deployCrowdsaleToken = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt link retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
   let CrowdsaleTokenExtInst = null;
@@ -53,6 +55,7 @@ deployCrowdsaleToken = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt creation retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
   return CrowdsaleTokenExtInstAddr;
@@ -70,6 +73,7 @@ deployCrowdsale = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     }
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExtContract link retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
   let MintedTokenCappedCrowdsaleExtInst = null;
@@ -87,6 +91,7 @@ deployCrowdsale = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     }
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExtContract creation retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
   return MintedTokenCappedCrowdsaleExtInstAddr;
@@ -121,6 +126,7 @@ deployFlatPricing = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     }
     sleep.sleep(5);
     console.log('FlatPricingExt creation retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
   return FlatPricingExtInstAddr;
@@ -155,6 +161,7 @@ deployFinalizedAgent = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     }
     sleep.sleep(5);
     console.log('ReservedTokensFinalizeAgentContract creation retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
   return ReservedTokensFinalizeAgentInstAddr;
@@ -188,6 +195,7 @@ transferOwnershipToken = async (gasOpt, global, ownerWallet, tokenAddr) => {
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - transferOwnership Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 }
 
@@ -205,6 +213,7 @@ transferOwnershipCrowdsale = async (gasOpt, global, ownerWallet, crowdsaleAddr) 
     }
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExt - transferOwnership Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 }
 
@@ -222,6 +231,7 @@ transferOwnershipFlatPricing = async (gasOpt, global, ownerWallet, flatPricingAd
     }
     sleep.sleep(5);
     console.log('FlatPricingExt - transferOwnership Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 }
 
@@ -239,6 +249,7 @@ transferOwnershipFinalizeAgent = async (gasOpt, global, ownerWallet, finalizedAg
     }
     sleep.sleep(5);
     console.log('ReservedTokensFinalizeAgent - transferOwnership Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 }
 
@@ -281,7 +292,7 @@ exports.deployContracts = async (gasOpt, global) => {
   // Store into db (table "address1")
   await global.SqliteHandler.push(JSON.stringify(address1Map), 'address1');
 
-  if (global.DEPLOY_ONLY_TOKEN) {
+  if (global.DEPLOY_ONLY_TOKEN == 1) {
     return;
   }
 
@@ -322,6 +333,7 @@ setReleaseAgentForCrowdsaleToken = async (gasOpt, global, releaseAgent, address1
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setReleaseAgent Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 }
 
@@ -340,6 +352,7 @@ setMintAgentManyForCrowdsaleToken = async (gasOpt, global, mintAgentList, addres
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setMintAgentMany Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 }
 
@@ -361,6 +374,7 @@ setReservedTokenForCrowdsaleToken = async (gasOpt, global, param, address1Map) =
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setReservedToken Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 }
 
@@ -386,6 +400,7 @@ setParamCrowdsaleToken = async (gasOpt, global, param, address1Map) => {
     }
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setParam Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 }
 
@@ -407,6 +422,7 @@ setWhitelistForCrowdsale = async (gasOpt, global, paramWhitelist, address2Map) =
     }
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExt - setEarlyParticipantWhitelistMultiple Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 }
 
@@ -425,6 +441,7 @@ setFinalizedAgentForCrowdsale = async (gasOpt, global, finalizedAgentAddr, addre
     }
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExt - setFinalizeAgent Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 }
 
@@ -454,6 +471,7 @@ setParamCrowdsale = async (gasOpt, global, paramCrowdsale, address2Map) => {
     }
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExt - setParam Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 }
 
@@ -478,6 +496,7 @@ setParamPricingStrategy = async (gasOpt, global, paramPricing, address2Map) => {
     }
     sleep.sleep(5);
     console.log('FlatPricingExt - setParam Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
 }
@@ -502,6 +521,7 @@ setParamFinalizedAgent = async (gasOpt, global, paramFinalizedAgent, address2Map
     }
     sleep.sleep(5);
     console.log('ReservedTokensFinalizeAgent - setParam Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
 }
@@ -601,6 +621,7 @@ exports.setParamForContracts = async (step2, step3, global) => {
   let returnedData = buildReturnedData(address1MapStr, address2MapStrList, global);
   
   if (global.JUST_RETURN_PREDEPLOY == 1) {
+    console.log('setParamForContracts - JUST_RETURN_PREDEPLOY:');
     return returnedData;
   }
   

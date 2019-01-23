@@ -1,6 +1,5 @@
 var sqlite3=require('sqlite3-promise')
 var db = null;
-var global = require('./global');
 
 var SqliteHandler = {
   async loadDB(dbFilePath) {
@@ -48,17 +47,14 @@ var SqliteHandler = {
       }
       addressListStr = row[0].data;
       rowId = row[0].id;
-
-      if (global.DELETE_ADDRESS) {
-        let queryDelete = 'DELETE FROM ' + addressTableName + ' WHERE ROWID=' + rowId;
-        try {
-          // TEST
-          await db.runAsync(queryDelete);
-          console.log('pop ' + addressTableName + ' OK - addressList:', addressListStr);
-        } catch (err) {
-          console.log('pop ' + addressTableName + ' Error: ', err);
-          return null;
-        }
+      let queryDelete = 'DELETE FROM ' + addressTableName + ' WHERE ROWID=' + rowId;
+      try {
+        // TEST
+        await db.runAsync(queryDelete);
+        console.log('pop ' + addressTableName + ' OK - addressList:', addressListStr);
+      } catch (err) {
+        console.log('pop ' + addressTableName + ' Error: ', err);
+        return null;
       }
     } catch (err) {
       console.log('pop ' + addressTableName + ' Error: ', err);
