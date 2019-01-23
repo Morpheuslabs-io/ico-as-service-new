@@ -593,7 +593,10 @@ exports.setParamForContracts = async (step2, step3, global) => {
     tiers
   } = step3;
 
-  console.log('setParamForContracts started');
+  var startTime = new Date();
+  var startDate = dateFormat(startTime, "yyyy-mm-dd h:MM:ss");
+  console.log("\n Started setting params of ICO wizard contracts" +
+    "\nTime: " + startDate);
 
   let address1MapStr = await global.SqliteHandler.pop('address1');
   if (!address1MapStr) {
@@ -782,5 +785,13 @@ exports.setParamForContracts = async (step2, step3, global) => {
   // Transfer ownership to wallet address
   await transferOwnershipAll(gasOpt, global, wallet_address, address1Map, address2MapList);
   
+  var endTime = new Date();
+  var endDate = dateFormat(endTime, "yyyy-mm-dd h:MM:ss");
+  console.log("\n Ended setting params of ICO wizard contracts" +
+    "\nTime: " + endDate);
+
+  var duration = ((endTime - startTime) / 1000) / 60;
+  console.log('\n Total duration: %d minutes', duration);
+
   return returnedData;
 }
