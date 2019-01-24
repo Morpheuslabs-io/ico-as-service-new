@@ -1,4 +1,14 @@
-## ICO Controller
+## ICO Wizard Server
+
+## System description
+
+The server has 4 components:
+
+- `Cron job`: running in background and periodically pre-deploy the set of contracts
+- `Sqlite db`: used to store the predeployed contracts.
+- `Express-based server`: provide rest APIs for handling of the ICO-wizard requests
+- `ICO-wizard handler`: perform the parameter setting for the pre-deployed contracts based on the provided ICO data extracted from the request.
+
 
 #### Setting
 
