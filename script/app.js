@@ -1,5 +1,6 @@
 let express = require('express');
 let app = express();
+var server = require('http').createServer(app);
 let cors = require('cors');
 let bodyParser = require('body-parser');
 const multipart = require('connect-multiparty');
@@ -20,8 +21,12 @@ app.use('/', express.static('public_static'));
 app.use(cors());
 
 const port = 4000 || process.env.PORT;
-app.listen(port, () => {
-    console.log("Express Listening at http://localhost:" + port);
+// app.listen(port, () => {
+//     console.log("Express Listening at http://localhost:" + port);
+// });
+
+server.listen(port, () => {
+  console.log('Server is running on port ', port);
 });
 
 app.post('/test/deploycontract', async function (req, res) {
