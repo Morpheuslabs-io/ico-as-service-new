@@ -9,6 +9,9 @@ The server has 4 components:
 - `Express-based server`: provide rest APIs for handling of the ICO-wizard requests
 - `ICO-wizard handler`: perform the parameter setting for the pre-deployed contracts based on the provided ICO data extracted from the request.
 
+**Notice**
+Error-handling and retry-mechanism are applied for the contract predeployment and setting to ensure that if something is broken inbetween, it will be retried and the breaking won't break the entire lengthy process.
+
 
 #### Setting
 
