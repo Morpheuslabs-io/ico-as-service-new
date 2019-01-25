@@ -1,4 +1,4 @@
-var request = require('request');
+var request = require('requestretry');
 
 /**
  * Declare class
@@ -6,35 +6,59 @@ var request = require('request');
  */
 var Utils = function () { }
 
-Utils.httpGet = function (route) {
-    return new Promise(function (resolve, reject) {
-        request.get(route, (er, res, body) => {
-            if (er) return reject(er);
-            body = JSON.parse(body);
-            return resolve(body);
-        });
-    });
+var oldGas = 0;
+
+Utils.requestRetryAsync = async (url, opt) => {
+  var reqOpt = {
+    url: '',
+    json: true,
+    // The below parameters are specific to request-retry
+    maxAttempts: 5, // (default) try 5 times
+    retryDelay: 5000, // (default) wait for 5s before trying again
+    fullResponse: false // (default) To resolve the promise with the full response or just the body
+  }
+
+  if (opt) {
+    reqOpt.maxAttempts = opt.maxAttempts ? opt.maxAttempts : reqOpt.maxAttempts
+    reqOpt.retryDelay = opt.retryDelay ? opt.retryDelay : reqOpt.retryDelay
+  }
+
+  reqOpt.url = url
+  try {
+    let re = await request(reqOpt)
+    // console.log('requestRetryAsync: ', re)
+    return re
+  } catch (err) {
+    console.log('requestRetryAsync - error: ', err)
+    return null
+  }
 }
 
 Utils.getGasPriceGST = async function () {
     const GAS_STATION_URL = 'https://ethgasstation.info/json/ethgasAPI.json';
-    var re = await Utils.httpGet(GAS_STATION_URL);
+    var re = await Utils.requestRetryAsync(GAS_STATION_URL);
+    if (!re) return null;
     let average = re.average / 10;
     return average; //Gwei
 }
 //etherchain
 Utils.getGasPriceETHC = async function () {
     const GAS_STATION_URL = 'https://www.etherchain.org/api/gasPriceOracle';
-    var re = await Utils.httpGet(GAS_STATION_URL);
+    var re = await Utils.requestRetryAsync(GAS_STATION_URL);
+    if (!re) return null;
     let standard = re.standard;
     return standard; //Gwei
 }
 
 Utils.checkCurrentGasPrice = async function () {
     let gas = await Utils.getGasPriceGST();
-    if (gas === undefined || gas === null) {
+    if (!gas) {
         gas = await Utils.getGasPriceETHC();
+        if (!gas) {
+          gas = oldGas;
+        }
     }
+    oldGas = gas;
     let currentGasPrice = gas * (10 ** 9); //wei
     console.log('checkCurrentGasPrice:', gas, ' Gwei');
     return currentGasPrice;
