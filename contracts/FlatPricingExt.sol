@@ -2,15 +2,14 @@
  * Issued by Morpheus Labs ICO as a Service Wizard
  */
 pragma solidity ^0.4.24;
-import "./lib/SafeMathLibExt.sol";
+import "./lib/SafeMath.sol";
 import "./lib/Ownable.sol";
 import "./lib/PricingStrategy.sol";
 
 /**
  * Fixed crowdsale pricing - everybody gets the same price.
  */
-contract FlatPricingExt is PricingStrategy, Ownable {
-    using SafeMathLibExt for uint;
+contract FlatPricingExt is PricingStrategy, Ownable, SafeMath {
 
     /* How many weis one token costs */
     uint public oneTokenInWei;
@@ -51,6 +50,7 @@ contract FlatPricingExt is PricingStrategy, Ownable {
      */
     function calculatePrice(uint value, uint weiRaised, uint tokensSold, address msgSender, uint decimals) public constant returns (uint) {
         uint multiplier = 10 ** decimals;
-        return value.times(multiplier) / oneTokenInWei;
+        // return value.times(multiplier) / oneTokenInWei;
+        return safeDiv(safeMul(value, multiplier), oneTokenInWei);
     }
 }

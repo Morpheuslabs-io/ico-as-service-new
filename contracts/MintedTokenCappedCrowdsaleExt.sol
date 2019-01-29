@@ -41,7 +41,7 @@ contract MintedTokenCappedCrowdsaleExt is CrowdsaleExt {
     function isBreakingInvestorCap(address addr, uint tokenAmount) public constant returns (bool limitBroken) {
         assert(isWhiteListed);
         uint maxCap = earlyParticipantWhitelist[addr].maxCap;
-        return (tokenAmountOf[addr].plus(tokenAmount)) > maxCap;
+        return (safeAdd(tokenAmountOf[addr], tokenAmount)) > maxCap;
     }
 
     function isCrowdsaleFull() public constant returns (bool) {

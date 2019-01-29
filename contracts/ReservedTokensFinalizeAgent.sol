@@ -4,7 +4,7 @@
 pragma solidity ^0.4.24;
 
 import "./lib/FinalizeAgent.sol";
-import "./lib/SafeMathLibExt.sol";
+import "./lib/SafeMath.sol";
 import "./CrowdsaleTokenExt.sol";
 import "./MintedTokenCappedCrowdsaleExt.sol";
 import "./lib/Ownable.sol";
@@ -14,8 +14,7 @@ import "./lib/Ownable.sol";
  * The default behavior for the crowdsale end.
  * Unlock tokens.
  */
-contract ReservedTokensFinalizeAgent is FinalizeAgent, Ownable {
-    using SafeMathLibExt for uint;
+contract ReservedTokensFinalizeAgent is FinalizeAgent, Ownable, SafeMath {
     CrowdsaleTokenExt public token;
     CrowdsaleExt public crowdsale;
 
@@ -54,11 +53,11 @@ contract ReservedTokensFinalizeAgent is FinalizeAgent, Ownable {
         uint tokensSold = 0;
         for (uint8 i = 0; i < crowdsale.joinedCrowdsalesLen(); i++) {
             CrowdsaleExt tier = CrowdsaleExt(crowdsale.joinedCrowdsales(i));
-            tokensSold = tokensSold.plus(tier.tokensSold());
+            tokensSold = safeAdd(tokensSold, tier.tokensSold());
         }
 
         uint startLooping = distributedReservedTokensDestinationsLen;
-        uint batch = token.reservedTokensDestinationsLen().minus(distributedReservedTokensDestinationsLen);
+        uint batch = safeSub(token.reservedTokensDestinationsLen(), distributedReservedTokensDestinationsLen);
         if (batch >= reservedTokensDistributionBatch) {
             batch = reservedTokensDistributionBatch;
         }

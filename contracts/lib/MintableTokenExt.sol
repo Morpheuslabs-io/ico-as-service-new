@@ -3,7 +3,7 @@
  */
 pragma solidity ^0.4.24;
 import "./StandardTokenExt.sol";
-import "./SafeMathLibExt.sol";
+import "./SafeMath.sol";
 
 /**
  * A token that can increase its supply by another contract.
@@ -13,8 +13,6 @@ import "./SafeMathLibExt.sol";
  *
  */
 contract MintableTokenExt is StandardTokenExt {
-
-  using SafeMathLibExt for uint;
 
   bool public mintingFinished = false;
 
@@ -101,8 +99,8 @@ contract MintableTokenExt is StandardTokenExt {
    * Only callably by a crowdsale contract (mint agent).
    */
   function mint(address receiver, uint amount) onlyMintAgent canMint public {
-    totalSupply = totalSupply.plus(amount);
-    balances[receiver] = balances[receiver].plus(amount);
+    totalSupply = safeAdd(totalSupply, amount);
+    balances[receiver] = safeAdd(balances[receiver], amount);
 
     // This will make the mint transaction apper in EtherScan.io
     // We can remove this after there is a standardized minting event

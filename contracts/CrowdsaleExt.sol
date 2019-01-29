@@ -2,7 +2,7 @@
  * Issued by Morpheus Labs ICO as a Service Wizard
  */
 pragma solidity ^0.4.24;
-import "./lib/SafeMathLibExt.sol";
+import "./lib/SafeMath.sol";
 import "./lib/FractionalERC20Ext.sol";
 import "./lib/PricingStrategy.sol";
 import "./lib/FinalizeAgent.sol";
@@ -19,12 +19,10 @@ import "./lib/MintableTokenExt.sol";
  * - different pricing strategies
  * - different investment policies (require server side customer id, allow only whitelisted addresses)
  */
-contract CrowdsaleExt is Haltable {
+contract CrowdsaleExt is Haltable, SafeMath {
 
     /* Max investment count when we are still allowed to change the multisig address */
     uint public MAX_INVESTMENTS_BEFORE_MULTISIG_CHANGE = 5;
-
-    using SafeMathLibExt for uint;
 
     /* The token we are selling */
     FractionalERC20Ext public token;
@@ -200,12 +198,12 @@ contract CrowdsaleExt is Haltable {
         }
 
         // Update investor
-        investedAmountOf[receiver] = investedAmountOf[receiver].plus(weiAmount);
-        tokenAmountOf[receiver] = tokenAmountOf[receiver].plus(tokenAmount);
+        investedAmountOf[receiver] = safeAdd(investedAmountOf[receiver], weiAmount);
+        tokenAmountOf[receiver] = safeAdd(tokenAmountOf[receiver], tokenAmount);
 
         // Update totals
-        weiRaised = weiRaised.plus(weiAmount);
-        tokensSold = tokensSold.plus(tokenAmount);
+        weiRaised = safeAdd(weiRaised, weiAmount);
+        tokensSold = safeAdd(tokensSold, tokenAmount);
 
         // Check that we did not bust the cap
         require (!isBreakingCap(weiAmount, tokenAmount, weiRaised, tokensSold));
@@ -335,7 +333,7 @@ contract CrowdsaleExt is Haltable {
         require (tokensBought >= earlyParticipantWhitelist[addr].minCap && tokenAmountOf[addr] != 0);
         //if (addr != msg.sender && contractAddr != msg.sender) throw;
         uint newMaxCap = earlyParticipantWhitelist[addr].maxCap;
-        newMaxCap = newMaxCap.minus(tokensBought);
+        newMaxCap = safeSub(newMaxCap, tokensBought);
         earlyParticipantWhitelist[addr] = WhiteListData({status : earlyParticipantWhitelist[addr].status, minCap : 0, maxCap : newMaxCap});
     }
 
