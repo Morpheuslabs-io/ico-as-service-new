@@ -43,7 +43,7 @@ global.globalize = function () {
 }
 
 global.initContract = function (artifacts) {
-  global.SafeMathLibExtContract = artifacts.require("SafeMathLibExt");
+  //global.SafeMathLibExtContract = artifacts.require("SafeMathLibExt");
   global.CrowdsaleTokenExtContract = artifacts.require("CrowdsaleTokenExt");
   global.FlatPricingExtContract = artifacts.require("FlatPricingExt");
   global.MintedTokenCappedCrowdsaleExtContract = artifacts.require("MintedTokenCappedCrowdsaleExt");
