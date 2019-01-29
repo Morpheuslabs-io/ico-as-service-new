@@ -27,18 +27,18 @@ deploySafeMathLib = async (gasOpt, global) => {
 
 // Deploy only once
 deployCrowdsaleToken = async (gasOpt, global, SafeMathLibExtInstAddr) => {
-  while (1) {
-    try {
-      await global.CrowdsaleTokenExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
-      console.log('CrowdsaleTokenExt link with SafeMathLibExt - OK');
-      break;
-    } catch (err) {
-      console.log('CrowdsaleTokenExt link with SafeMathLibExt - error: ', (err.message || ''));
-    }
-    sleep.sleep(5);
-    console.log('CrowdsaleTokenExt link retry');
-    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
-  }
+  // while (1) {
+  //   try {
+  //     await global.CrowdsaleTokenExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
+  //     console.log('CrowdsaleTokenExt link with SafeMathLibExt - OK');
+  //     break;
+  //   } catch (err) {
+  //     console.log('CrowdsaleTokenExt link with SafeMathLibExt - error: ', (err.message || ''));
+  //   }
+  //   sleep.sleep(5);
+  //   console.log('CrowdsaleTokenExt link retry');
+  //   gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+  // }
 
   let CrowdsaleTokenExtInst = null;
   let CrowdsaleTokenExtInstAddr = null;
@@ -63,18 +63,18 @@ deployCrowdsaleToken = async (gasOpt, global, SafeMathLibExtInstAddr) => {
 
 // Deploy multiple times
 deployCrowdsale = async (gasOpt, global, SafeMathLibExtInstAddr) => {
-  while (1) {
-    try {
-      await global.MintedTokenCappedCrowdsaleExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
-      console.log('MintedTokenCappedCrowdsaleExtContract link with SafeMathLibExt - OK');
-      break;
-    } catch (err) {
-      console.log('MintedTokenCappedCrowdsaleExtContract link with SafeMathLibExt - error: ', (err.message || ''));
-    }
-    sleep.sleep(5);
-    console.log('MintedTokenCappedCrowdsaleExtContract link retry');
-    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
-  }
+  // while (1) {
+  //   try {
+  //     await global.MintedTokenCappedCrowdsaleExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
+  //     console.log('MintedTokenCappedCrowdsaleExtContract link with SafeMathLibExt - OK');
+  //     break;
+  //   } catch (err) {
+  //     console.log('MintedTokenCappedCrowdsaleExtContract link with SafeMathLibExt - error: ', (err.message || ''));
+  //   }
+  //   sleep.sleep(5);
+  //   console.log('MintedTokenCappedCrowdsaleExtContract link retry');
+  //   gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+  // }
 
   let MintedTokenCappedCrowdsaleExtInst = null;
   let MintedTokenCappedCrowdsaleExtInstAddr = null;
@@ -99,17 +99,17 @@ deployCrowdsale = async (gasOpt, global, SafeMathLibExtInstAddr) => {
 
 // Deploy multiple times
 deployFlatPricing = async (gasOpt, global, SafeMathLibExtInstAddr) => {
-  while (1) {
-    try {
-      await global.FlatPricingExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
-      console.log('FlatPricingExtContract link with SafeMathLibExt - OK');
-      break;
-    } catch (err) {
-      console.log('FlatPricingExtContract link with SafeMathLibExt - error: ', (err.message || ''));
-    }
-    sleep.sleep(5);
-    console.log('FlatPricingExtContract link retry');
-  }
+  // while (1) {
+  //   try {
+  //     await global.FlatPricingExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
+  //     console.log('FlatPricingExtContract link with SafeMathLibExt - OK');
+  //     break;
+  //   } catch (err) {
+  //     console.log('FlatPricingExtContract link with SafeMathLibExt - error: ', (err.message || ''));
+  //   }
+  //   sleep.sleep(5);
+  //   console.log('FlatPricingExtContract link retry');
+  // }
 
   let FlatPricingExtInst = null;
   let FlatPricingExtInstAddr = null;
@@ -134,17 +134,17 @@ deployFlatPricing = async (gasOpt, global, SafeMathLibExtInstAddr) => {
 
 // Deploy multiple times
 deployFinalizedAgent = async (gasOpt, global, SafeMathLibExtInstAddr) => {
-  while (1) {
-    try {
-      await global.ReservedTokensFinalizeAgentContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
-      console.log('ReservedTokensFinalizeAgentContract link with SafeMathLibExt - OK');
-      break;
-    } catch (err) {
-      console.log('ReservedTokensFinalizeAgentContract link with SafeMathLibExt - error: ', (err.message || ''));
-    }
-    sleep.sleep(5);
-    console.log('ReservedTokensFinalizeAgentContract link retry');
-  }
+  // while (1) {
+  //   try {
+  //     await global.ReservedTokensFinalizeAgentContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
+  //     console.log('ReservedTokensFinalizeAgentContract link with SafeMathLibExt - OK');
+  //     break;
+  //   } catch (err) {
+  //     console.log('ReservedTokensFinalizeAgentContract link with SafeMathLibExt - error: ', (err.message || ''));
+  //   }
+  //   sleep.sleep(5);
+  //   console.log('ReservedTokensFinalizeAgentContract link retry');
+  // }
 
   let ReservedTokensFinalizeAgentInst = null;
   let ReservedTokensFinalizeAgentInstAddr = null;
@@ -284,7 +284,7 @@ exports.deployContracts = async (gasOpt, global) => {
   let address1Map = {};
   let address2Map = {};
 
-  let SafeMathLibExtInstAddr = await deploySafeMathLib(gasOpt, global);
+  let SafeMathLibExtInstAddr = null; //await deploySafeMathLib(gasOpt, global);
 
   let CrowdsaleTokenExtInstAddr = await deployCrowdsaleToken(gasOpt, global, SafeMathLibExtInstAddr);
   address1Map[global.CONTRACT.TOKEN] = CrowdsaleTokenExtInstAddr;
