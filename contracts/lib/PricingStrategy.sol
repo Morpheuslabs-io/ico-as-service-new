@@ -1,7 +1,7 @@
 /**
  * Issued by Morpheus Labs ICO as a Service Wizard
  */
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.24;
 
 /**
  * Interface for defining crowdsale pricing.

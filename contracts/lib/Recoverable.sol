@@ -1,7 +1,7 @@
 /**
  * Issued by Morpheus Labs ICO as a Service Wizard
  */
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.24;
 
 import "./Ownable.sol";
 import "./ERC20Basic.sol";

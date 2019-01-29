@@ -1,7 +1,7 @@
 /**
  * Issued by Morpheus Labs ICO as a Service Wizard
  */
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.24;
 import "./lib/SafeMathLibExt.sol";
 import "./lib/Ownable.sol";
 import "./lib/PricingStrategy.sol";
