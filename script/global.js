@@ -40,6 +40,11 @@ global.globalize = function () {
   global.DEPLOY_ONLY_TOKEN = settingData.DEPLOY_ONLY_TOKEN;
   global.DELETE_ADDRESS = settingData.DELETE_ADDRESS;
   global.RETRY_GAS_PRICE_MULTIPLIER = settingData.RETRY_GAS_PRICE_MULTIPLIER;
+
+  global.ETHERSCAN_API_KEY = settingData.ETHERSCAN_API_KEY;
+  global.ETHERSCAN_API_URL = settingData.ETHERSCAN_API_URL;
+  global.CONTRACTS_FLATTEN_DIR = settingData.CONTRACTS_FLATTEN_DIR;
+  global.CONTRACTS_FLATTEN_SUFFIX = settingData.CONTRACTS_FLATTEN_SUFFIX;
 }
 
 global.initContract = function (artifacts) {

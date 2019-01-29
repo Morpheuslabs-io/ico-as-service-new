@@ -1,4 +1,5 @@
 const utils = require('./utils')
+const publish = require('./publish')
 const dateFormat = require('dateformat');
 var sleep = require('sleep');
 var moment = require('moment');
@@ -58,6 +59,11 @@ deployCrowdsaleToken = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
+  let contractAddr = CrowdsaleTokenExtInstAddr;
+  let contractName = global.CONTRACT.TOKEN;
+  let contractFilePath = global.CONTRACTS_FLATTEN_DIR + "/" + contractName + global.CONTRACTS_FLATTEN_SUFFIX;
+  await publish.publishContract(contractAddr, contractName, contractFilePath, global);
+
   return CrowdsaleTokenExtInstAddr;
 }
 
@@ -94,6 +100,11 @@ deployCrowdsale = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
+  let contractAddr = MintedTokenCappedCrowdsaleExtInstAddr;
+  let contractName = global.CONTRACT.CROWDSALE;
+  let contractFilePath = global.CONTRACTS_FLATTEN_DIR + "/" + contractName + global.CONTRACTS_FLATTEN_SUFFIX;
+  await publish.publishContract(contractAddr, contractName, contractFilePath, global);
+
   return MintedTokenCappedCrowdsaleExtInstAddr;
 }
 
@@ -129,6 +140,11 @@ deployFlatPricing = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
 
+  let contractAddr = FlatPricingExtInstAddr;
+  let contractName = global.CONTRACT.FLATPRICING;
+  let contractFilePath = global.CONTRACTS_FLATTEN_DIR + "/" + contractName + global.CONTRACTS_FLATTEN_SUFFIX;
+  await publish.publishContract(contractAddr, contractName, contractFilePath, global);
+
   return FlatPricingExtInstAddr;
 }
 
@@ -163,6 +179,11 @@ deployFinalizedAgent = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     console.log('ReservedTokensFinalizeAgentContract creation retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
   }
+
+  let contractAddr = ReservedTokensFinalizeAgentInstAddr;
+  let contractName = global.CONTRACT.FINALIZEDAGENT;
+  let contractFilePath = global.CONTRACTS_FLATTEN_DIR + "/" + contractName + global.CONTRACTS_FLATTEN_SUFFIX;
+  await publish.publishContract(contractAddr, contractName, contractFilePath, global);
 
   return ReservedTokensFinalizeAgentInstAddr;
 

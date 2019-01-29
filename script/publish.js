@@ -2,13 +2,13 @@ var querystring = require('querystring');
 var request = require('request-promise');
 var fs = require("fs");
 
-exports.publishContract = async (contractAddr, contractName, contractFilePath) => {
+exports.publishContract = async (contractAddr, contractName, contractFilePath, global) => {
   
   let source = exports.getContractSource(contractFilePath);
   if (!source) return;
 
   let form = {
-    "apikey": "KCUPM62T94YYXRK6KJFK3VMHVBRASKTHVR",
+    "apikey": global.ETHERSCAN_API_KEY,
     "module": "contract",                           
     "action": "verifysourcecode",                   
     "contractaddress": contractAddr,
@@ -27,7 +27,7 @@ exports.publishContract = async (contractAddr, contractName, contractFilePath) =
       'Content-Length': contentLength,
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    uri: 'http://api-rinkeby.etherscan.io/api?module=contract',
+    uri: global.ETHERSCAN_API_URL,
     body: formData,
     method: 'POST'
   });
@@ -48,13 +48,15 @@ exports.getContractSource = (contractFilePath) => {
 }
 
 async function test2() {
-  //let contractFilePath = './contracts-flatten/ReservedTokensFinalizeAgentFlattened.sol';
-  // let contractFilePath = './script/data.js';
   let contractFilePath = './contracts-flatten/MintedTokenCappedCrowdsaleExtFlatten.sol';
   let contractAddr = "0x58d8015f4fae2abf13108b1304c8435124c0d041";
   let contractName = "MintedTokenCappedCrowdsaleExt";
 
-  await exports.publishContract(contractAddr, contractName, contractFilePath);
+  let global = {}
+  global.ETHERSCAN_API_KEY = 'KCUPM62T94YYXRK6KJFK3VMHVBRASKTHVR';
+  global.ETHERSCAN_API_URL = 'http://api-rinkeby.etherscan.io/api';
+
+  await exports.publishContract(contractAddr, contractName, contractFilePath, global);
 }
 
-test2();
+// test2();
