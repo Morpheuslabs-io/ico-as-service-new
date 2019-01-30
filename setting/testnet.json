@@ -4,16 +4,25 @@
   "OWNER_KEY_FILE_FOLDER": "./keyfile/testnet",
   "GAS_LIMIT":  7000000,
   "DB_FILE_PATH": "../database/sqlite.db",
+  
   "PREDEPLOY_INTERVAL": "*/1 * * * *",
   "PREDEPLOY_MAX": 15,
   "PREDEPLOY_MAX_MULTIPLES": 1,  
   "PREDEPLOY_GAS_PRICE_MAX": 7000000000,
   "RETRY_GAS_PRICE_MULTIPLIER": 2,
+  
   "JUST_RETURN_PREDEPLOY": 1,
   "DEPLOY_ONLY_TOKEN": 0,
   "DELETE_ADDRESS": 1,
+  
   "ETHERSCAN_API_KEY": "KCUPM62T94YYXRK6KJFK3VMHVBRASKTHVR",
   "ETHERSCAN_API_URL": "http://api-rinkeby.etherscan.io/api",
+  "ETHERSCAN_ADDRESS_URL": "https://rinkeby.etherscan.io/address/",
   "CONTRACTS_FLATTEN_DIR": "./contracts-flatten",
-  "CONTRACTS_FLATTEN_SUFFIX": "Flatten.sol"
+  "CONTRACTS_FLATTEN_SUFFIX": "Flatten.sol",
+  
+  "MAILGUN_DOMAIN": "sandboxe608a5544bda4147998625e674fb6a5d.mailgun.org",
+  "MAILGUN_API_KEY": "0b5c41b60f58d88cacec0f48e670316f-c8c889c9-6332350f",
+  "MAILGUN_FROM": "Morpheus ICO Wizard <support@morpheuslabs.io>",
+  "MAILGUN_SUBJECT": "ICO Contract Finalization Confirmation"
 }

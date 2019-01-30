@@ -43,8 +43,15 @@ global.globalize = function () {
 
   global.ETHERSCAN_API_KEY = settingData.ETHERSCAN_API_KEY;
   global.ETHERSCAN_API_URL = settingData.ETHERSCAN_API_URL;
+  global.ETHERSCAN_ADDRESS_URL = settingData.ETHERSCAN_ADDRESS_URL;
+
   global.CONTRACTS_FLATTEN_DIR = settingData.CONTRACTS_FLATTEN_DIR;
   global.CONTRACTS_FLATTEN_SUFFIX = settingData.CONTRACTS_FLATTEN_SUFFIX;
+
+  global.MAILGUN_DOMAIN = settingData.MAILGUN_DOMAIN;
+  global.MAILGUN_API_KEY = settingData.MAILGUN_API_KEY;
+  global.MAILGUN_FROM = settingData.MAILGUN_FROM;
+  global.MAILGUN_SUBJECT = settingData.MAILGUN_SUBJECT;
 }
 
 global.initContract = function (artifacts) {
