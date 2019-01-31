@@ -2,7 +2,7 @@
   "OWNER_ADDR": "0x8847F80cB1b2B567679B3166A0C828453e122c7F",
   "OWNER_PASSPHRASE": "123456789",
   "OWNER_KEY_FILE_FOLDER": "./keyfile/testnet",
-  "GAS_LIMIT":  7000000,
+  "GAS_LIMIT":  6000000,
   "DB_FILE_PATH": "../database/sqlite.db",
   
   "PREDEPLOY_INTERVAL": "*/1 * * * *",
