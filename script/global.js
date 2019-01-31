@@ -40,6 +40,7 @@ global.globalize = function () {
   global.DEPLOY_ONLY_TOKEN = settingData.DEPLOY_ONLY_TOKEN;
   global.DELETE_ADDRESS = settingData.DELETE_ADDRESS;
   global.RETRY_GAS_PRICE_MULTIPLIER = settingData.RETRY_GAS_PRICE_MULTIPLIER;
+  global.RETRY_TIMES = settingData.RETRY_TIMES;
 
   global.ETHERSCAN_API_KEY = settingData.ETHERSCAN_API_KEY;
   global.ETHERSCAN_API_URL = settingData.ETHERSCAN_API_URL;

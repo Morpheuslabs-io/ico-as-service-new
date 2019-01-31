@@ -29,23 +29,12 @@ deploySafeMathLib = async (gasOpt, global) => {
 
 // Deploy only once
 deployCrowdsaleToken = async (gasOpt, global, SafeMathLibExtInstAddr) => {
-  // while (1) {
-  //   try {
-  //     await global.CrowdsaleTokenExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
-  //     console.log('CrowdsaleTokenExt link with SafeMathLibExt - OK');
-  //     break;
-  //   } catch (err) {
-  //     console.log('CrowdsaleTokenExt link with SafeMathLibExt - error: ', (err.message || ''));
-  //   }
-  //   sleep.sleep(5);
-  //   console.log('CrowdsaleTokenExt link retry');
-  //   gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
-  // }
 
   let CrowdsaleTokenExtInst = null;
   let CrowdsaleTokenExtInstAddr = null;
 
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
       CrowdsaleTokenExtInst = await global.CrowdsaleTokenExtContract.new(gasOpt);
       CrowdsaleTokenExtInstAddr = CrowdsaleTokenExtInst.address;
@@ -58,6 +47,7 @@ deployCrowdsaleToken = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt creation retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 
   let contractAddr = CrowdsaleTokenExtInstAddr;
@@ -70,23 +60,12 @@ deployCrowdsaleToken = async (gasOpt, global, SafeMathLibExtInstAddr) => {
 
 // Deploy multiple times
 deployCrowdsale = async (gasOpt, global, SafeMathLibExtInstAddr) => {
-  // while (1) {
-  //   try {
-  //     await global.MintedTokenCappedCrowdsaleExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
-  //     console.log('MintedTokenCappedCrowdsaleExtContract link with SafeMathLibExt - OK');
-  //     break;
-  //   } catch (err) {
-  //     console.log('MintedTokenCappedCrowdsaleExtContract link with SafeMathLibExt - error: ', (err.message || ''));
-  //   }
-  //   sleep.sleep(5);
-  //   console.log('MintedTokenCappedCrowdsaleExtContract link retry');
-  //   gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
-  // }
 
   let MintedTokenCappedCrowdsaleExtInst = null;
   let MintedTokenCappedCrowdsaleExtInstAddr = null;
 
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
       MintedTokenCappedCrowdsaleExtInst = await global.MintedTokenCappedCrowdsaleExtContract.new(gasOpt);
       MintedTokenCappedCrowdsaleExtInstAddr = MintedTokenCappedCrowdsaleExtInst.address;
@@ -99,6 +78,7 @@ deployCrowdsale = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExtContract creation retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 
   let contractAddr = MintedTokenCappedCrowdsaleExtInstAddr;
@@ -111,22 +91,12 @@ deployCrowdsale = async (gasOpt, global, SafeMathLibExtInstAddr) => {
 
 // Deploy multiple times
 deployFlatPricing = async (gasOpt, global, SafeMathLibExtInstAddr) => {
-  // while (1) {
-  //   try {
-  //     await global.FlatPricingExtContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
-  //     console.log('FlatPricingExtContract link with SafeMathLibExt - OK');
-  //     break;
-  //   } catch (err) {
-  //     console.log('FlatPricingExtContract link with SafeMathLibExt - error: ', (err.message || ''));
-  //   }
-  //   sleep.sleep(5);
-  //   console.log('FlatPricingExtContract link retry');
-  // }
-
+  
   let FlatPricingExtInst = null;
   let FlatPricingExtInstAddr = null;
 
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
       FlatPricingExtInst = await global.FlatPricingExtContract.new(gasOpt);
       FlatPricingExtInstAddr = FlatPricingExtInst.address;
@@ -139,6 +109,7 @@ deployFlatPricing = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     sleep.sleep(5);
     console.log('FlatPricingExt creation retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 
   let contractAddr = FlatPricingExtInstAddr;
@@ -151,22 +122,12 @@ deployFlatPricing = async (gasOpt, global, SafeMathLibExtInstAddr) => {
 
 // Deploy multiple times
 deployFinalizedAgent = async (gasOpt, global, SafeMathLibExtInstAddr) => {
-  // while (1) {
-  //   try {
-  //     await global.ReservedTokensFinalizeAgentContract.link('SafeMathLibExt', SafeMathLibExtInstAddr);
-  //     console.log('ReservedTokensFinalizeAgentContract link with SafeMathLibExt - OK');
-  //     break;
-  //   } catch (err) {
-  //     console.log('ReservedTokensFinalizeAgentContract link with SafeMathLibExt - error: ', (err.message || ''));
-  //   }
-  //   sleep.sleep(5);
-  //   console.log('ReservedTokensFinalizeAgentContract link retry');
-  // }
-
+  
   let ReservedTokensFinalizeAgentInst = null;
   let ReservedTokensFinalizeAgentInstAddr = null;
 
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
       ReservedTokensFinalizeAgentInst = await global.ReservedTokensFinalizeAgentContract.new(gasOpt);
       ReservedTokensFinalizeAgentInstAddr = ReservedTokensFinalizeAgentInst.address;
@@ -179,6 +140,7 @@ deployFinalizedAgent = async (gasOpt, global, SafeMathLibExtInstAddr) => {
     sleep.sleep(5);
     console.log('ReservedTokensFinalizeAgentContract creation retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 
   let contractAddr = ReservedTokensFinalizeAgentInstAddr;
@@ -206,9 +168,11 @@ deployFinalizedAgent = async (gasOpt, global, SafeMathLibExtInstAddr) => {
 transferOwnershipToken = async (gasOpt, global, ownerWallet, tokenAddr) => {
   let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
   let crowdsaleTokenInstance = null;
-  while (1) {
+
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(tokenAddr);
+      crowdsaleTokenInstance = await crowdsaleTokenContract.at(tokenAddr);
       await crowdsaleTokenInstance.transferOwnership(ownerWallet, gasOpt);
       console.log('CrowdsaleTokenExt - transferOwnership OK');
       break;
@@ -218,15 +182,18 @@ transferOwnershipToken = async (gasOpt, global, ownerWallet, tokenAddr) => {
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - transferOwnership Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 }
 
 transferOwnershipCrowdsale = async (gasOpt, global, ownerWallet, crowdsaleAddr) => {
   let crowdsaleContract = global.MintedTokenCappedCrowdsaleExtContract;
   let crowdsaleInstance = null;
-  while (1) {
+  
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {  
     try {
-      let crowdsaleInstance = await crowdsaleContract.at(crowdsaleAddr);
+      crowdsaleInstance = await crowdsaleContract.at(crowdsaleAddr);
       await crowdsaleInstance.transferOwnership(ownerWallet, gasOpt);
       console.log('MintedTokenCappedCrowdsaleExt - transferOwnership OK');
       break;
@@ -236,15 +203,17 @@ transferOwnershipCrowdsale = async (gasOpt, global, ownerWallet, crowdsaleAddr) 
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExt - transferOwnership Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 }
 
 transferOwnershipFlatPricing = async (gasOpt, global, ownerWallet, flatPricingAddr) => {
   let FlatPricingContract = global.FlatPricingExtContract;
   let FlatPricingInstance = null;
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let FlatPricingInstance = await FlatPricingContract.at(flatPricingAddr);
+      FlatPricingInstance = await FlatPricingContract.at(flatPricingAddr);
       await FlatPricingInstance.transferOwnership(ownerWallet, gasOpt);
       console.log('FlatPricingExt - transferOwnership OK');
       break;
@@ -254,15 +223,17 @@ transferOwnershipFlatPricing = async (gasOpt, global, ownerWallet, flatPricingAd
     sleep.sleep(5);
     console.log('FlatPricingExt - transferOwnership Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 }
 
 transferOwnershipFinalizeAgent = async (gasOpt, global, ownerWallet, finalizedAgentAddr) => {
   let FinalizedAgentContract = global.ReservedTokensFinalizeAgentContract;
   let FinalizedAgentInstance = null;
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let FinalizedAgentInstance = await FinalizedAgentContract.at(finalizedAgentAddr);
+      FinalizedAgentInstance = await FinalizedAgentContract.at(finalizedAgentAddr);
       await FinalizedAgentInstance.transferOwnership(ownerWallet, gasOpt);
       console.log('ReservedTokensFinalizeAgent - transferOwnership OK');
       break;
@@ -272,6 +243,7 @@ transferOwnershipFinalizeAgent = async (gasOpt, global, ownerWallet, finalizedAg
     sleep.sleep(5);
     console.log('ReservedTokensFinalizeAgent - transferOwnership Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 }
 
@@ -283,9 +255,15 @@ transferOwnershipAll = async (gasOpt, global, ownerWallet, address1Map, address2
     
     await transferOwnershipCrowdsale(gasOpt, global, ownerWallet, address2Map[global.CONTRACT.CROWDSALE]);
 
+    sleep.sleep(2);
+
     await transferOwnershipFlatPricing(gasOpt, global, ownerWallet, address2Map[global.CONTRACT.FLATPRICING]);
 
+    sleep.sleep(2);
+
     await transferOwnershipFinalizeAgent(gasOpt, global, ownerWallet, address2Map[global.CONTRACT.FINALIZEDAGENT]);
+
+    sleep.sleep(2);
   }
 }
 
@@ -344,9 +322,10 @@ setReleaseAgentForCrowdsaleToken = async (gasOpt, global, releaseAgent, address1
   
   let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
   let crowdsaleTokenInstance = null;
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
+      crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
       await crowdsaleTokenInstance.setReleaseAgent(releaseAgent, gasOpt);
       console.log('CrowdsaleTokenExt - setReleaseAgent OK');
       break;
@@ -356,6 +335,7 @@ setReleaseAgentForCrowdsaleToken = async (gasOpt, global, releaseAgent, address1
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setReleaseAgent Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 }
 
@@ -363,9 +343,10 @@ setMintAgentManyForCrowdsaleToken = async (gasOpt, global, mintAgentList, addres
   
   let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
   let crowdsaleTokenInstance = null;
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
+      crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
       await crowdsaleTokenInstance.setMintAgentMany(mintAgentList, gasOpt);
       console.log('CrowdsaleTokenExt - setMintAgentMany OK');
       break;
@@ -375,6 +356,7 @@ setMintAgentManyForCrowdsaleToken = async (gasOpt, global, mintAgentList, addres
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setMintAgentMany Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 }
 
@@ -385,9 +367,10 @@ setReservedTokenForCrowdsaleToken = async (gasOpt, global, param, address1Map) =
 
   let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
   let crowdsaleTokenInstance = null;
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
+      crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
       await crowdsaleTokenInstance.setReservedTokensListMultiple(addrs, inTokens, inPercentageUnit, inPercentageDecimals, gasOpt);
       console.log('CrowdsaleTokenExt - setReservedToken OK');
       break;
@@ -397,6 +380,7 @@ setReservedTokenForCrowdsaleToken = async (gasOpt, global, param, address1Map) =
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setReservedToken Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 }
 
@@ -411,9 +395,10 @@ setParamCrowdsaleToken = async (gasOpt, global, param, address1Map) => {
 
   let crowdsaleTokenContract = global.CrowdsaleTokenExtContract;
   let crowdsaleTokenInstance = null;
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
+      crowdsaleTokenInstance = await crowdsaleTokenContract.at(address1Map[global.CONTRACT.TOKEN]);
       await crowdsaleTokenInstance.setParam(name, ticker, initSupply, decimals, true, mincap, gasOpt);
       console.log('CrowdsaleTokenExt - setParam OK');
       break;
@@ -423,6 +408,7 @@ setParamCrowdsaleToken = async (gasOpt, global, param, address1Map) => {
     sleep.sleep(5);
     console.log('CrowdsaleTokenExt - setParam Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 }
 
@@ -433,9 +419,10 @@ setWhitelistForCrowdsale = async (gasOpt, global, paramWhitelist, address2Map) =
 
   let crowdsaleContract = global.MintedTokenCappedCrowdsaleExtContract;
   let crowdsaleInstance = null;
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let crowdsaleInstance = await crowdsaleContract.at(address2Map[global.CONTRACT.CROWDSALE]);
+      crowdsaleInstance = await crowdsaleContract.at(address2Map[global.CONTRACT.CROWDSALE]);
       await crowdsaleInstance.setEarlyParticipantWhitelistMultiple(addrs, statuses, minCaps, maxCaps, gasOpt);
       console.log('MintedTokenCappedCrowdsaleExt - setEarlyParticipantWhitelistMultiple OK');
       break;
@@ -445,6 +432,7 @@ setWhitelistForCrowdsale = async (gasOpt, global, paramWhitelist, address2Map) =
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExt - setEarlyParticipantWhitelistMultiple Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 }
 
@@ -452,9 +440,10 @@ setFinalizedAgentForCrowdsale = async (gasOpt, global, finalizedAgentAddr, addre
 
   let crowdsaleContract = global.MintedTokenCappedCrowdsaleExtContract;
   let crowdsaleInstance = null;
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let crowdsaleInstance = await crowdsaleContract.at(address2Map[global.CONTRACT.CROWDSALE]);
+      crowdsaleInstance = await crowdsaleContract.at(address2Map[global.CONTRACT.CROWDSALE]);
       await crowdsaleInstance.setFinalizeAgent(finalizedAgentAddr, gasOpt);
       console.log('MintedTokenCappedCrowdsaleExt - setFinalizeAgent OK');
       break;
@@ -464,6 +453,7 @@ setFinalizedAgentForCrowdsale = async (gasOpt, global, finalizedAgentAddr, addre
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExt - setFinalizeAgent Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 }
 
@@ -482,9 +472,10 @@ setParamCrowdsale = async (gasOpt, global, paramCrowdsale, address2Map) => {
 
   let crowdsaleContract = global.MintedTokenCappedCrowdsaleExtContract;
   let crowdsaleInstance = null;
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let crowdsaleInstance = await crowdsaleContract.at(address2Map[global.CONTRACT.CROWDSALE]);
+      crowdsaleInstance = await crowdsaleContract.at(address2Map[global.CONTRACT.CROWDSALE]);
       await crowdsaleInstance.setParam(name, token, pricingStrategy, multisigWallet, start, end, minimumFundingGoal, maximumSellableTokens, isWhiteListed, gasOpt);
       console.log('MintedTokenCappedCrowdsaleExt - setParam OK');
       break;
@@ -494,6 +485,7 @@ setParamCrowdsale = async (gasOpt, global, paramCrowdsale, address2Map) => {
     sleep.sleep(5);
     console.log('MintedTokenCappedCrowdsaleExt - setParam Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 }
 
@@ -506,11 +498,11 @@ setParamPricingStrategy = async (gasOpt, global, paramPricing, address2Map) => {
 
   let PricingStrategyContract = global.FlatPricingExtContract;
   let PricingStrategyInstance = null;
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let PricingStrategyInstance = await PricingStrategyContract.at(address2Map[global.CONTRACT.FLATPRICING]);
+      PricingStrategyInstance = await PricingStrategyContract.at(address2Map[global.CONTRACT.FLATPRICING]);
       await PricingStrategyInstance.setParam(rate, gasOpt);
-      await PricingStrategyInstance.setTier(tokenAddr, gasOpt);
       console.log('FlatPricingExt - setParam OK');
       break;
     } catch (err) {
@@ -519,6 +511,24 @@ setParamPricingStrategy = async (gasOpt, global, paramPricing, address2Map) => {
     sleep.sleep(5);
     console.log('FlatPricingExt - setParam Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
+  }
+
+  sleep.sleep(5);
+
+  retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
+    try {
+      await PricingStrategyInstance.setTier(tokenAddr, gasOpt);
+      console.log('FlatPricingExt - setTier OK');
+      break;
+    } catch (err) {
+      console.log('FlatPricingExt - setTier Error: ', (err.message || ''));
+    }
+    sleep.sleep(5);
+    console.log('FlatPricingExt - setTier Retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 
 }
@@ -532,9 +542,10 @@ setParamFinalizedAgent = async (gasOpt, global, paramFinalizedAgent, address2Map
 
   let FinalizedAgentContract = global.ReservedTokensFinalizeAgentContract;
   let FinalizedAgentInstance = null;
-  while (1) {
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
     try {
-      let FinalizedAgentInstance = await FinalizedAgentContract.at(address2Map[global.CONTRACT.FINALIZEDAGENT]);
+      FinalizedAgentInstance = await FinalizedAgentContract.at(address2Map[global.CONTRACT.FINALIZEDAGENT]);
       await FinalizedAgentInstance.setParam(tokenAddr, crowdsaleAddr, gasOpt);
       console.log('ReservedTokensFinalizeAgent - setParam OK');
       break;
@@ -544,6 +555,7 @@ setParamFinalizedAgent = async (gasOpt, global, paramFinalizedAgent, address2Map
     sleep.sleep(5);
     console.log('ReservedTokensFinalizeAgent - setParam Retry');
     gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
   }
 
 }
@@ -620,7 +632,7 @@ buildReturnedData = (address1MapStr, address2MapStrList, global) => {
     let address2Map = JSON.parse(address2MapStr);
     data += global.CONTRACT.CROWDSALE + ': ' + address2Map[global.CONTRACT.CROWDSALE] + '\n\n';
     data += global.CONTRACT.FLATPRICING + ': ' + address2Map[global.CONTRACT.FLATPRICING] + '\n\n';
-    data += global.CONTRACT.FINALIZEDAGENT + ': ' + address2Map[global.CONTRACT.FINALIZEDAGENT] + '\n\n\n';
+    data += global.CONTRACT.FINALIZEDAGENT + ': ' + address2Map[global.CONTRACT.FINALIZEDAGENT] + '\n\n';
 
     dataCrowdsale.push(address2Map[global.CONTRACT.CROWDSALE]);
   }
@@ -639,7 +651,6 @@ exports.setParamForContracts = async (res, step2, step3, global) => {
   const {
     wallet_address,
     email_address,
-    gasPrice,
     mincap,
     enableWhitelisting,
     tiers
@@ -679,6 +690,8 @@ exports.setParamForContracts = async (res, step2, step3, global) => {
   
   console.log('setParamForContracts - send the predeployed contract addresses');
   res.send({"status":true, "data": returnedData});
+  // TEST
+  // return;
   
   let currGasPrice = await utils.checkCurrentGasPrice();
   let gasOpt = {
