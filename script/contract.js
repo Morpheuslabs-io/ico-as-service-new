@@ -1,4 +1,5 @@
 const utils = require('./utils')
+const mail = require('./mail')
 const publish = require('./publish')
 const dateFormat = require('dateformat');
 var sleep = require('sleep');
@@ -576,6 +577,35 @@ toFixed = (x) => {
   return x;
 }
 
+doSendMail = async (toAddr, address1MapStr, address2MapStrList, global) => {
+
+  let address1Map = JSON.parse(address1MapStr);
+  let tokenAddr = address1Map[global.CONTRACT.TOKEN];
+
+  let crowdsaleAddr = '';
+  let pricingStrategyAddr = '';
+  let finalizedAgentAddr = '';
+  let tierList = [];
+
+  for (let i=0; i < address2MapStrList.length; i++) {
+    let address2MapStr = address2MapStrList[i];
+    let address2Map = JSON.parse(address2MapStr);
+    crowdsaleAddr = address2Map[global.CONTRACT.CROWDSALE];
+    pricingStrategyAddr = address2Map[global.CONTRACT.FLATPRICING];
+    finalizedAgentAddr = address2Map[global.CONTRACT.FINALIZEDAGENT];
+
+    tierList.push({
+      crowdsaleAddr,
+      pricingStrategyAddr,
+      finalizedAgentAddr
+    });
+  }
+  
+  let mailContent = mail.buildMailContent(tokenAddr, tierList, global);
+  
+  await mail.sendMail(toAddr, mailContent, global);
+}
+
 buildReturnedData = (address1MapStr, address2MapStrList, global) => {
   let data = '';
   let dataToken = '';
@@ -597,7 +627,7 @@ buildReturnedData = (address1MapStr, address2MapStrList, global) => {
   return {data, dataToken, dataCrowdsale};
 }
 
-exports.setParamForContracts = async (step2, step3, global) => {
+exports.setParamForContracts = async (res, step2, step3, global) => {
 
   const {
     name,
@@ -608,6 +638,7 @@ exports.setParamForContracts = async (step2, step3, global) => {
 
   const {
     wallet_address,
+    email_address,
     gasPrice,
     mincap,
     enableWhitelisting,
@@ -623,7 +654,8 @@ exports.setParamForContracts = async (step2, step3, global) => {
   if (!address1MapStr) {
     let errMsg = 'Cannot get the predeployed contract';
     console.log('setParamForContracts - error: ', errMsg);
-    return {error: errMsg};
+    res.send({"status":false, "message": errMsg});
+    return;
   }
   let address1Map = JSON.parse(address1MapStr);
 
@@ -634,7 +666,8 @@ exports.setParamForContracts = async (step2, step3, global) => {
     if (!address2MapStr) {
       let errMsg = 'Cannot get the predeployed contract';
       console.log('setParamForContracts - error: ', errMsg);
-      return {error: errMsg};
+      res.send({"status":false, "message": errMsg});
+      return;
     }
     let address2Map = JSON.parse(address2MapStr);
     address2MapList.push(address2Map);
@@ -644,10 +677,8 @@ exports.setParamForContracts = async (step2, step3, global) => {
   // Returned data
   let returnedData = buildReturnedData(address1MapStr, address2MapStrList, global);
   
-  if (global.JUST_RETURN_PREDEPLOY == 1) {
-    console.log('setParamForContracts - JUST_RETURN_PREDEPLOY:');
-    return returnedData;
-  }
+  console.log('setParamForContracts - send the predeployed contract addresses');
+  res.send({"status":true, "data": returnedData});
   
   let currGasPrice = await utils.checkCurrentGasPrice();
   let gasOpt = {
@@ -814,5 +845,5 @@ exports.setParamForContracts = async (step2, step3, global) => {
   var duration = ((endTime - startTime) / 1000) / 60;
   console.log('\n Total duration: %d minutes', duration);
 
-  return returnedData;
+  await doSendMail(email_address, address1MapStr, address2MapStrList, global);
 }
