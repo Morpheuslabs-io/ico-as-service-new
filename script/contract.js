@@ -613,7 +613,7 @@ doSendMail = async (toAddr, address1MapStr, address2MapStrList, global) => {
     });
   }
   
-  let mailContent = mail.buildMailContent(tokenAddr, tierList, global);
+  let mailContent = await mail.buildMailContent(tokenAddr, tierList, global);
   
   await mail.sendMail(toAddr, mailContent, global);
 }

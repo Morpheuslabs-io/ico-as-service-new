@@ -16,6 +16,7 @@
   "DEPLOY_ONLY_TOKEN": 0,
   "DELETE_ADDRESS": 1,
   
+  "ETHERSCAN_NETWORK": "rinkeby",
   "ETHERSCAN_API_KEY": "KCUPM62T94YYXRK6KJFK3VMHVBRASKTHVR",
   "ETHERSCAN_API_URL": "http://api-rinkeby.etherscan.io/api",
   "ETHERSCAN_ADDRESS_URL": "https://rinkeby.etherscan.io/address/",

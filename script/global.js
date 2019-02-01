@@ -42,6 +42,7 @@ global.globalize = function () {
   global.RETRY_GAS_PRICE_MULTIPLIER = settingData.RETRY_GAS_PRICE_MULTIPLIER;
   global.RETRY_TIMES = settingData.RETRY_TIMES;
 
+  global.ETHERSCAN_NETWORK = settingData.ETHERSCAN_NETWORK;
   global.ETHERSCAN_API_KEY = settingData.ETHERSCAN_API_KEY;
   global.ETHERSCAN_API_URL = settingData.ETHERSCAN_API_URL;
   global.ETHERSCAN_ADDRESS_URL = settingData.ETHERSCAN_ADDRESS_URL;
