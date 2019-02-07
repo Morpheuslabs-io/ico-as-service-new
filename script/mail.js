@@ -14,7 +14,7 @@ exports.buildMailContentSimple = (tokenAddr, crowdsaleAddr, pricingStrategyAddr,
   return mailContent;
 }
 
-exports.buildMailContent = async (tokenAddr, tierList, global) => {
+exports.buildHtmlMailContent = async (tokenAddr, tierList, global) => {
   let mailContent='<p><b>Hello</b></p>';
   let txFee = 0;
   let txFeeTotal = 0;
@@ -148,7 +148,9 @@ async function test2() {
 
   let tierList = [tierContent, tierContent];
 
-  let mailContent = await exports.buildMailContent(tokenAddr, tierList, global);
+  let mailContent = await exports.buildHtmlMailContent(tokenAddr, tierList, global);
+
+  console.log('mailContent: ', mailContent);
   
   await exports.sendMail(toAddr, mailContent, global);
 }

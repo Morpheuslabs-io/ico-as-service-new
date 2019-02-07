@@ -292,7 +292,7 @@ exports.deployContracts = async (gasOpt, global) => {
   // Store into db (table "address1")
   await global.SqliteHandler.push(JSON.stringify(address1Map), 'address1');
 
-  if (global.DEPLOY_ONLY_TOKEN == 1) {
+  if (global.PREDEPLOY_ONLY_TOKEN == 1) {
     return;
   }
 
@@ -589,6 +589,17 @@ toFixed = (x) => {
   return x;
 }
 
+doSendMailAndStoreResponse = async (toAddr, address1MapStr, address2MapStrList, global) => {
+  
+  // Send notification email to user
+  let htmlMailContent = await doSendMail(toAddr, address1MapStr, address2MapStrList, global);
+  //////////////////////////////////
+
+  // Store user response
+  await global.SqliteHandler.updateUserResponse(toAddr, htmlMailContent);
+  //////////////////////////////////
+}
+
 doSendMail = async (toAddr, address1MapStr, address2MapStrList, global) => {
 
   let address1Map = JSON.parse(address1MapStr);
@@ -613,9 +624,11 @@ doSendMail = async (toAddr, address1MapStr, address2MapStrList, global) => {
     });
   }
   
-  let mailContent = await mail.buildMailContent(tokenAddr, tierList, global);
+  let htmlMailContent = await mail.buildHtmlMailContent(tokenAddr, tierList, global);
   
-  await mail.sendMail(toAddr, mailContent, global);
+  await mail.sendMail(toAddr, htmlMailContent, global);
+
+  return htmlMailContent;
 }
 
 buildReturnedData = (address1MapStr, address2MapStrList, global) => {
@@ -656,11 +669,6 @@ exports.setParamForContracts = async (res, step2, step3, global) => {
     tiers
   } = step3;
 
-  var startTime = new Date();
-  var startDate = dateFormat(startTime, "yyyy-mm-dd h:MM:ss");
-  console.log("\n Started setting params of ICO wizard contracts" +
-    "\nTime: " + startDate);
-
   let address1MapStr = await global.SqliteHandler.pop('address1');
   if (!address1MapStr) {
     let errMsg = 'Cannot get the predeployed contract';
@@ -685,14 +693,33 @@ exports.setParamForContracts = async (res, step2, step3, global) => {
     address2MapStrList.push(address2MapStr);
   }
 
-  // Returned data
+  // Returned data 
   let returnedData = buildReturnedData(address1MapStr, address2MapStrList, global);
-  
-  console.log('setParamForContracts - send the predeployed contract addresses');
   res.send({"status":true, "data": returnedData});
-  // TEST
-  // return;
-  
+  console.log('setParamForContracts - send the predeployed contract addresses');
+  /////////////////
+
+  // Store user request
+  let requestData = {};
+  requestData.email = email_address;
+  requestData.request = {step2, step3};
+  await global.SqliteHandler.pushUserRequest(requestData);
+  /////////////////
+
+  if (global.DO_NOT_SET_PARAM == 1) {
+    
+    // Send notification email to user and store response
+    await doSendMailAndStoreResponse(email_address, address1MapStr, address2MapStrList, global);
+    //////////////////////////////////
+    
+    return;
+  }
+
+  var startTime = new Date();
+  var startDate = dateFormat(startTime, "yyyy-mm-dd h:MM:ss");
+  console.log("\n Started setting params of ICO wizard contracts" +
+    "\nTime: " + startDate);
+
   let currGasPrice = await utils.checkCurrentGasPrice();
   let gasOpt = {
     gasPrice: currGasPrice,
@@ -858,5 +885,8 @@ exports.setParamForContracts = async (res, step2, step3, global) => {
   var duration = ((endTime - startTime) / 1000) / 60;
   console.log('\n Total duration: %d minutes', duration);
 
-  await doSendMail(email_address, address1MapStr, address2MapStrList, global);
+  // Send notification email to user and store response
+  await doSendMailAndStoreResponse(email_address, address1MapStr, address2MapStrList, global);
+  //////////////////////////////////
+
 }

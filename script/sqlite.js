@@ -52,7 +52,7 @@ var SqliteHandler = {
       let queryDelete = 'DELETE FROM ' + addressTableName + ' WHERE ROWID=' + rowId;
       try {
         // TEST
-        await db.runAsync(queryDelete);
+        // await db.runAsync(queryDelete);
         console.log('pop ' + addressTableName + ' OK - addressList:', addressListStr);
       } catch (err) {
         console.log('pop ' + addressTableName + ' Error: ', err);
@@ -83,47 +83,34 @@ var SqliteHandler = {
     let requestStr = JSON.stringify(requestData.request);
 
     let queryInsert = "INSERT INTO " + "user" + " (email, request) VALUES (";
-    queryInsert += "'" + requestData.email + "'" + "," + "'" + requestStr + "'" + ")";
+    queryInsert += "'" + requestData.email.toLowerCase() + "'" + "," + "'" + requestStr + "'" + ")";
 
     try {
       await db.runAsync(queryInsert);
-      console.log('pushUserRequest OK - email: ' + requestData.email);
+      console.log('pushUserRequest OK - email: ' + requestData.email.toLowerCase());
     } catch (err) {
       console.log('pushUserRequest Error: ' + err);
     }
   },
-  async pushUserResponse(responseData) {
+  async updateUserResponse(email, htmlMailContent) {
 
-    let responseStr = JSON.stringify(responseData.response);
+    htmlMailContent = '<HTML> \n' + '<BODY> \n' + htmlMailContent + '</BODY> \n' + '</HTML>';
 
-    let queryInsert = "INSERT INTO " + "user" + " (email, response) VALUES (";
-    queryInsert += "'" + responseData.email + "'" + "," + "'" + responseStr + "'" + ")";
+    console.log('pushUserResponse - htmlMailContent:', htmlMailContent);
+
+    let queryUpdate = "UPDATE " + "user" + " SET response=";
+    queryUpdate += "'" + htmlMailContent + "'" + " WHERE email=" + "'" + email + "'";
 
     try {
-      await db.runAsync(queryInsert);
-      console.log('pushUserResponse OK - email: ' + responseData.email);
+      await db.runAsync(queryUpdate);
+      console.log('updateUserResponse OK');
     } catch (err) {
-      console.log('pushUserResponse Error: ' + err);
+      console.log('updateUserResponse Error: ' + err);
     }
   }
 }
 
-// async function test() {
-//   await SqliteHandler.loadDB('./database/sqlite.db');
-//   await SqliteHandler.push('123456', 'address1');
-//   await SqliteHandler.push('aaaaa', 'address2');
-//   await SqliteHandler.push('456', 'address1');
-//   await SqliteHandler.push('aaa', 'address2');
-//   await SqliteHandler.predeployed('address1');
-//   await SqliteHandler.predeployed('address2');
-//   await SqliteHandler.pop('address1');
-//   await SqliteHandler.pop('address2');
-//   await SqliteHandler.predeployed('address1');
-//   await SqliteHandler.predeployed('address2');
-//   await SqliteHandler.close();
-// }
-
-async function test2() {
+async function testUserReq() {
   let requestData = {};
   requestData.email = 'midotrinh@gmail.com';
   requestData.request = {
@@ -160,7 +147,18 @@ async function test2() {
   await SqliteHandler.close();
 }
 
-test2();
+async function testUserResponse() {
+  let htmlMailContent = '<p><b>Hello</b></p><p>Please be informed that your ICO contracts have successfully been finalized. </p><h4>Token contract:</h4><ul><li>Link: https://rinkeby.etherscan.io/address/0x6fc3d2d026dcec292850dbfd82c10e40e47abb47</li><li>Transaction fee: 0.016878556 ETH</li></ul><h3>Tier 1</h3><h4>Crowdsale contract</h4><ul><li>Link: https://rinkeby.etherscan.io/address/0x25e3cf3a61603ecd91a3072f1c99bd1f28b6d8e8</li><li>Transaction fee: 0.02406358 ETH</li></ul><h4>Pricing Strategy contract</h4><ul><li>Link: https://rinkeby.etherscan.io/address/0x2b3eebd3310f531378714c491ca962579b7db246</li><li>Transaction fee: 0.004232284 ETH</li></ul><h4>Finalized Agent contract</h4><ul><li>Link: https://rinkeby.etherscan.io/address/0xcf4d162fe2209d49ba97eee1449b5fd0fcde7343</li><li>Transaction fee: 0.009527956 ETH</li></ul><h3>Tier 2</h3><h4>Crowdsale contract</h4><ul><li>Link: https://rinkeby.etherscan.io/address/0x25e3cf3a61603ecd91a3072f1c99bd1f28b6d8e8</li><li>Transaction fee: 0.02406358 ETH</li></ul><h4>Pricing Strategy contract</h4><ul><li>Link: https://rinkeby.etherscan.io/address/0x2b3eebd3310f531378714c491ca962579b7db246</li><li>Transaction fee: 0.004232284 ETH</li></ul><h4>Finalized Agent contract</h4><ul><li>Link: https://rinkeby.etherscan.io/address/0xcf4d162fe2209d49ba97eee1449b5fd0fcde7343</li><li>Transaction fee: 0.009527956 ETH</li></ul><h4>Total transaction fee: 0.09252619600000002 ETH</h4><a href="https://morpheuslabs.io/"><b>@ Morpheus Labs. Inc | 2017 All rights reserved</b></a>';
+
+  let email='midotrinh@gmail.com';
+
+  await SqliteHandler.loadDB('./database/sqlite.db');
+  await SqliteHandler.updateUserResponse(email, htmlMailContent);
+  await SqliteHandler.close();
+}
+
+// testUserReq();
+// testUserResponse();
 
 module.exports = SqliteHandler;
 
