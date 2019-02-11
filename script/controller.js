@@ -303,34 +303,5 @@ exports.setparam = async (req, res, global) => {
 
   console.log('controller::setparam - step2:', step2, ', step3:', step3);
 
-  let result = await contract.setParamForContracts(step2, step3, global);
-
-  if (result.error) {
-    return res.send({"status":false, "message": result.error});
-  } else {
-    return res.send({"status":true, "data": result});
-  }
+  await contract.setParamForContracts(res, step2, step3, global);
 }
-
-// const testData = require('../data/fake_test_data').testData;
-// exports.setparamtest = async (global) => {
-  
-//   const {
-//     step2,
-//     step3
-//   } = testData;
-
-//   console.log('testData:', testData);
-
-//   console.log('controller::setparamtest - step2:', step2, ', step3:', step3);
-
-//   let result = await contract.setParamForContracts(step2, step3, global);
-
-//   if (result.error) {
-//     return res.send({"status":false, "message": result.error});
-//   } else {
-//     return res.send({"status":true, "data": result});
-//   }
-// }
-
-

@@ -36,15 +36,24 @@ global.globalize = function () {
   global.PREDEPLOY_MAX = settingData.PREDEPLOY_MAX;
   global.PREDEPLOY_MAX_MULTIPLES = settingData.PREDEPLOY_MAX_MULTIPLES;
   global.PREDEPLOY_GAS_PRICE_MAX = settingData.PREDEPLOY_GAS_PRICE_MAX;
-  global.JUST_RETURN_PREDEPLOY = settingData.JUST_RETURN_PREDEPLOY;
-  global.DEPLOY_ONLY_TOKEN = settingData.DEPLOY_ONLY_TOKEN;
+  global.DO_NOT_SET_PARAM = settingData.DO_NOT_SET_PARAM;
+  global.PREDEPLOY_ONLY_TOKEN = settingData.PREDEPLOY_ONLY_TOKEN;
   global.DELETE_ADDRESS = settingData.DELETE_ADDRESS;
   global.RETRY_GAS_PRICE_MULTIPLIER = settingData.RETRY_GAS_PRICE_MULTIPLIER;
+  global.RETRY_TIMES = settingData.RETRY_TIMES;
 
+  global.ETHERSCAN_NETWORK = settingData.ETHERSCAN_NETWORK;
   global.ETHERSCAN_API_KEY = settingData.ETHERSCAN_API_KEY;
   global.ETHERSCAN_API_URL = settingData.ETHERSCAN_API_URL;
+  global.ETHERSCAN_ADDRESS_URL = settingData.ETHERSCAN_ADDRESS_URL;
+
   global.CONTRACTS_FLATTEN_DIR = settingData.CONTRACTS_FLATTEN_DIR;
   global.CONTRACTS_FLATTEN_SUFFIX = settingData.CONTRACTS_FLATTEN_SUFFIX;
+
+  global.MAILGUN_DOMAIN = settingData.MAILGUN_DOMAIN;
+  global.MAILGUN_API_KEY = settingData.MAILGUN_API_KEY;
+  global.MAILGUN_FROM = settingData.MAILGUN_FROM;
+  global.MAILGUN_SUBJECT = settingData.MAILGUN_SUBJECT;
 }
 
 global.initContract = function (artifacts) {
