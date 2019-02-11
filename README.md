@@ -13,7 +13,7 @@ The server has 4 components:
 Error-handling and retry-mechanism are applied for the contract predeployment and setting to ensure that if something is broken inbetween, it will be retried and the breaking won't break the entire lengthy process.
 
 
-#### Setting
+## Setting
 
 2 setting files `mainnet.json` and `testnet.json` reside in folder `setting`
 can be used to configure needed params for interacting with testnet rinkeby or mainnet.
@@ -25,7 +25,7 @@ Instead, `keyfile` and `passphrase` are used.
 `Keyfile` is currently stored in folder `keyfile`.
 It's possible to use https://www.myetherwallet.com/ to generate an account with keyfile
 
-#### Installation
+## Installation
 
 `npm i`
 
@@ -42,38 +42,42 @@ http://pm2.keymetrics.io/docs/usage/quick-start/
 
 - `pm2 log some_id`: used to view log output of a pm2-started program
 
-#### Smart contract
+## Smart contract
 
 - If being modified, smart contracts must be compiled again with this cmd `npm run build`
 
 - In addition, smart contracts must be flattened again by executing the script `script_create_flatten.sh` inside folder `pm2`. The flattened contract files, which are stored in folder `contracts-flatten`, are used for publishing to EtherScan.
 
 
-#### Start server in foreground
+## Start server
+
+#### in foreground
 
 - `npm run server-rinkeby`: for interacting with testnet rinkeby
 
 - `npm run server-mainnet`: for interacting with mainnet
 
-#### Start server in background
+#### in background
 
 - `pm2 start pm2/script_server_rinkeby.sh`: for interacting with testnet rinkeby
 
 - `pm2 start pm2/script_server_mainnet.sh`: for interacting with mainnet
 
-#### Start cron-job in foreground
+## Start cron-job
+
+#### in foreground
 
 - `npm run cron-rinkeby`: for interacting with testnet rinkeby
 
 - `npm run cron-mainnet`: for interacting with mainnet
 
-#### Start cron-job in background
+#### in background
 
 - `pm2 start pm2/script_cron_rinkeby.sh`: for interacting with testnet rinkeby
 
 - `pm2 start pm2/script_cron_mainnet.sh`: for interacting with mainnet
 
-#### View Sqlite database
+## View Sqlite database
 
 Please install `sqlite3` tool if not yet
 
@@ -85,10 +89,10 @@ Please install `sqlite3` tool if not yet
 
 - `.tables`: view existing tables
 
-- `select * from table_name`: view table content
+- `select * from table_name;`: view table content
 
-- Example: `select * from address1`
+- Example: `select * from address1;`
 
-- Example: `select * from address2`
+- Example: `select * from address2;`
 
-- Example: `select * from user`
+- Example: `select * from user;`
