@@ -476,7 +476,7 @@ setParamCrowdsale = async (gasOpt, global, paramCrowdsale, address2Map) => {
   while (retryCnt <= global.RETRY_TIMES) {
     try {
       crowdsaleInstance = await crowdsaleContract.at(address2Map[global.CONTRACT.CROWDSALE]);
-      await crowdsaleInstance.setParam(name, token, pricingStrategy, multisigWallet, start, end, minimumFundingGoal, maximumSellableTokens, isWhiteListed, gasOpt);
+      await crowdsaleInstance.setParam(name, token, pricingStrategy, multisigWallet, start, end, minimumFundingGoal, isWhiteListed, maximumSellableTokens, gasOpt);
       console.log('MintedTokenCappedCrowdsaleExt - setParam OK');
       break;
     } catch (err) {
