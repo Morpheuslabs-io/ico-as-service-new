@@ -2,7 +2,7 @@
 
 ## System description
 
-The server has 4 components:
+The system has 4 components:
 
 - `Cron job`: running in background and periodically pre-deploy the set of contracts. Each of the predeployed contracts will also be published to EtherScan.
 - `Sqlite db`: used to store the predeployed contracts. Physical file `sqlite.db` is stored in folder `database`
