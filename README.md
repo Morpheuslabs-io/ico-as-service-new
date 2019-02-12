@@ -1,21 +1,10 @@
-## ICO as service - ICO Wizard
+# ICO as service - ICO Wizard
 
-Morpheus Labs provides ICO as service - ICO Wizard utility to automaticaly generate and deploy ERC20 based token smart contracts to Ethereum testnet or mainnet for ICO purpose based on parameters specified through ICO wazard.
+Morpheus Labs provides ICO as service - ICO Wizard utility to automaticaly generate and deploy ERC20 based token smart contracts to Ethereum testnet or mainnet for ICO purpose based on parameters specified through ICO wizard.
 
 ## System description
 
-The system has 4 components:
-
-- `Cron job`: running in background and periodically pre-deploy the set of contracts. Each of the predeployed contracts will also be published to EtherScan.
-- `Sqlite db`: used to store the predeployed contracts. Physical file `sqlite.db` is stored in folder `database`
-- `Express-based server`: provide rest APIs for handling of the ICO-wizard requests
-- `ICO-wizard handler`: perform the parameter setting for the pre-deployed contracts based on the provided ICO data extracted from the request.
-
-**Notice**
-Error-handling and retry-mechanism are applied for the contract predeployment and setting to ensure that if something is broken inbetween, it will be retried and the breaking won't break the entire lengthy process.
-
-
-## Setting
+#### Configuration
 
 2 setting files `mainnet.json` and `testnet.json` reside in folder `setting`
 can be used to configure needed params for interacting with testnet rinkeby or mainnet.
@@ -27,7 +16,38 @@ Instead, `keyfile` and `passphrase` are used.
 `Keyfile` is currently stored in folder `keyfile`.
 It's possible to use https://www.myetherwallet.com/ to generate an account with keyfile
 
-## Installation
+#### Cron job 
+
+- Run in background and periodically pre-deploy the set of contracts. Each of the predeployed contracts will also be published to EtherScan. 
+
+- The contract pre-deployment will be suspended if the max gas price is exceeded or the max limit of the contract sets is exceeded.
+
+- Important configuration params: `PREDEPLOY_INTERVAL`, `PREDEPLOY_MAX` and `PREDEPLOY_GAS_PRICE_MAX`
+
+#### Sqlite db
+
+Used to store the predeployed contracts and ICO data. Physical file `sqlite.db` is stored in folder `database`.
+
+There are 3 tables:
+
+- `address1`: store ICO token address
+
+- `address2`: store addresses of crowdsale, pricing strategy and finalized agent.
+
+- `user`: store the ICO data including the data set by user and the notification data sent via email. This is for later administration purpose.
+
+#### Express-based server 
+
+Provide rest APIs for handling of the ICO-wizard requests. Currently, only 1 rest API that is `/setparam`
+
+**Notice**
+Error-handling and retry-mechanism are applied for the contract predeployment and setting to ensure that if something is broken inbetween, it will be retried and the breaking won't break the entire lengthy process.
+
+## System operation
+
+The system operation includes the following steps
+
+#### Installation
 
 `npm i`
 
@@ -44,42 +64,42 @@ http://pm2.keymetrics.io/docs/usage/quick-start/
 
 - `pm2 log some_id`: used to view log output of a pm2-started program
 
-## Smart contract
+#### Smart contract
 
 - If being modified, smart contracts must be compiled again with this cmd `npm run build`
 
 - In addition, smart contracts must be flattened again by executing the script `script_create_flatten.sh` inside folder `pm2`. The flattened contract files, which are stored in folder `contracts-flatten`, are used for publishing to EtherScan.
 
 
-## Start server
+#### Start server
 
-#### in foreground
+**in foreground**
 
 - `npm run server-rinkeby`: for interacting with testnet rinkeby
 
 - `npm run server-mainnet`: for interacting with mainnet
 
-#### in background
+**in background**
 
 - `pm2 start pm2/script_server_rinkeby.sh`: for interacting with testnet rinkeby
 
 - `pm2 start pm2/script_server_mainnet.sh`: for interacting with mainnet
 
-## Start cron-job
+#### Start cron-job
 
-#### in foreground
+**in foreground**
 
 - `npm run cron-rinkeby`: for interacting with testnet rinkeby
 
 - `npm run cron-mainnet`: for interacting with mainnet
 
-#### in background
+**in background**
 
 - `pm2 start pm2/script_cron_rinkeby.sh`: for interacting with testnet rinkeby
 
 - `pm2 start pm2/script_cron_mainnet.sh`: for interacting with mainnet
 
-## View Sqlite database
+#### View Sqlite database
 
 Please install `sqlite3` tool if not yet
 
