@@ -1,4 +1,6 @@
-## ICO As service - ICO Wizard
+## ICO as service - ICO Wizard
+
+Morpheus Labs provides ICO as service - ICO Wizard utility to automaticaly generate and deploy ERC20 based token smart contracts to Ethereum testnet or mainnet for ICO purpose based on parameters specified through ICO wazard.
 
 ## System description
 
