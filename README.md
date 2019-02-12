@@ -1,4 +1,4 @@
-## ICO Wizard Server
+## ICO As service - ICO Wizard
 
 ## System description
 
