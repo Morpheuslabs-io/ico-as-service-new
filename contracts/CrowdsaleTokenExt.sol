@@ -46,7 +46,7 @@ contract CrowdsaleTokenExt is ReleasableToken, MintableTokenExt {
         // No more new supply allowed after the token creation
         if (!_mintable) {
             mintingFinished = true;
-            if (totalSupply == 0) {
+            if (_initialSupply == 0) {
                 revert();
                 // Cannot create a token without supply and no minting
             }
