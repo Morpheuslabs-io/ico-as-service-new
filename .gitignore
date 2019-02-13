@@ -1,8 +1,6 @@
 node_modules/
-build/contracts/
 package-lock.json
 public_static/
 database/*
 script/*.txt
 data/*
-contracts-flatten/*.log

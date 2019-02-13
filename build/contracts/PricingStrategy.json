@@ -1,0 +1,1397 @@
+{
+  "contractName": "PricingStrategy",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tier",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isPricingStrategy",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "crowdsale",
+          "type": "address"
+        }
+      ],
+      "name": "isSane",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "purchaser",
+          "type": "address"
+        }
+      ],
+      "name": "isPresalePurchase",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOneTokenInWei",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateRate",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "name": "weiRaised",
+          "type": "uint256"
+        },
+        {
+          "name": "tokensSold",
+          "type": "uint256"
+        },
+        {
+          "name": "msgSender",
+          "type": "address"
+        },
+        {
+          "name": "decimals",
+          "type": "uint256"
+        }
+      ],
+      "name": "calculatePrice",
+      "outputs": [
+        {
+          "name": "tokenAmount",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b506102e2806100206000396000f300608060405260043610610078576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806304bbc2551461007d57806316f4d022146100ac57806318a4155e1461010357806369ea1771146101825780638e768288146101af578063f14ae17d1461020a575b600080fd5b34801561008957600080fd5b50610092610265565b604051808215151515815260200191505060405180910390f35b3480156100b857600080fd5b506100c161026e565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561010f57600080fd5b5061016c600480360381019080803590602001909291908035906020019092919080359060200190929190803573ffffffffffffffffffffffffffffffffffffffff16906020019092919080359060200190929190505050610293565b6040518082815260200191505060405180910390f35b34801561018e57600080fd5b506101ad6004803603810190808035906020019092919050505061029e565b005b3480156101bb57600080fd5b506101f0600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506102a1565b604051808215151515815260200191505060405180910390f35b34801561021657600080fd5b5061024b600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506102ac565b604051808215151515815260200191505060405180910390f35b60006001905090565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600095945050505050565b50565b600060019050919050565b60008090509190505600a165627a7a72305820ca0292ce3aa5f60be3a740bed1524e988d89743983bab046decf0a6042acf07a0029",
+  "deployedBytecode": "0x608060405260043610610078576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806304bbc2551461007d57806316f4d022146100ac57806318a4155e1461010357806369ea1771146101825780638e768288146101af578063f14ae17d1461020a575b600080fd5b34801561008957600080fd5b50610092610265565b604051808215151515815260200191505060405180910390f35b3480156100b857600080fd5b506100c161026e565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561010f57600080fd5b5061016c600480360381019080803590602001909291908035906020019092919080359060200190929190803573ffffffffffffffffffffffffffffffffffffffff16906020019092919080359060200190929190505050610293565b6040518082815260200191505060405180910390f35b34801561018e57600080fd5b506101ad6004803603810190808035906020019092919050505061029e565b005b3480156101bb57600080fd5b506101f0600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506102a1565b604051808215151515815260200191505060405180910390f35b34801561021657600080fd5b5061024b600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506102ac565b604051808215151515815260200191505060405180910390f35b60006001905090565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600095945050505050565b50565b600060019050919050565b60008090509190505600a165627a7a72305820ca0292ce3aa5f60be3a740bed1524e988d89743983bab046decf0a6042acf07a0029",
+  "sourceMap": "138:1445:15:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;138:1445:15;;;;;;;",
+  "deployedSourceMap": "138:1445:15:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;224:82;;8:9:-1;5:2;;;30:1;27;20:12;5:2;224:82:15;;;;;;;;;;;;;;;;;;;;;;;;;;;168:19;;8:9:-1;5:2;;;30:1;27;20:12;5:2;168:19:15;;;;;;;;;;;;;;;;;;;;;;;;;;;1433:148;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1433:148:15;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;848:52;;8:9:-1;5:2;;;30:1;27;20:12;5:2;848:52:15;;;;;;;;;;;;;;;;;;;;;;;;;;434:88;;8:9:-1;5:2;;;30:1;27;20:12;5:2;434:88:15;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;706:100;;8:9:-1;5:2;;;30:1;27;20:12;5:2;706:100:15;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;224:82;278:4;297;290:11;;224:82;:::o;168:19::-;;;;;;;;;;;;;:::o;1433:148::-;1561:16;1433:148;;;;;;;:::o;848:52::-;;:::o;434:88::-;494:4;513;506:11;;434:88;;;:::o;706:100::-;777:4;796:5;789:12;;706:100;;;:::o",
+  "source": "/**\n * Issued by Morpheus Labs ICO as a Service Wizard\n */\npragma solidity ^0.4.24;\n\n/**\n * Interface for defining crowdsale pricing.\n */\ncontract PricingStrategy {\n\n  address public tier;\n\n  /** Interface declaration. */\n  function isPricingStrategy() public constant returns (bool) {\n    return true;\n  }\n\n  /** Self check if all references are correctly set.\n   * Checks that pricing strategy matches crowdsale parameters.\n   */\n  function isSane(address crowdsale) public constant returns (bool) {\n    return true;\n  }\n\n  /**\n   * @dev Pricing tells if this is a presale purchase or not.\n   * @param purchaser Address of the purchaser\n   * @return False by default, true if a presale purchaser\n   */\n  function isPresalePurchase(address purchaser) public constant returns (bool) {\n    return false;\n  }\n\n  /* How many weis one token costs */\n  function updateRate(uint newOneTokenInWei) public {}\n\n  /**\n   * When somebody tries to buy tokens for X eth, calculate how many tokens they get.\n   * @param value - What is the value of the transaction send in as wei\n   * @param tokensSold - how much tokens have been sold this far\n   * @param weiRaised - how much money has been raised this far in the main token sale - this number excludes presale\n   * @param msgSender - who is the investor of this transaction\n   * @param decimals - how many decimal units the token has\n   * @return Amount of tokens the investor receives\n   */\n  function calculatePrice(uint value, uint weiRaised, uint tokensSold, address msgSender, uint decimals) public constant returns (uint tokenAmount) {}\n}",
+  "sourcePath": "/home/trungtt/Work/reference/morphe/ico/ico-as-service-new/contracts/lib/PricingStrategy.sol",
+  "ast": {
+    "absolutePath": "/home/trungtt/Work/reference/morphe/ico/ico-as-service-new/contracts/lib/PricingStrategy.sol",
+    "exportedSymbols": {
+      "PricingStrategy": [
+        3569
+      ]
+    },
+    "id": 3570,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3516,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "59:24:15"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "Interface for defining crowdsale pricing.",
+        "fullyImplemented": true,
+        "id": 3569,
+        "linearizedBaseContracts": [
+          3569
+        ],
+        "name": "PricingStrategy",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 3518,
+            "name": "tier",
+            "nodeType": "VariableDeclaration",
+            "scope": 3569,
+            "src": "168:19:15",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 3517,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "168:7:15",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3525,
+              "nodeType": "Block",
+              "src": "284:22:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "74727565",
+                    "id": 3523,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "297:4:15",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "true"
+                  },
+                  "functionReturnParameters": 3522,
+                  "id": 3524,
+                  "nodeType": "Return",
+                  "src": "290:11:15"
+                }
+              ]
+            },
+            "documentation": "Interface declaration. ",
+            "id": 3526,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "isPricingStrategy",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3519,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "250:2:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3522,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3521,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3526,
+                  "src": "278:4:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 3520,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "278:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "277:6:15"
+            },
+            "scope": 3569,
+            "src": "224:82:15",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3535,
+              "nodeType": "Block",
+              "src": "500:22:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "74727565",
+                    "id": 3533,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "513:4:15",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "true"
+                  },
+                  "functionReturnParameters": 3532,
+                  "id": 3534,
+                  "nodeType": "Return",
+                  "src": "506:11:15"
+                }
+              ]
+            },
+            "documentation": "Self check if all references are correctly set.\nChecks that pricing strategy matches crowdsale parameters.",
+            "id": 3536,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "isSane",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3529,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3528,
+                  "name": "crowdsale",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3536,
+                  "src": "450:17:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3527,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "450:7:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "449:19:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3532,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3531,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3536,
+                  "src": "494:4:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 3530,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "494:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "493:6:15"
+            },
+            "scope": 3569,
+            "src": "434:88:15",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3545,
+              "nodeType": "Block",
+              "src": "783:23:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "66616c7365",
+                    "id": 3543,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "796:5:15",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "false"
+                  },
+                  "functionReturnParameters": 3542,
+                  "id": 3544,
+                  "nodeType": "Return",
+                  "src": "789:12:15"
+                }
+              ]
+            },
+            "documentation": "@dev Pricing tells if this is a presale purchase or not.\n@param purchaser Address of the purchaser\n@return False by default, true if a presale purchaser",
+            "id": 3546,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "isPresalePurchase",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3539,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3538,
+                  "name": "purchaser",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3546,
+                  "src": "733:17:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3537,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "733:7:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "732:19:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3542,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3541,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3546,
+                  "src": "777:4:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 3540,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "777:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "776:6:15"
+            },
+            "scope": 3569,
+            "src": "706:100:15",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3551,
+              "nodeType": "Block",
+              "src": "898:2:15",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 3552,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "updateRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3549,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3548,
+                  "name": "newOneTokenInWei",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3552,
+                  "src": "868:21:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3547,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "868:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "867:23:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3550,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "898:0:15"
+            },
+            "scope": 3569,
+            "src": "848:52:15",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3567,
+              "nodeType": "Block",
+              "src": "1579:2:15",
+              "statements": []
+            },
+            "documentation": "When somebody tries to buy tokens for X eth, calculate how many tokens they get.\n@param value - What is the value of the transaction send in as wei\n@param tokensSold - how much tokens have been sold this far\n@param weiRaised - how much money has been raised this far in the main token sale - this number excludes presale\n@param msgSender - who is the investor of this transaction\n@param decimals - how many decimal units the token has\n@return Amount of tokens the investor receives",
+            "id": 3568,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "calculatePrice",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3563,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3554,
+                  "name": "value",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1457:10:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3553,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1457:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3556,
+                  "name": "weiRaised",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1469:14:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3555,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1469:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3558,
+                  "name": "tokensSold",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1485:15:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3557,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1485:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3560,
+                  "name": "msgSender",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1502:17:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3559,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1502:7:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3562,
+                  "name": "decimals",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1521:13:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3561,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1521:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1456:79:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3566,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3565,
+                  "name": "tokenAmount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1561:16:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3564,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1561:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1560:18:15"
+            },
+            "scope": 3569,
+            "src": "1433:148:15",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 3570,
+        "src": "138:1445:15"
+      }
+    ],
+    "src": "59:1524:15"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/trungtt/Work/reference/morphe/ico/ico-as-service-new/contracts/lib/PricingStrategy.sol",
+    "exportedSymbols": {
+      "PricingStrategy": [
+        3569
+      ]
+    },
+    "id": 3570,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3516,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "59:24:15"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "Interface for defining crowdsale pricing.",
+        "fullyImplemented": true,
+        "id": 3569,
+        "linearizedBaseContracts": [
+          3569
+        ],
+        "name": "PricingStrategy",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 3518,
+            "name": "tier",
+            "nodeType": "VariableDeclaration",
+            "scope": 3569,
+            "src": "168:19:15",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 3517,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "168:7:15",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3525,
+              "nodeType": "Block",
+              "src": "284:22:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "74727565",
+                    "id": 3523,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "297:4:15",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "true"
+                  },
+                  "functionReturnParameters": 3522,
+                  "id": 3524,
+                  "nodeType": "Return",
+                  "src": "290:11:15"
+                }
+              ]
+            },
+            "documentation": "Interface declaration. ",
+            "id": 3526,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "isPricingStrategy",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3519,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "250:2:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3522,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3521,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3526,
+                  "src": "278:4:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 3520,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "278:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "277:6:15"
+            },
+            "scope": 3569,
+            "src": "224:82:15",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3535,
+              "nodeType": "Block",
+              "src": "500:22:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "74727565",
+                    "id": 3533,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "513:4:15",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "true"
+                  },
+                  "functionReturnParameters": 3532,
+                  "id": 3534,
+                  "nodeType": "Return",
+                  "src": "506:11:15"
+                }
+              ]
+            },
+            "documentation": "Self check if all references are correctly set.\nChecks that pricing strategy matches crowdsale parameters.",
+            "id": 3536,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "isSane",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3529,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3528,
+                  "name": "crowdsale",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3536,
+                  "src": "450:17:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3527,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "450:7:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "449:19:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3532,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3531,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3536,
+                  "src": "494:4:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 3530,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "494:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "493:6:15"
+            },
+            "scope": 3569,
+            "src": "434:88:15",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3545,
+              "nodeType": "Block",
+              "src": "783:23:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "66616c7365",
+                    "id": 3543,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "796:5:15",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "false"
+                  },
+                  "functionReturnParameters": 3542,
+                  "id": 3544,
+                  "nodeType": "Return",
+                  "src": "789:12:15"
+                }
+              ]
+            },
+            "documentation": "@dev Pricing tells if this is a presale purchase or not.\n@param purchaser Address of the purchaser\n@return False by default, true if a presale purchaser",
+            "id": 3546,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "isPresalePurchase",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3539,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3538,
+                  "name": "purchaser",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3546,
+                  "src": "733:17:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3537,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "733:7:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "732:19:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3542,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3541,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3546,
+                  "src": "777:4:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 3540,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "777:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "776:6:15"
+            },
+            "scope": 3569,
+            "src": "706:100:15",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3551,
+              "nodeType": "Block",
+              "src": "898:2:15",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 3552,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "updateRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3549,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3548,
+                  "name": "newOneTokenInWei",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3552,
+                  "src": "868:21:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3547,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "868:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "867:23:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3550,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "898:0:15"
+            },
+            "scope": 3569,
+            "src": "848:52:15",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3567,
+              "nodeType": "Block",
+              "src": "1579:2:15",
+              "statements": []
+            },
+            "documentation": "When somebody tries to buy tokens for X eth, calculate how many tokens they get.\n@param value - What is the value of the transaction send in as wei\n@param tokensSold - how much tokens have been sold this far\n@param weiRaised - how much money has been raised this far in the main token sale - this number excludes presale\n@param msgSender - who is the investor of this transaction\n@param decimals - how many decimal units the token has\n@return Amount of tokens the investor receives",
+            "id": 3568,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "calculatePrice",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3563,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3554,
+                  "name": "value",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1457:10:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3553,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1457:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3556,
+                  "name": "weiRaised",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1469:14:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3555,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1469:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3558,
+                  "name": "tokensSold",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1485:15:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3557,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1485:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3560,
+                  "name": "msgSender",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1502:17:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3559,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1502:7:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3562,
+                  "name": "decimals",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1521:13:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3561,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1521:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1456:79:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3566,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3565,
+                  "name": "tokenAmount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3568,
+                  "src": "1561:16:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3564,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1561:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1560:18:15"
+            },
+            "scope": 3569,
+            "src": "1433:148:15",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 3570,
+        "src": "138:1445:15"
+      }
+    ],
+    "src": "59:1524:15"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2019-02-13T09:25:31.644Z"
+}
