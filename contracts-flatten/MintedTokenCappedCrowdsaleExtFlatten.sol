@@ -3,6 +3,114 @@
  */
 pragma solidity ^0.4.24;
 
+contract SafeMath {
+  function safeMul(uint a, uint b) internal returns (uint) {
+    uint c = a * b;
+    assert(a == 0 || c / a == b);
+    return c;
+  }
+
+  function safeDiv(uint a, uint b) internal returns (uint) {
+    assert(b > 0);
+    uint c = a / b;
+    assert(a == b * c + a % b);
+    return c;
+  }
+
+  function safeSub(uint a, uint b) internal returns (uint) {
+    assert(b <= a);
+    return a - b;
+  }
+
+  function safeAdd(uint a, uint b) internal returns (uint) {
+    uint c = a + b;
+    assert(c >= a && c >= b);
+    return c;
+  }
+
+  function max64(uint64 a, uint64 b) internal constant returns (uint64) {
+    return a >= b ? a : b;
+  }
+
+  function min64(uint64 a, uint64 b) internal constant returns (uint64) {
+    return a < b ? a : b;
+  }
+
+  function max256(uint256 a, uint256 b) internal constant returns (uint256) {
+    return a >= b ? a : b;
+  }
+
+  function min256(uint256 a, uint256 b) internal constant returns (uint256) {
+    return a < b ? a : b;
+  }
+
+}
+contract PricingStrategy {
+
+  address public tier;
+
+  /** Interface declaration. */
+  function isPricingStrategy() public constant returns (bool) {
+    return true;
+  }
+
+  /** Self check if all references are correctly set.
+   * Checks that pricing strategy matches crowdsale parameters.
+   */
+  function isSane(address crowdsale) public constant returns (bool) {
+    return true;
+  }
+
+  /**
+   * @dev Pricing tells if this is a presale purchase or not.
+   * @param purchaser Address of the purchaser
+   * @return False by default, true if a presale purchaser
+   */
+  function isPresalePurchase(address purchaser) public constant returns (bool) {
+    return false;
+  }
+
+  /* How many weis one token costs */
+  function updateRate(uint newOneTokenInWei) public {}
+
+  /**
+   * When somebody tries to buy tokens for X eth, calculate how many tokens they get.
+   * @param value - What is the value of the transaction send in as wei
+   * @param tokensSold - how much tokens have been sold this far
+   * @param weiRaised - how much money has been raised this far in the main token sale - this number excludes presale
+   * @param msgSender - who is the investor of this transaction
+   * @param decimals - how many decimal units the token has
+   * @return Amount of tokens the investor receives
+   */
+  function calculatePrice(uint value, uint weiRaised, uint tokensSold, address msgSender, uint decimals) public constant returns (uint tokenAmount) {}
+}
+contract FinalizeAgent {
+
+  bool public reservedTokensAreDistributed = false;
+
+  function isFinalizeAgent() public constant returns (bool) {
+    return true;
+  }
+
+  /** Return true if we can run finalizeCrowdsale() properly.
+   *
+   * This is a safety check function that doesn't allow crowdsale to begin
+   * unless the finalizer has been set up properly.
+   */
+  function isSane() public constant returns (bool) {
+    return true;
+  }
+
+  function distributeReservedTokens(uint reservedTokensDistributionBatch) public {
+
+  }
+
+  /** Called once by crowdsale finalize() if the sale was success. */
+  function finalizeCrowdsale() public {
+
+  }
+
+}
 contract Ownable {
   address public owner;
 
@@ -81,45 +189,6 @@ contract Ownable {
     owner = newOwner;
   }
 }
-contract PricingStrategy {
-
-  address public tier;
-
-  /** Interface declaration. */
-  function isPricingStrategy() public constant returns (bool) {
-    return true;
-  }
-
-  /** Self check if all references are correctly set.
-   * Checks that pricing strategy matches crowdsale parameters.
-   */
-  function isSane(address crowdsale) public constant returns (bool) {
-    return true;
-  }
-
-  /**
-   * @dev Pricing tells if this is a presale purchase or not.
-   * @param purchaser Address of the purchaser
-   * @return False by default, true if a presale purchaser
-   */
-  function isPresalePurchase(address purchaser) public constant returns (bool) {
-    return false;
-  }
-
-  /* How many weis one token costs */
-  function updateRate(uint newOneTokenInWei) public {}
-
-  /**
-   * When somebody tries to buy tokens for X eth, calculate how many tokens they get.
-   * @param value - What is the value of the transaction send in as wei
-   * @param tokensSold - how much tokens have been sold this far
-   * @param weiRaised - how much money has been raised this far in the main token sale - this number excludes presale
-   * @param msgSender - who is the investor of this transaction
-   * @param decimals - how many decimal units the token has
-   * @return Amount of tokens the investor receives
-   */
-  function calculatePrice(uint value, uint weiRaised, uint tokensSold, address msgSender, uint decimals) public constant returns (uint tokenAmount) {}
-}
 contract ERC20Basic {
   uint256 public totalSupply;
 
@@ -129,74 +198,20 @@ contract ERC20Basic {
 
   event Transfer(address indexed from, address indexed to, uint256 value);
 }
-contract SafeMath {
-  function safeMul(uint a, uint b) internal returns (uint) {
-    uint c = a * b;
-    assert(a == 0 || c / a == b);
-    return c;
+contract Recoverable is Ownable {
+
+  /// @dev This will be invoked by the owner, when owner wants to rescue tokens
+  /// @param token Token which will we rescue to the owner from the contract
+  function recoverTokens(ERC20Basic token) onlyOwner public {
+    token.transfer(owner, tokensToBeReturned(token));
   }
 
-  function safeDiv(uint a, uint b) internal returns (uint) {
-    assert(b > 0);
-    uint c = a / b;
-    assert(a == b * c + a % b);
-    return c;
+  /// @dev Interface function, can be overwritten by the superclass
+  /// @param token Token which balance we will check and return
+  /// @return The amount of tokens (in smallest denominator) the contract owns
+  function tokensToBeReturned(ERC20Basic token) public returns (uint) {
+    return token.balanceOf(this);
   }
-
-  function safeSub(uint a, uint b) internal returns (uint) {
-    assert(b <= a);
-    return a - b;
-  }
-
-  function safeAdd(uint a, uint b) internal returns (uint) {
-    uint c = a + b;
-    assert(c >= a && c >= b);
-    return c;
-  }
-
-  function max64(uint64 a, uint64 b) internal constant returns (uint64) {
-    return a >= b ? a : b;
-  }
-
-  function min64(uint64 a, uint64 b) internal constant returns (uint64) {
-    return a < b ? a : b;
-  }
-
-  function max256(uint256 a, uint256 b) internal constant returns (uint256) {
-    return a >= b ? a : b;
-  }
-
-  function min256(uint256 a, uint256 b) internal constant returns (uint256) {
-    return a < b ? a : b;
-  }
-
-}
-contract FinalizeAgent {
-
-  bool public reservedTokensAreDistributed = false;
-
-  function isFinalizeAgent() public constant returns (bool) {
-    return true;
-  }
-
-  /** Return true if we can run finalizeCrowdsale() properly.
-   *
-   * This is a safety check function that doesn't allow crowdsale to begin
-   * unless the finalizer has been set up properly.
-   */
-  function isSane() public constant returns (bool) {
-    return true;
-  }
-
-  function distributeReservedTokens(uint reservedTokensDistributionBatch) public {
-
-  }
-
-  /** Called once by crowdsale finalize() if the sale was success. */
-  function finalizeCrowdsale() public {
-
-  }
-
 }
 contract Haltable is Ownable {
   bool public halted;
@@ -235,21 +250,6 @@ contract ERC20 is ERC20Basic {
   function approve(address spender, uint256 value) public returns (bool);
 
   event Approval(address indexed owner, address indexed spender, uint256 value);
-}
-contract Recoverable is Ownable {
-
-  /// @dev This will be invoked by the owner, when owner wants to rescue tokens
-  /// @param token Token which will we rescue to the owner from the contract
-  function recoverTokens(ERC20Basic token) onlyOwner public {
-    token.transfer(owner, tokensToBeReturned(token));
-  }
-
-  /// @dev Interface function, can be overwritten by the superclass
-  /// @param token Token which balance we will check and return
-  /// @return The amount of tokens (in smallest denominator) the contract owns
-  function tokensToBeReturned(ERC20Basic token) public returns (uint) {
-    return token.balanceOf(this);
-  }
 }
 contract StandardToken is ERC20, SafeMath {
 
