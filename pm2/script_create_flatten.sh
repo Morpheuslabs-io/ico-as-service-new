@@ -7,3 +7,5 @@ rm -rf ../contracts-flatten/*.*
 ./flat -input ../contracts/MintedTokenCappedCrowdsaleExt.sol -output ../contracts-flatten/MintedTokenCappedCrowdsaleExtFlatten.sol
 
 ./flat -input ../contracts/ReservedTokensFinalizeAgent.sol -output ../contracts-flatten/ReservedTokensFinalizeAgentFlatten.sol
+
+./flat -input ../contracts/TokenVesting.sol -output ../contracts-flatten/TokenVestingFlatten.sol
