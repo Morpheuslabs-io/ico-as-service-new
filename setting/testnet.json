@@ -7,7 +7,7 @@
   
   "PREDEPLOY_INTERVAL": "*/1 * * * *",
   "PREDEPLOY_MAX": 15,
-  "PREDEPLOY_MIN": 3,
+  "PREDEPLOY_MIN": 5,
   "PREDEPLOY_MAX_MULTIPLES": 1,  
   "PREDEPLOY_GAS_PRICE_MAX": 3000000000,
   "RETRY_GAS_PRICE_MULTIPLIER": 2,
@@ -27,5 +27,7 @@
   "MAILGUN_DOMAIN": "sandboxe608a5544bda4147998625e674fb6a5d.mailgun.org",
   "MAILGUN_API_KEY": "0b5c41b60f58d88cacec0f48e670316f-c8c889c9-6332350f",
   "MAILGUN_FROM": "Morpheus ICO Wizard <support@morpheuslabs.io>",
-  "MAILGUN_SUBJECT": "ICO Contract Finalization Confirmation"
+  "MAILGUN_SUBJECT": "ICO Contract Finalization Confirmation",
+
+  "TOKEN_VESTING_URL": "http://104.248.144.168:3001/"
 }

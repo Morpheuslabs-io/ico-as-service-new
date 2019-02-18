@@ -55,6 +55,8 @@ global.globalize = function () {
   global.MAILGUN_API_KEY = settingData.MAILGUN_API_KEY;
   global.MAILGUN_FROM = settingData.MAILGUN_FROM;
   global.MAILGUN_SUBJECT = settingData.MAILGUN_SUBJECT;
+
+  global.TOKEN_VESTING_URL = settingData.TOKEN_VESTING_URL;
 }
 
 global.initContract = function (artifacts) {

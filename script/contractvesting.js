@@ -112,7 +112,7 @@ exports.deployContracts = async (gasOpt, global) => {
 
   var startTime = new Date();
   var startDate = dateFormat(startTime, "yyyy-mm-dd h:MM:ss");
-  console.log("\n Started deployment of ICO wizard contracts" +
+  console.log("\n Started deployment of TokenVesting contracts" +
     "\nTime: " + startDate);
 
   let TokenVestingInstAddr = await deployTokenVesting(gasOpt, global);
@@ -128,10 +128,22 @@ exports.deployContracts = async (gasOpt, global) => {
   console.log('\n Total duration: %d minutes', duration);
 }
 
+map2Array = (myMap) => {
+  let myArray = []
+  let mapKeys = Object.keys(myMap)
+  for (let i = 0; i < mapKeys.length; i++) {
+    let key = mapKeys[i];
+    myArray.push(myMap[key]);
+  }
+  return myArray;
+}
+
 exports.setParamForVesting = async (res, vestingList, email_address, wallet_address, global) => {
 
+  let vestingArray = map2Array(vestingList);
+
   let addressVestingList = [];
-  for (let i = 0; i < vestingList.length; i++) {
+  for (let i = 0; i < vestingArray.length; i++) {
     let addressVesting = await global.SqliteHandler.pop('addressVesting');
     if (!addressVesting) {
       let errMsg = 'Cannot get the predeployed contract';
@@ -155,15 +167,6 @@ exports.setParamForVesting = async (res, vestingList, email_address, wallet_addr
   await global.SqliteHandler.pushUserRequest(requestData, "userVesting");
   /////////////////
 
-  if (global.DO_NOT_SET_PARAM == 1) {
-    
-    // Send notification email to user and store response
-    await doSendMailAndStoreResponse(email_address, addressVestingList, vestingList, global);
-    //////////////////////////////////
-    
-    return;
-  }
-
   var startTime = new Date();
   var startDate = dateFormat(startTime, "yyyy-mm-dd h:MM:ss");
   console.log("\n Started setting params of Token-Vesting contracts" +
@@ -175,14 +178,14 @@ exports.setParamForVesting = async (res, vestingList, email_address, wallet_addr
     gas: global.GAS_LIMIT
   };
 
-  for (let i = 0; i < vestingList.length; i++) {
-    let vestingEntry = vestingList[i];
+  for (let i = 0; i < vestingArray.length; i++) {
+    let vestingEntry = vestingArray[i];
     let tokenVestingAddress = addressVestingList[i];
 
     let beneficiary = vestingEntry.beneficiaryAddress;
-    let start = moment(vestingEntry.startVesting.format('YYYY-MM-DD')).unix();
-    let cliff = moment(vestingEntry.cliffVesting.format('YYYY-MM-DD')).unix();
-    let end = moment(vestingEntry.endVesting.format('YYYY-MM-DD')).unix();
+    let start = moment(vestingEntry.startVesting).unix();
+    let cliff = moment(vestingEntry.cliffVesting).unix();
+    let end = moment(vestingEntry.endVesting).unix();
     let duration = end - start;
 
     let paramTokenVesting = {
@@ -191,7 +194,7 @@ exports.setParamForVesting = async (res, vestingList, email_address, wallet_addr
 
     await setParamTokenVesting(gasOpt, global, paramTokenVesting, tokenVestingAddress);
 
-    await transferOwnership(gasOpt, global, tokenVestingAddress);
+    await transferOwnership(gasOpt, global, wallet_address, tokenVestingAddress);
   }
   
   var endTime = new Date();

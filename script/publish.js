@@ -1,6 +1,7 @@
 var querystring = require('querystring');
 var request = require('request-promise');
 var fs = require("fs");
+var sleep = require('sleep');
 
 exports.publishContract = async (contractAddr, contractName, contractFilePath, global) => {
   
@@ -34,14 +35,14 @@ exports.publishContract = async (contractAddr, contractName, contractFilePath, g
       method: 'POST'
     });
 
-    console.log('publishContract result:', result);
-    if (result.message !== "NOTOK" || result.result.toLowerCase().indexOf('unable to locate') === -1) {
+    console.log('publishContract result:', result);    
+    result = JSON.parse(result);    
+    if (result.status === "1") {
       break;
     }
     
-    console.log('publishContract retry');
-
     sleep.sleep(5);
+    console.log('publishContract retry');
     retryCnt++;
   }
 }

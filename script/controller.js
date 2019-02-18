@@ -1,6 +1,7 @@
 const utils = require('./utils')
 const dateFormat = require('dateformat');
 const contract = require('./contract')
+const contractVesting = require('./contractvesting')
 
 exports.deploycontractminted = async (req, res, next) => {
 
@@ -313,5 +314,5 @@ exports.setvesting = async (req, res, global) => {
 
   console.log('controller::setvesting - vestingList:', vestingList);
 
-  await contract.setParamForVesting(res, vestingList, emailAddress, walletAddress, global);
+  await contractVesting.setParamForVesting(res, vestingList, emailAddress, walletAddress, global);
 }

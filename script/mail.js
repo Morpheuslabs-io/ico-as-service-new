@@ -22,15 +22,16 @@ exports.buildHtmlMailContentVesting = async (addressVestingList, vestingList, gl
   mailContent += '<p>Please be informed that your Token-Vesting contracts have successfully been finalized. </p>';
   
   for (let i=0; i<addressVestingList.length; i++) {
+    let addrVesting = addressVestingList[i];
     mailContent += '<h4>' + (i+1) + '.</h4>';
 
     mailContent += '<ul>';
     mailContent += '<li>Beneficiary address: ' + vestingList[i].beneficiaryAddress + '</li>';
-    mailContent += '<li>Token-Vesting address: ' + global.ETHERSCAN_ADDRESS_URL + addressVestingList[i] + '</li>';
-    txFee = await etherscan.getTxFee(addressVestingList[i], global);
+    mailContent += '<li>Token-Vesting address: ' + global.ETHERSCAN_ADDRESS_URL + addrVesting + '</li>';
+    txFee = await etherscan.getTxFee(addrVesting, global);
     txFeeTotal += txFee;
     mailContent += '<li>Transaction fee: ' + txFee + ' ETH' + '</li>';
-    mailContent += '<li>Link: ' + txFee + ' ETH' + '</li>';
+    mailContent += '<li>Link: ' + global.TOKEN_VESTING_URL + addrVesting + '/' + vestingList[i].tokenAddress + '</li>';
     mailContent += '</ul>';
   }
 
