@@ -60,15 +60,13 @@ class TokenVestingApp extends Component {
     const { address, token } = this.props
 
     const tokenVesting = await getTokenVesting(address)
-    const token = await getToken(token)
-
-    console.log('token: ', token);
+    const tokenContract = await getToken(token)
 
     const start = await tokenVesting.start()
     const duration = await tokenVesting.duration()
     const end = start.plus(duration)
 
-    const balance  = await token.balanceOf(address)
+    const balance  = await tokenContract.balanceOf(address)
     const released = await tokenVesting.released(token)
     const total = balance.plus(released)
 
@@ -79,13 +77,13 @@ class TokenVestingApp extends Component {
       total,
       released,
       vested: await tokenVesting.vestedAmount(token),
-      decimals: await token.decimals(),
+      decimals: await tokenContract.decimals(),
       beneficiary: await tokenVesting.beneficiary(),
       owner: await tokenVesting.owner(),
       revocable: await tokenVesting.revocable(),
       revoked: await tokenVesting.revoked(token),
-      name: await token.name(),
-      symbol: await token.symbol(),
+      name: await tokenContract.name(),
+      symbol: await tokenContract.symbol(),
       loading: false
     })
   }

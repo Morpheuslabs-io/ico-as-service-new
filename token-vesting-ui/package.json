@@ -22,6 +22,7 @@
   },
   "scripts": {
     "start": "require-link && react-scripts start",
+    "dev": "require-link && REACT_APP_TEST_NET=rinkeby react-scripts start",
     "build": "require-link && react-scripts build",
     "test": "require-link && react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
