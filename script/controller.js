@@ -305,3 +305,13 @@ exports.setparam = async (req, res, global) => {
 
   await contract.setParamForContracts(res, step2, step3, global);
 }
+
+exports.setvesting = async (req, res, global) => {
+  const {vestingList, emailAddress, walletAddress} = req.body;
+
+  console.log('controller::setvesting - emailAddress:', emailAddress, ', walletAddress:', walletAddress);
+
+  console.log('controller::setvesting - vestingList:', vestingList);
+
+  await contract.setParamForVesting(res, vestingList, emailAddress, walletAddress, global);
+}

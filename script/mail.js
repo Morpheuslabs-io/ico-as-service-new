@@ -14,6 +14,33 @@ exports.buildMailContentSimple = (tokenAddr, crowdsaleAddr, pricingStrategyAddr,
   return mailContent;
 }
 
+exports.buildHtmlMailContentVesting = async (addressVestingList, vestingList, global) => {
+  let mailContent='<p><b>Hello</b></p>';
+  let txFee = 0;
+  let txFeeTotal = 0;
+
+  mailContent += '<p>Please be informed that your Token-Vesting contracts have successfully been finalized. </p>';
+  
+  for (let i=0; i<addressVestingList.length; i++) {
+    mailContent += '<h4>' + (i+1) + '.</h4>';
+
+    mailContent += '<ul>';
+    mailContent += '<li>Beneficiary address: ' + vestingList[i].beneficiaryAddress + '</li>';
+    mailContent += '<li>Token-Vesting address: ' + global.ETHERSCAN_ADDRESS_URL + addressVestingList[i] + '</li>';
+    txFee = await etherscan.getTxFee(addressVestingList[i], global);
+    txFeeTotal += txFee;
+    mailContent += '<li>Transaction fee: ' + txFee + ' ETH' + '</li>';
+    mailContent += '<li>Link: ' + txFee + ' ETH' + '</li>';
+    mailContent += '</ul>';
+  }
+
+  mailContent += '<h4>Total transaction fee: ' + txFeeTotal + ' ETH' + '</h4>';
+
+  mailContent += '<a href="https://morpheuslabs.io/"><b>@ Morpheus Labs. Inc | 2017 All rights reserved</b></a>';
+
+  return mailContent;
+}
+
 exports.buildHtmlMailContent = async (tokenAddr, tierList, global) => {
   let mailContent='<p><b>Hello</b></p>';
   let txFee = 0;
@@ -63,15 +90,6 @@ exports.buildHtmlMailContent = async (tokenAddr, tierList, global) => {
 
   return mailContent;
 }
-
-// exports.buildTierContentForMail = (crowdsaleAddr, pricingStrategyAddr, finalizedAgentAddr, global) => {
-//   let tierContent='';
-//   tierContent += 'Crowdsale contract: ' + global.ETHERSCAN_ADDRESS_URL + crowdsaleAddr + '\n';
-//   tierContent += 'Pricing Strategy contract: ' + global.ETHERSCAN_ADDRESS_URL + pricingStrategyAddr + '\n';
-//   tierContent += 'Finalized Agent contract: ' + global.ETHERSCAN_ADDRESS_URL + finalizedAgentAddr + '\n\n';
-
-//   return tierContent;
-// }
 
 exports.sendMail = async (toAddr, mailContent, global) => {
 

@@ -12,7 +12,11 @@ var SqliteHandler = {
       await db.runAsync("CREATE TABLE IF NOT EXISTS address2 (id INTEGER PRIMARY KEY AUTOINCREMENT, data TEXT)");
 
       await db.runAsync("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, request TEXT, response TEXT)");
-      
+
+      await db.runAsync("CREATE TABLE IF NOT EXISTS addressVesting (id INTEGER PRIMARY KEY AUTOINCREMENT, data TEXT)");
+
+      await db.runAsync("CREATE TABLE IF NOT EXISTS userVesting (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, request TEXT, response TEXT)");
+
       console.log('loadDB OK');
     } catch (err) {
       console.log('loadDB error: ', err);
@@ -52,7 +56,7 @@ var SqliteHandler = {
       let queryDelete = 'DELETE FROM ' + addressTableName + ' WHERE ROWID=' + rowId;
       try {
         // TEST
-        await db.runAsync(queryDelete);
+        // await db.runAsync(queryDelete);
         console.log('pop ' + addressTableName + ' OK - addressList:', addressListStr);
       } catch (err) {
         console.log('pop ' + addressTableName + ' Error: ', err);
@@ -78,11 +82,12 @@ var SqliteHandler = {
       return null;
     }
   },
-  async pushUserRequest(requestData) {
+  async pushUserRequest(requestData, userTable) {
 
     let requestStr = JSON.stringify(requestData.request);
+    let myTable = !userTable ? "user" : "userVesting";
 
-    let queryInsert = "INSERT INTO " + "user" + " (email, request) VALUES (";
+    let queryInsert = "INSERT INTO " + myTable + " (email, request) VALUES (";
     queryInsert += "'" + requestData.email.toLowerCase() + "'" + "," + "'" + requestStr + "'" + ")";
 
     try {
@@ -92,13 +97,14 @@ var SqliteHandler = {
       console.log('pushUserRequest Error: ' + err);
     }
   },
-  async updateUserResponse(email, htmlMailContent) {
+  async updateUserResponse(email, htmlMailContent, userTable) {
 
     htmlMailContent = '<HTML> \n' + '<BODY> \n' + htmlMailContent + '</BODY> \n' + '</HTML>';
+    let myTable = !userTable ? "user" : "userVesting";
 
     console.log('pushUserResponse - htmlMailContent:', htmlMailContent);
 
-    let queryUpdate = "UPDATE " + "user" + " SET response=";
+    let queryUpdate = "UPDATE " + myTable + " SET response=";
     queryUpdate += "'" + htmlMailContent + "'" + " WHERE email=" + "'" + email + "'";
 
     try {

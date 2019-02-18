@@ -63,6 +63,8 @@ global.initContract = function (artifacts) {
   global.MintedTokenCappedCrowdsaleExtContract = artifacts.require("MintedTokenCappedCrowdsaleExt");
   global.ReservedTokensFinalizeAgentContract = artifacts.require("ReservedTokensFinalizeAgent");
 
+  global.TokenVestingContract = artifacts.require("TokenVesting");
+
   // Define enum for accessing the predeployed contracts
   global.CONTRACT = {};
   global.CONTRACT.ADDRESS_MAP_CNT = 4;
