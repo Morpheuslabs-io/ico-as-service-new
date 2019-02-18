@@ -79,7 +79,7 @@ class VestingDetails extends Component {
 
   formatDate(date) {
     if (! date) return
-    const milliseconds = date * 1000
+    const milliseconds = date
     return moment(milliseconds).format("dddd, MMMM Do YYYY, h:mm:ss a")
   }
 
