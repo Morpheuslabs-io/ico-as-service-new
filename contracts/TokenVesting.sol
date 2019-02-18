@@ -120,7 +120,7 @@ contract TokenVesting is Ownable, SafeMath {
      * @param token ERC20 token which is being vested
      */
     function release(IERC20 token) public {
-        uint256 unreleased = _releasableAmount(token);
+        uint256 unreleased = releasableAmount(token);
 
         require(unreleased > 0);
 
@@ -142,7 +142,7 @@ contract TokenVesting is Ownable, SafeMath {
 
         uint256 balance = token.balanceOf(address(this));
 
-        uint256 unreleased = _releasableAmount(token);
+        uint256 unreleased = releasableAmount(token);
         uint256 refund = safeSub(balance, unreleased);
 
         _revoked[address(token)] = true;
@@ -156,15 +156,15 @@ contract TokenVesting is Ownable, SafeMath {
      * @dev Calculates the amount that has already vested but hasn't been released yet.
      * @param token ERC20 token which is being vested
      */
-    function _releasableAmount(IERC20 token) private view returns (uint256) {
-        return safeSub(_vestedAmount(token), _released[address(token)]);
+    function releasableAmount(IERC20 token) public view returns (uint256) {
+        return safeSub(vestedAmount(token), _released[address(token)]);
     }
 
     /**
      * @dev Calculates the amount that has already vested.
      * @param token ERC20 token which is being vested
      */
-    function _vestedAmount(IERC20 token) private view returns (uint256) {
+    function vestedAmount(IERC20 token) public view returns (uint256) {
         uint256 currentBalance = token.balanceOf(address(this));
         uint256 totalBalance = safeAdd(currentBalance, _released[address(token)]);
 

@@ -162,15 +162,6 @@ contract SafeMath {
   }
 
 }
-contract ERC20Basic {
-  uint256 public totalSupply;
-
-  function balanceOf(address who) public view returns (uint256);
-
-  function transfer(address to, uint256 value) public returns (bool);
-
-  event Transfer(address indexed from, address indexed to, uint256 value);
-}
 contract FinalizeAgent {
 
   bool public reservedTokensAreDistributed = false;
@@ -198,20 +189,14 @@ contract FinalizeAgent {
   }
 
 }
-contract Recoverable is Ownable {
+contract ERC20Basic {
+  uint256 public totalSupply;
 
-  /// @dev This will be invoked by the owner, when owner wants to rescue tokens
-  /// @param token Token which will we rescue to the owner from the contract
-  function recoverTokens(ERC20Basic token) onlyOwner public {
-    token.transfer(owner, tokensToBeReturned(token));
-  }
+  function balanceOf(address who) public view returns (uint256);
 
-  /// @dev Interface function, can be overwritten by the superclass
-  /// @param token Token which balance we will check and return
-  /// @return The amount of tokens (in smallest denominator) the contract owns
-  function tokensToBeReturned(ERC20Basic token) public returns (uint) {
-    return token.balanceOf(this);
-  }
+  function transfer(address to, uint256 value) public returns (bool);
+
+  event Transfer(address indexed from, address indexed to, uint256 value);
 }
 contract Haltable is Ownable {
   bool public halted;
@@ -251,11 +236,20 @@ contract ERC20 is ERC20Basic {
 
   event Approval(address indexed owner, address indexed spender, uint256 value);
 }
-contract FractionalERC20Ext is ERC20 {
+contract Recoverable is Ownable {
 
-  uint public decimals;
-  uint public minCap;
+  /// @dev This will be invoked by the owner, when owner wants to rescue tokens
+  /// @param token Token which will we rescue to the owner from the contract
+  function recoverTokens(ERC20Basic token) onlyOwner public {
+    token.transfer(owner, tokensToBeReturned(token));
+  }
 
+  /// @dev Interface function, can be overwritten by the superclass
+  /// @param token Token which balance we will check and return
+  /// @return The amount of tokens (in smallest denominator) the contract owns
+  function tokensToBeReturned(ERC20Basic token) public returns (uint) {
+    return token.balanceOf(this);
+  }
 }
 contract StandardToken is ERC20, SafeMath {
 
@@ -305,6 +299,12 @@ contract StandardToken is ERC20, SafeMath {
   function allowance(address _owner, address _spender) public constant returns (uint remaining) {
     return allowed[_owner][_spender];
   }
+
+}
+contract FractionalERC20Ext is ERC20 {
+
+  uint public decimals;
+  uint public minCap;
 
 }
 contract StandardTokenExt is StandardToken, Recoverable {

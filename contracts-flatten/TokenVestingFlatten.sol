@@ -3,6 +3,48 @@
  */
 pragma solidity ^0.4.24;
 
+contract SafeMath {
+  function safeMul(uint a, uint b) internal returns (uint) {
+    uint c = a * b;
+    assert(a == 0 || c / a == b);
+    return c;
+  }
+
+  function safeDiv(uint a, uint b) internal returns (uint) {
+    assert(b > 0);
+    uint c = a / b;
+    assert(a == b * c + a % b);
+    return c;
+  }
+
+  function safeSub(uint a, uint b) internal returns (uint) {
+    assert(b <= a);
+    return a - b;
+  }
+
+  function safeAdd(uint a, uint b) internal returns (uint) {
+    uint c = a + b;
+    assert(c >= a && c >= b);
+    return c;
+  }
+
+  function max64(uint64 a, uint64 b) internal constant returns (uint64) {
+    return a >= b ? a : b;
+  }
+
+  function min64(uint64 a, uint64 b) internal constant returns (uint64) {
+    return a < b ? a : b;
+  }
+
+  function max256(uint256 a, uint256 b) internal constant returns (uint256) {
+    return a >= b ? a : b;
+  }
+
+  function min256(uint256 a, uint256 b) internal constant returns (uint256) {
+    return a < b ? a : b;
+  }
+
+}
 interface IERC20 {
     function transfer(address to, uint256 value) external returns (bool);
 
@@ -97,48 +139,6 @@ contract Ownable {
     emit OwnershipTransferred(owner, newOwner);
     owner = newOwner;
   }
-}
-contract SafeMath {
-  function safeMul(uint a, uint b) internal returns (uint) {
-    uint c = a * b;
-    assert(a == 0 || c / a == b);
-    return c;
-  }
-
-  function safeDiv(uint a, uint b) internal returns (uint) {
-    assert(b > 0);
-    uint c = a / b;
-    assert(a == b * c + a % b);
-    return c;
-  }
-
-  function safeSub(uint a, uint b) internal returns (uint) {
-    assert(b <= a);
-    return a - b;
-  }
-
-  function safeAdd(uint a, uint b) internal returns (uint) {
-    uint c = a + b;
-    assert(c >= a && c >= b);
-    return c;
-  }
-
-  function max64(uint64 a, uint64 b) internal constant returns (uint64) {
-    return a >= b ? a : b;
-  }
-
-  function min64(uint64 a, uint64 b) internal constant returns (uint64) {
-    return a < b ? a : b;
-  }
-
-  function max256(uint256 a, uint256 b) internal constant returns (uint256) {
-    return a >= b ? a : b;
-  }
-
-  function min256(uint256 a, uint256 b) internal constant returns (uint256) {
-    return a < b ? a : b;
-  }
-
 }
 contract TokenVesting is Ownable, SafeMath {
     // The vesting schedule is time-based (i.e. using block timestamps as opposed to e.g. block numbers), and is
@@ -247,7 +247,7 @@ contract TokenVesting is Ownable, SafeMath {
      * @param token ERC20 token which is being vested
      */
     function release(IERC20 token) public {
-        uint256 unreleased = _releasableAmount(token);
+        uint256 unreleased = releasableAmount(token);
 
         require(unreleased > 0);
 
@@ -269,7 +269,7 @@ contract TokenVesting is Ownable, SafeMath {
 
         uint256 balance = token.balanceOf(address(this));
 
-        uint256 unreleased = _releasableAmount(token);
+        uint256 unreleased = releasableAmount(token);
         uint256 refund = safeSub(balance, unreleased);
 
         _revoked[address(token)] = true;
@@ -283,15 +283,15 @@ contract TokenVesting is Ownable, SafeMath {
      * @dev Calculates the amount that has already vested but hasn't been released yet.
      * @param token ERC20 token which is being vested
      */
-    function _releasableAmount(IERC20 token) private view returns (uint256) {
-        return safeSub(_vestedAmount(token), _released[address(token)]);
+    function releasableAmount(IERC20 token) public view returns (uint256) {
+        return safeSub(vestedAmount(token), _released[address(token)]);
     }
 
     /**
      * @dev Calculates the amount that has already vested.
      * @param token ERC20 token which is being vested
      */
-    function _vestedAmount(IERC20 token) private view returns (uint256) {
+    function vestedAmount(IERC20 token) public view returns (uint256) {
         uint256 currentBalance = token.balanceOf(address(this));
         uint256 totalBalance = safeAdd(currentBalance, _released[address(token)]);
 
