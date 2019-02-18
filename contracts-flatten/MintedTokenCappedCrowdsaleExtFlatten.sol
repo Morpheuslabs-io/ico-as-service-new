@@ -3,75 +3,6 @@
  */
 pragma solidity ^0.4.24;
 
-contract FinalizeAgent {
-
-  bool public reservedTokensAreDistributed = false;
-
-  function isFinalizeAgent() public constant returns (bool) {
-    return true;
-  }
-
-  /** Return true if we can run finalizeCrowdsale() properly.
-   *
-   * This is a safety check function that doesn't allow crowdsale to begin
-   * unless the finalizer has been set up properly.
-   */
-  function isSane() public constant returns (bool) {
-    return true;
-  }
-
-  function distributeReservedTokens(uint reservedTokensDistributionBatch) public {
-
-  }
-
-  /** Called once by crowdsale finalize() if the sale was success. */
-  function finalizeCrowdsale() public {
-
-  }
-
-}
-contract SafeMath {
-  function safeMul(uint a, uint b) internal returns (uint) {
-    uint c = a * b;
-    assert(a == 0 || c / a == b);
-    return c;
-  }
-
-  function safeDiv(uint a, uint b) internal returns (uint) {
-    assert(b > 0);
-    uint c = a / b;
-    assert(a == b * c + a % b);
-    return c;
-  }
-
-  function safeSub(uint a, uint b) internal returns (uint) {
-    assert(b <= a);
-    return a - b;
-  }
-
-  function safeAdd(uint a, uint b) internal returns (uint) {
-    uint c = a + b;
-    assert(c >= a && c >= b);
-    return c;
-  }
-
-  function max64(uint64 a, uint64 b) internal constant returns (uint64) {
-    return a >= b ? a : b;
-  }
-
-  function min64(uint64 a, uint64 b) internal constant returns (uint64) {
-    return a < b ? a : b;
-  }
-
-  function max256(uint256 a, uint256 b) internal constant returns (uint256) {
-    return a >= b ? a : b;
-  }
-
-  function min256(uint256 a, uint256 b) internal constant returns (uint256) {
-    return a < b ? a : b;
-  }
-
-}
 contract PricingStrategy {
 
   address public tier;
@@ -189,6 +120,48 @@ contract Ownable {
     owner = newOwner;
   }
 }
+contract SafeMath {
+  function safeMul(uint a, uint b) internal returns (uint) {
+    uint c = a * b;
+    assert(a == 0 || c / a == b);
+    return c;
+  }
+
+  function safeDiv(uint a, uint b) internal returns (uint) {
+    assert(b > 0);
+    uint c = a / b;
+    assert(a == b * c + a % b);
+    return c;
+  }
+
+  function safeSub(uint a, uint b) internal returns (uint) {
+    assert(b <= a);
+    return a - b;
+  }
+
+  function safeAdd(uint a, uint b) internal returns (uint) {
+    uint c = a + b;
+    assert(c >= a && c >= b);
+    return c;
+  }
+
+  function max64(uint64 a, uint64 b) internal constant returns (uint64) {
+    return a >= b ? a : b;
+  }
+
+  function min64(uint64 a, uint64 b) internal constant returns (uint64) {
+    return a < b ? a : b;
+  }
+
+  function max256(uint256 a, uint256 b) internal constant returns (uint256) {
+    return a >= b ? a : b;
+  }
+
+  function min256(uint256 a, uint256 b) internal constant returns (uint256) {
+    return a < b ? a : b;
+  }
+
+}
 contract ERC20Basic {
   uint256 public totalSupply;
 
@@ -198,14 +171,32 @@ contract ERC20Basic {
 
   event Transfer(address indexed from, address indexed to, uint256 value);
 }
-contract ERC20 is ERC20Basic {
-  function allowance(address owner, address spender) public view returns (uint256);
+contract FinalizeAgent {
 
-  function transferFrom(address from, address to, uint256 value) public returns (bool);
+  bool public reservedTokensAreDistributed = false;
 
-  function approve(address spender, uint256 value) public returns (bool);
+  function isFinalizeAgent() public constant returns (bool) {
+    return true;
+  }
 
-  event Approval(address indexed owner, address indexed spender, uint256 value);
+  /** Return true if we can run finalizeCrowdsale() properly.
+   *
+   * This is a safety check function that doesn't allow crowdsale to begin
+   * unless the finalizer has been set up properly.
+   */
+  function isSane() public constant returns (bool) {
+    return true;
+  }
+
+  function distributeReservedTokens(uint reservedTokensDistributionBatch) public {
+
+  }
+
+  /** Called once by crowdsale finalize() if the sale was success. */
+  function finalizeCrowdsale() public {
+
+  }
+
 }
 contract Recoverable is Ownable {
 
@@ -249,6 +240,21 @@ contract Haltable is Ownable {
   function unhalt() external onlyOwner onlyInEmergency {
     halted = false;
   }
+
+}
+contract ERC20 is ERC20Basic {
+  function allowance(address owner, address spender) public view returns (uint256);
+
+  function transferFrom(address from, address to, uint256 value) public returns (bool);
+
+  function approve(address spender, uint256 value) public returns (bool);
+
+  event Approval(address indexed owner, address indexed spender, uint256 value);
+}
+contract FractionalERC20Ext is ERC20 {
+
+  uint public decimals;
+  uint public minCap;
 
 }
 contract StandardToken is ERC20, SafeMath {
@@ -307,12 +313,6 @@ contract StandardTokenExt is StandardToken, Recoverable {
   function isToken() public view returns (bool weAre) {
     return true;
   }
-}
-contract FractionalERC20Ext is ERC20 {
-
-  uint public decimals;
-  uint public minCap;
-
 }
 contract MintableTokenExt is StandardTokenExt {
 

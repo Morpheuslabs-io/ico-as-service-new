@@ -3,48 +3,6 @@
  */
 pragma solidity ^0.4.24;
 
-contract SafeMath {
-  function safeMul(uint a, uint b) internal returns (uint) {
-    uint c = a * b;
-    assert(a == 0 || c / a == b);
-    return c;
-  }
-
-  function safeDiv(uint a, uint b) internal returns (uint) {
-    assert(b > 0);
-    uint c = a / b;
-    assert(a == b * c + a % b);
-    return c;
-  }
-
-  function safeSub(uint a, uint b) internal returns (uint) {
-    assert(b <= a);
-    return a - b;
-  }
-
-  function safeAdd(uint a, uint b) internal returns (uint) {
-    uint c = a + b;
-    assert(c >= a && c >= b);
-    return c;
-  }
-
-  function max64(uint64 a, uint64 b) internal constant returns (uint64) {
-    return a >= b ? a : b;
-  }
-
-  function min64(uint64 a, uint64 b) internal constant returns (uint64) {
-    return a < b ? a : b;
-  }
-
-  function max256(uint256 a, uint256 b) internal constant returns (uint256) {
-    return a >= b ? a : b;
-  }
-
-  function min256(uint256 a, uint256 b) internal constant returns (uint256) {
-    return a < b ? a : b;
-  }
-
-}
 contract Ownable {
   address public owner;
 
@@ -132,6 +90,57 @@ contract ERC20Basic {
 
   event Transfer(address indexed from, address indexed to, uint256 value);
 }
+contract SafeMath {
+  function safeMul(uint a, uint b) internal returns (uint) {
+    uint c = a * b;
+    assert(a == 0 || c / a == b);
+    return c;
+  }
+
+  function safeDiv(uint a, uint b) internal returns (uint) {
+    assert(b > 0);
+    uint c = a / b;
+    assert(a == b * c + a % b);
+    return c;
+  }
+
+  function safeSub(uint a, uint b) internal returns (uint) {
+    assert(b <= a);
+    return a - b;
+  }
+
+  function safeAdd(uint a, uint b) internal returns (uint) {
+    uint c = a + b;
+    assert(c >= a && c >= b);
+    return c;
+  }
+
+  function max64(uint64 a, uint64 b) internal constant returns (uint64) {
+    return a >= b ? a : b;
+  }
+
+  function min64(uint64 a, uint64 b) internal constant returns (uint64) {
+    return a < b ? a : b;
+  }
+
+  function max256(uint256 a, uint256 b) internal constant returns (uint256) {
+    return a >= b ? a : b;
+  }
+
+  function min256(uint256 a, uint256 b) internal constant returns (uint256) {
+    return a < b ? a : b;
+  }
+
+}
+contract ERC20 is ERC20Basic {
+  function allowance(address owner, address spender) public view returns (uint256);
+
+  function transferFrom(address from, address to, uint256 value) public returns (bool);
+
+  function approve(address spender, uint256 value) public returns (bool);
+
+  event Approval(address indexed owner, address indexed spender, uint256 value);
+}
 contract Recoverable is Ownable {
 
   /// @dev This will be invoked by the owner, when owner wants to rescue tokens
@@ -146,15 +155,6 @@ contract Recoverable is Ownable {
   function tokensToBeReturned(ERC20Basic token) public returns (uint) {
     return token.balanceOf(this);
   }
-}
-contract ERC20 is ERC20Basic {
-  function allowance(address owner, address spender) public view returns (uint256);
-
-  function transferFrom(address from, address to, uint256 value) public returns (bool);
-
-  function approve(address spender, uint256 value) public returns (bool);
-
-  event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 contract StandardToken is ERC20, SafeMath {
 
@@ -213,74 +213,6 @@ contract StandardTokenExt is StandardToken, Recoverable {
     return true;
   }
 }
-contract ReleasableToken is StandardTokenExt {
-
-  /* The finalizer contract that allows unlift the transfer limits on this token */
-  address public releaseAgent;
-
-  /** A crowdsale contract can release us to the wild if ICO success. If false we are are in transfer lock up period.*/
-  bool public released = false;
-
-  /** Map of agents that are allowed to transfer tokens regardless of the lock down period. These are crowdsale contracts and possible the team multisig itself. */
-  mapping(address => bool) public transferAgents;
-
-  /**
-   * Limit token transfer until the crowdsale is over.
-   */
-  modifier canTransfer(address _sender) {
-    if (!released) {
-      require(transferAgents[_sender]);
-    }
-    _;
-  }
-
-  /** The function can be called only before or after the tokens have been releasesd */
-  modifier inReleaseState(bool releaseState) {
-    require(releaseState == released);
-    _;
-  }
-
-  /** The function can be called only by a whitelisted release agent. */
-  modifier onlyReleaseAgent() {
-    require(msg.sender == releaseAgent);
-    _;
-  }
-
-  /**
-   * Set the contract that can call release and make the token transferable.
-   * Design choice. Allow reset the release agent to fix fat finger mistakes.
-   */
-  function setReleaseAgent(address addr) onlyOwner inReleaseState(false) public {
-    // We don't do interface check here as we might want to a normal wallet address to act as a release agent
-    releaseAgent = addr;
-  }
-
-  /**
-   * Owner can allow a particular address (a crowdsale contract) to transfer tokens despite the lock up period.
-   */
-  function setTransferAgent(address addr, bool state) onlyOwner inReleaseState(false) public {
-    transferAgents[addr] = state;
-  }
-
-  /**
-   * One way function to release the tokens to the wild.
-   * Can be called only from the release agent that is the final ICO contract. It is only called if the crowdsale has been success (first milestone reached).
-   */
-  function releaseTokenTransfer() public onlyReleaseAgent {
-    released = true;
-  }
-
-  function transfer(address _to, uint _value) public canTransfer(msg.sender) returns (bool success) {
-    // Call StandardToken.transfer()
-    return super.transfer(_to, _value);
-  }
-
-  function transferFrom(address _from, address _to, uint _value) public canTransfer(_from) returns (bool success) {
-    // Call StandardToken.transferForm()
-    return super.transferFrom(_from, _to, _value);
-  }
-}
-
 contract MintableTokenExt is StandardTokenExt {
 
   bool public mintingFinished = false;
@@ -409,6 +341,74 @@ contract MintableTokenExt is StandardTokenExt {
       });
   }
 }
+contract ReleasableToken is StandardTokenExt {
+
+  /* The finalizer contract that allows unlift the transfer limits on this token */
+  address public releaseAgent;
+
+  /** A crowdsale contract can release us to the wild if ICO success. If false we are are in transfer lock up period.*/
+  bool public released = false;
+
+  /** Map of agents that are allowed to transfer tokens regardless of the lock down period. These are crowdsale contracts and possible the team multisig itself. */
+  mapping(address => bool) public transferAgents;
+
+  /**
+   * Limit token transfer until the crowdsale is over.
+   */
+  modifier canTransfer(address _sender) {
+    if (!released) {
+      require(transferAgents[_sender]);
+    }
+    _;
+  }
+
+  /** The function can be called only before or after the tokens have been releasesd */
+  modifier inReleaseState(bool releaseState) {
+    require(releaseState == released);
+    _;
+  }
+
+  /** The function can be called only by a whitelisted release agent. */
+  modifier onlyReleaseAgent() {
+    require(msg.sender == releaseAgent);
+    _;
+  }
+
+  /**
+   * Set the contract that can call release and make the token transferable.
+   * Design choice. Allow reset the release agent to fix fat finger mistakes.
+   */
+  function setReleaseAgent(address addr) onlyOwner inReleaseState(false) public {
+    // We don't do interface check here as we might want to a normal wallet address to act as a release agent
+    releaseAgent = addr;
+  }
+
+  /**
+   * Owner can allow a particular address (a crowdsale contract) to transfer tokens despite the lock up period.
+   */
+  function setTransferAgent(address addr, bool state) onlyOwner inReleaseState(false) public {
+    transferAgents[addr] = state;
+  }
+
+  /**
+   * One way function to release the tokens to the wild.
+   * Can be called only from the release agent that is the final ICO contract. It is only called if the crowdsale has been success (first milestone reached).
+   */
+  function releaseTokenTransfer() public onlyReleaseAgent {
+    released = true;
+  }
+
+  function transfer(address _to, uint _value) public canTransfer(msg.sender) returns (bool success) {
+    // Call StandardToken.transfer()
+    return super.transfer(_to, _value);
+  }
+
+  function transferFrom(address _from, address _to, uint _value) public canTransfer(_from) returns (bool success) {
+    // Call StandardToken.transferForm()
+    return super.transferFrom(_from, _to, _value);
+  }
+}
+
 contract CrowdsaleTokenExt is ReleasableToken, MintableTokenExt {
 
     event ClaimedTokens(address indexed _token, address indexed _controller, uint _amount);

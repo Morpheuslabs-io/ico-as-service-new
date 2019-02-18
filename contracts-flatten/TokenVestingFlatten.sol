@@ -3,6 +3,23 @@
  */
 pragma solidity ^0.4.24;
 
+interface IERC20 {
+    function transfer(address to, uint256 value) external returns (bool);
+
+    function approve(address spender, uint256 value) external returns (bool);
+
+    function transferFrom(address from, address to, uint256 value) external returns (bool);
+
+    function totalSupply() external view returns (uint256);
+
+    function balanceOf(address who) external view returns (uint256);
+
+    function allowance(address owner, address spender) external view returns (uint256);
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+}
 contract Ownable {
   address public owner;
 
@@ -123,23 +140,6 @@ contract SafeMath {
   }
 
 }
-interface IERC20 {
-    function transfer(address to, uint256 value) external returns (bool);
-
-    function approve(address spender, uint256 value) external returns (bool);
-
-    function transferFrom(address from, address to, uint256 value) external returns (bool);
-
-    function totalSupply() external view returns (uint256);
-
-    function balanceOf(address who) external view returns (uint256);
-
-    function allowance(address owner, address spender) external view returns (uint256);
-
-    event Transfer(address indexed from, address indexed to, uint256 value);
-
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-}
 contract TokenVesting is Ownable, SafeMath {
     // The vesting schedule is time-based (i.e. using block timestamps as opposed to e.g. block numbers), and is
     // therefore sensitive to timestamp manipulation (which is something miners can do, to a certain degree).Therefore,
@@ -172,22 +172,22 @@ contract TokenVesting is Ownable, SafeMath {
      * beneficiary, gradually in a linear fashion until start + duration. By then all
      * of the balance will have vested.
      * @param beneficiary address of the beneficiary to whom vested tokens are transferred
-     * @param cliffDuration duration in seconds of the cliff in which tokens will begin to vest
+     * @param cliff duration in seconds of the cliff in which tokens will begin to vest
      * @param start the time (as Unix time) at which point vesting starts
      * @param duration duration in seconds of the period in which the tokens will vest
      * @param revocable whether the vesting is revocable or not
      */
-    function setParam(address beneficiary, uint256 start, uint256 cliffDuration, uint256 duration, bool revocable) public onlyOwner paramNotSet {
+    function setParam(address beneficiary, uint256 start, uint256 cliff, uint256 duration, bool revocable) public onlyOwner paramNotSet {
 
         require(beneficiary != address(0));
-        require(cliffDuration <= duration);
         require(duration > 0);
         require(safeAdd(start, duration) > block.timestamp);
+        require(safeAdd(start, duration) > cliff);
 
         _beneficiary = beneficiary;
         _revocable = revocable;
         _duration = duration;
-        _cliff = safeAdd(start, cliffDuration);
+        _cliff = cliff;
         _start = start;
 
         isParamSet = true;

@@ -45,22 +45,22 @@ contract TokenVesting is Ownable, SafeMath {
      * beneficiary, gradually in a linear fashion until start + duration. By then all
      * of the balance will have vested.
      * @param beneficiary address of the beneficiary to whom vested tokens are transferred
-     * @param cliffDuration duration in seconds of the cliff in which tokens will begin to vest
+     * @param cliff duration in seconds of the cliff in which tokens will begin to vest
      * @param start the time (as Unix time) at which point vesting starts
      * @param duration duration in seconds of the period in which the tokens will vest
      * @param revocable whether the vesting is revocable or not
      */
-    function setParam(address beneficiary, uint256 start, uint256 cliffDuration, uint256 duration, bool revocable) public onlyOwner paramNotSet {
+    function setParam(address beneficiary, uint256 start, uint256 cliff, uint256 duration, bool revocable) public onlyOwner paramNotSet {
 
         require(beneficiary != address(0));
-        require(cliffDuration <= duration);
         require(duration > 0);
         require(safeAdd(start, duration) > block.timestamp);
+        require(safeAdd(start, duration) > cliff);
 
         _beneficiary = beneficiary;
         _revocable = revocable;
         _duration = duration;
-        _cliff = safeAdd(start, cliffDuration);
+        _cliff = cliff;
         _start = start;
 
         isParamSet = true;
