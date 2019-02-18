@@ -25,7 +25,13 @@ var jobId = crontab.scheduleJob(global.PREDEPLOY_INTERVAL, async function(){
     console.log(`cron job running ... (isVesting: ${isVesting})`);
     isCronRunning = true;
 
-    let predeployCnt = await global.SqliteHandler.predeployed('address1');
+    let predeployCnt;
+    if (isVesting) {
+      predeployCnt = await global.SqliteHandler.predeployed('addressVesting');
+    } else {
+      predeployCnt = await global.SqliteHandler.predeployed('address1');
+    }
+    
     if (predeployCnt >= global.PREDEPLOY_MAX)
     {
       console.log('cron job - Already predeployed: ' + predeployCnt + ' sets');
