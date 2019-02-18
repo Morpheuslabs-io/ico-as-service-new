@@ -21,8 +21,8 @@
     "zeppelin-solidity": "git+https://git@github.com/OpenZeppelin/zeppelin-solidity.git#8e01dd14f9211239213ae7bd4c6af92dd18d4ab7"
   },
   "scripts": {
-    "start": "require-link && react-scripts start",
-    "dev": "require-link && REACT_APP_TEST_NET=rinkeby react-scripts start",
+    "start": "require-link && HOST=104.248.144.168 PORT=3001 react-scripts start",
+    "dev": "require-link && REACT_APP_TEST_NET=rinkeby HOST=localhost PORT=3001 react-scripts start",
     "build": "require-link && react-scripts build",
     "test": "require-link && react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
