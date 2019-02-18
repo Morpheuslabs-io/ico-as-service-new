@@ -3,6 +3,33 @@
  */
 pragma solidity ^0.4.24;
 
+contract FinalizeAgent {
+
+  bool public reservedTokensAreDistributed = false;
+
+  function isFinalizeAgent() public constant returns (bool) {
+    return true;
+  }
+
+  /** Return true if we can run finalizeCrowdsale() properly.
+   *
+   * This is a safety check function that doesn't allow crowdsale to begin
+   * unless the finalizer has been set up properly.
+   */
+  function isSane() public constant returns (bool) {
+    return true;
+  }
+
+  function distributeReservedTokens(uint reservedTokensDistributionBatch) public {
+
+  }
+
+  /** Called once by crowdsale finalize() if the sale was success. */
+  function finalizeCrowdsale() public {
+
+  }
+
+}
 contract SafeMath {
   function safeMul(uint a, uint b) internal returns (uint) {
     uint c = a * b;
@@ -83,33 +110,6 @@ contract PricingStrategy {
    * @return Amount of tokens the investor receives
    */
   function calculatePrice(uint value, uint weiRaised, uint tokensSold, address msgSender, uint decimals) public constant returns (uint tokenAmount) {}
-}
-contract FinalizeAgent {
-
-  bool public reservedTokensAreDistributed = false;
-
-  function isFinalizeAgent() public constant returns (bool) {
-    return true;
-  }
-
-  /** Return true if we can run finalizeCrowdsale() properly.
-   *
-   * This is a safety check function that doesn't allow crowdsale to begin
-   * unless the finalizer has been set up properly.
-   */
-  function isSane() public constant returns (bool) {
-    return true;
-  }
-
-  function distributeReservedTokens(uint reservedTokensDistributionBatch) public {
-
-  }
-
-  /** Called once by crowdsale finalize() if the sale was success. */
-  function finalizeCrowdsale() public {
-
-  }
-
 }
 contract Ownable {
   address public owner;
@@ -198,6 +198,15 @@ contract ERC20Basic {
 
   event Transfer(address indexed from, address indexed to, uint256 value);
 }
+contract ERC20 is ERC20Basic {
+  function allowance(address owner, address spender) public view returns (uint256);
+
+  function transferFrom(address from, address to, uint256 value) public returns (bool);
+
+  function approve(address spender, uint256 value) public returns (bool);
+
+  event Approval(address indexed owner, address indexed spender, uint256 value);
+}
 contract Recoverable is Ownable {
 
   /// @dev This will be invoked by the owner, when owner wants to rescue tokens
@@ -241,15 +250,6 @@ contract Haltable is Ownable {
     halted = false;
   }
 
-}
-contract ERC20 is ERC20Basic {
-  function allowance(address owner, address spender) public view returns (uint256);
-
-  function transferFrom(address from, address to, uint256 value) public returns (bool);
-
-  function approve(address spender, uint256 value) public returns (bool);
-
-  event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 contract StandardToken is ERC20, SafeMath {
 
@@ -301,18 +301,18 @@ contract StandardToken is ERC20, SafeMath {
   }
 
 }
-contract FractionalERC20Ext is ERC20 {
-
-  uint public decimals;
-  uint public minCap;
-
-}
 contract StandardTokenExt is StandardToken, Recoverable {
 
   /* Interface declaration */
   function isToken() public view returns (bool weAre) {
     return true;
   }
+}
+contract FractionalERC20Ext is ERC20 {
+
+  uint public decimals;
+  uint public minCap;
+
 }
 contract MintableTokenExt is StandardTokenExt {
 

@@ -213,14 +213,14 @@
     "absolutePath": "/home/trungtt/Work/reference/morphe/ico/ico-as-service-new/contracts/lib/FractionalERC20Ext.sol",
     "exportedSymbols": {
       "FractionalERC20Ext": [
-        2951
+        2906
       ]
     },
-    "id": 2952,
+    "id": 2907,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2943,
+        "id": 2898,
         "literals": [
           "solidity",
           "^",
@@ -233,10 +233,10 @@
       {
         "absolutePath": "/home/trungtt/Work/reference/morphe/ico/ico-as-service-new/contracts/lib/ERC20.sol",
         "file": "./ERC20.sol",
-        "id": 2944,
+        "id": 2899,
         "nodeType": "ImportDirective",
-        "scope": 2952,
-        "sourceUnit": 2881,
+        "scope": 2907,
+        "sourceUnit": 2836,
         "src": "84:21:11",
         "symbolAliases": [],
         "unitAlias": ""
@@ -247,43 +247,43 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 2945,
+              "id": 2900,
               "name": "ERC20",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2880,
+              "referencedDeclaration": 2835,
               "src": "200:5:11",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20_$2880",
+                "typeIdentifier": "t_contract$_ERC20_$2835",
                 "typeString": "contract ERC20"
               }
             },
-            "id": 2946,
+            "id": 2901,
             "nodeType": "InheritanceSpecifier",
             "src": "200:5:11"
           }
         ],
         "contractDependencies": [
-          2880,
-          2909
+          2835,
+          2864
         ],
         "contractKind": "contract",
         "documentation": "A token that defines fractional units as decimals.",
         "fullyImplemented": false,
-        "id": 2951,
+        "id": 2906,
         "linearizedBaseContracts": [
-          2951,
-          2880,
-          2909
+          2906,
+          2835,
+          2864
         ],
         "name": "FractionalERC20Ext",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 2948,
+            "id": 2903,
             "name": "decimals",
             "nodeType": "VariableDeclaration",
-            "scope": 2951,
+            "scope": 2906,
             "src": "211:20:11",
             "stateVariable": true,
             "storageLocation": "default",
@@ -292,7 +292,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 2947,
+              "id": 2902,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "211:4:11",
@@ -306,10 +306,10 @@
           },
           {
             "constant": false,
-            "id": 2950,
+            "id": 2905,
             "name": "minCap",
             "nodeType": "VariableDeclaration",
-            "scope": 2951,
+            "scope": 2906,
             "src": "235:18:11",
             "stateVariable": true,
             "storageLocation": "default",
@@ -318,7 +318,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 2949,
+              "id": 2904,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "235:4:11",
@@ -331,7 +331,7 @@
             "visibility": "public"
           }
         ],
-        "scope": 2952,
+        "scope": 2907,
         "src": "169:88:11"
       }
     ],
@@ -341,14 +341,14 @@
     "absolutePath": "/home/trungtt/Work/reference/morphe/ico/ico-as-service-new/contracts/lib/FractionalERC20Ext.sol",
     "exportedSymbols": {
       "FractionalERC20Ext": [
-        2951
+        2906
       ]
     },
-    "id": 2952,
+    "id": 2907,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2943,
+        "id": 2898,
         "literals": [
           "solidity",
           "^",
@@ -361,10 +361,10 @@
       {
         "absolutePath": "/home/trungtt/Work/reference/morphe/ico/ico-as-service-new/contracts/lib/ERC20.sol",
         "file": "./ERC20.sol",
-        "id": 2944,
+        "id": 2899,
         "nodeType": "ImportDirective",
-        "scope": 2952,
-        "sourceUnit": 2881,
+        "scope": 2907,
+        "sourceUnit": 2836,
         "src": "84:21:11",
         "symbolAliases": [],
         "unitAlias": ""
@@ -375,43 +375,43 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 2945,
+              "id": 2900,
               "name": "ERC20",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2880,
+              "referencedDeclaration": 2835,
               "src": "200:5:11",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20_$2880",
+                "typeIdentifier": "t_contract$_ERC20_$2835",
                 "typeString": "contract ERC20"
               }
             },
-            "id": 2946,
+            "id": 2901,
             "nodeType": "InheritanceSpecifier",
             "src": "200:5:11"
           }
         ],
         "contractDependencies": [
-          2880,
-          2909
+          2835,
+          2864
         ],
         "contractKind": "contract",
         "documentation": "A token that defines fractional units as decimals.",
         "fullyImplemented": false,
-        "id": 2951,
+        "id": 2906,
         "linearizedBaseContracts": [
-          2951,
-          2880,
-          2909
+          2906,
+          2835,
+          2864
         ],
         "name": "FractionalERC20Ext",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 2948,
+            "id": 2903,
             "name": "decimals",
             "nodeType": "VariableDeclaration",
-            "scope": 2951,
+            "scope": 2906,
             "src": "211:20:11",
             "stateVariable": true,
             "storageLocation": "default",
@@ -420,7 +420,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 2947,
+              "id": 2902,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "211:4:11",
@@ -434,10 +434,10 @@
           },
           {
             "constant": false,
-            "id": 2950,
+            "id": 2905,
             "name": "minCap",
             "nodeType": "VariableDeclaration",
-            "scope": 2951,
+            "scope": 2906,
             "src": "235:18:11",
             "stateVariable": true,
             "storageLocation": "default",
@@ -446,7 +446,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 2949,
+              "id": 2904,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "235:4:11",
@@ -459,7 +459,7 @@
             "visibility": "public"
           }
         ],
-        "scope": 2952,
+        "scope": 2907,
         "src": "169:88:11"
       }
     ],
@@ -471,5 +471,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2019-02-13T09:25:31.642Z"
+  "updatedAt": "2019-02-18T03:10:08.394Z"
 }

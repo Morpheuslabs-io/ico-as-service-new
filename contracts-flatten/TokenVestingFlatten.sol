@@ -3,23 +3,6 @@
  */
 pragma solidity ^0.4.24;
 
-interface IERC20 {
-    function transfer(address to, uint256 value) external returns (bool);
-
-    function approve(address spender, uint256 value) external returns (bool);
-
-    function transferFrom(address from, address to, uint256 value) external returns (bool);
-
-    function totalSupply() external view returns (uint256);
-
-    function balanceOf(address who) external view returns (uint256);
-
-    function allowance(address owner, address spender) external view returns (uint256);
-
-    event Transfer(address indexed from, address indexed to, uint256 value);
-
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-}
 contract Ownable {
   address public owner;
 
@@ -140,6 +123,23 @@ contract SafeMath {
   }
 
 }
+interface IERC20 {
+    function transfer(address to, uint256 value) external returns (bool);
+
+    function approve(address spender, uint256 value) external returns (bool);
+
+    function transferFrom(address from, address to, uint256 value) external returns (bool);
+
+    function totalSupply() external view returns (uint256);
+
+    function balanceOf(address who) external view returns (uint256);
+
+    function allowance(address owner, address spender) external view returns (uint256);
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+}
 contract TokenVesting is Ownable, SafeMath {
     // The vesting schedule is time-based (i.e. using block timestamps as opposed to e.g. block numbers), and is
     // therefore sensitive to timestamp manipulation (which is something miners can do, to a certain degree).Therefore,
@@ -163,6 +163,10 @@ contract TokenVesting is Ownable, SafeMath {
     mapping (address => uint256) private _released;
     mapping (address => bool) private _revoked;
 
+    constructor() {
+
+    }
+
     /**
      * @dev Creates a vesting contract that vests its balance of any ERC20 token to the
      * beneficiary, gradually in a linear fashion until start + duration. By then all
@@ -173,7 +177,8 @@ contract TokenVesting is Ownable, SafeMath {
      * @param duration duration in seconds of the period in which the tokens will vest
      * @param revocable whether the vesting is revocable or not
      */
-    constructor (address beneficiary, uint256 start, uint256 cliffDuration, uint256 duration, bool revocable) public {
+    function setParam(address beneficiary, uint256 start, uint256 cliffDuration, uint256 duration, bool revocable) public onlyOwner paramNotSet {
+
         require(beneficiary != address(0));
         require(cliffDuration <= duration);
         require(duration > 0);
@@ -184,6 +189,8 @@ contract TokenVesting is Ownable, SafeMath {
         _duration = duration;
         _cliff = safeAdd(start, cliffDuration);
         _start = start;
+
+        isParamSet = true;
     }
 
     /**

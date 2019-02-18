@@ -3,15 +3,6 @@
  */
 pragma solidity ^0.4.24;
 
-contract ERC20Basic {
-  uint256 public totalSupply;
-
-  function balanceOf(address who) public view returns (uint256);
-
-  function transfer(address to, uint256 value) public returns (bool);
-
-  event Transfer(address indexed from, address indexed to, uint256 value);
-}
 contract FinalizeAgent {
 
   bool public reservedTokensAreDistributed = false;
@@ -38,6 +29,96 @@ contract FinalizeAgent {
 
   }
 
+}
+contract SafeMath {
+  function safeMul(uint a, uint b) internal returns (uint) {
+    uint c = a * b;
+    assert(a == 0 || c / a == b);
+    return c;
+  }
+
+  function safeDiv(uint a, uint b) internal returns (uint) {
+    assert(b > 0);
+    uint c = a / b;
+    assert(a == b * c + a % b);
+    return c;
+  }
+
+  function safeSub(uint a, uint b) internal returns (uint) {
+    assert(b <= a);
+    return a - b;
+  }
+
+  function safeAdd(uint a, uint b) internal returns (uint) {
+    uint c = a + b;
+    assert(c >= a && c >= b);
+    return c;
+  }
+
+  function max64(uint64 a, uint64 b) internal constant returns (uint64) {
+    return a >= b ? a : b;
+  }
+
+  function min64(uint64 a, uint64 b) internal constant returns (uint64) {
+    return a < b ? a : b;
+  }
+
+  function max256(uint256 a, uint256 b) internal constant returns (uint256) {
+    return a >= b ? a : b;
+  }
+
+  function min256(uint256 a, uint256 b) internal constant returns (uint256) {
+    return a < b ? a : b;
+  }
+
+}
+contract ERC20Basic {
+  uint256 public totalSupply;
+
+  function balanceOf(address who) public view returns (uint256);
+
+  function transfer(address to, uint256 value) public returns (bool);
+
+  event Transfer(address indexed from, address indexed to, uint256 value);
+}
+contract PricingStrategy {
+
+  address public tier;
+
+  /** Interface declaration. */
+  function isPricingStrategy() public constant returns (bool) {
+    return true;
+  }
+
+  /** Self check if all references are correctly set.
+   * Checks that pricing strategy matches crowdsale parameters.
+   */
+  function isSane(address crowdsale) public constant returns (bool) {
+    return true;
+  }
+
+  /**
+   * @dev Pricing tells if this is a presale purchase or not.
+   * @param purchaser Address of the purchaser
+   * @return False by default, true if a presale purchaser
+   */
+  function isPresalePurchase(address purchaser) public constant returns (bool) {
+    return false;
+  }
+
+  /* How many weis one token costs */
+  function updateRate(uint newOneTokenInWei) public {}
+
+  /**
+   * When somebody tries to buy tokens for X eth, calculate how many tokens they get.
+   * @param value - What is the value of the transaction send in as wei
+   * @param tokensSold - how much tokens have been sold this far
+   * @param weiRaised - how much money has been raised this far in the main token sale - this number excludes presale
+   * @param msgSender - who is the investor of this transaction
+   * @param decimals - how many decimal units the token has
+   * @return Amount of tokens the investor receives
+   */
+  function calculatePrice(uint value, uint weiRaised, uint tokensSold, address msgSender, uint decimals) public constant returns (uint tokenAmount) {}
 }
 contract Ownable {
   address public owner;
@@ -117,96 +198,6 @@ contract Ownable {
     owner = newOwner;
   }
 }
-contract SafeMath {
-  function safeMul(uint a, uint b) internal returns (uint) {
-    uint c = a * b;
-    assert(a == 0 || c / a == b);
-    return c;
-  }
-
-  function safeDiv(uint a, uint b) internal returns (uint) {
-    assert(b > 0);
-    uint c = a / b;
-    assert(a == b * c + a % b);
-    return c;
-  }
-
-  function safeSub(uint a, uint b) internal returns (uint) {
-    assert(b <= a);
-    return a - b;
-  }
-
-  function safeAdd(uint a, uint b) internal returns (uint) {
-    uint c = a + b;
-    assert(c >= a && c >= b);
-    return c;
-  }
-
-  function max64(uint64 a, uint64 b) internal constant returns (uint64) {
-    return a >= b ? a : b;
-  }
-
-  function min64(uint64 a, uint64 b) internal constant returns (uint64) {
-    return a < b ? a : b;
-  }
-
-  function max256(uint256 a, uint256 b) internal constant returns (uint256) {
-    return a >= b ? a : b;
-  }
-
-  function min256(uint256 a, uint256 b) internal constant returns (uint256) {
-    return a < b ? a : b;
-  }
-
-}
-contract PricingStrategy {
-
-  address public tier;
-
-  /** Interface declaration. */
-  function isPricingStrategy() public constant returns (bool) {
-    return true;
-  }
-
-  /** Self check if all references are correctly set.
-   * Checks that pricing strategy matches crowdsale parameters.
-   */
-  function isSane(address crowdsale) public constant returns (bool) {
-    return true;
-  }
-
-  /**
-   * @dev Pricing tells if this is a presale purchase or not.
-   * @param purchaser Address of the purchaser
-   * @return False by default, true if a presale purchaser
-   */
-  function isPresalePurchase(address purchaser) public constant returns (bool) {
-    return false;
-  }
-
-  /* How many weis one token costs */
-  function updateRate(uint newOneTokenInWei) public {}
-
-  /**
-   * When somebody tries to buy tokens for X eth, calculate how many tokens they get.
-   * @param value - What is the value of the transaction send in as wei
-   * @param tokensSold - how much tokens have been sold this far
-   * @param weiRaised - how much money has been raised this far in the main token sale - this number excludes presale
-   * @param msgSender - who is the investor of this transaction
-   * @param decimals - how many decimal units the token has
-   * @return Amount of tokens the investor receives
-   */
-  function calculatePrice(uint value, uint weiRaised, uint tokensSold, address msgSender, uint decimals) public constant returns (uint tokenAmount) {}
-}
-contract ERC20 is ERC20Basic {
-  function allowance(address owner, address spender) public view returns (uint256);
-
-  function transferFrom(address from, address to, uint256 value) public returns (bool);
-
-  function approve(address spender, uint256 value) public returns (bool);
-
-  event Approval(address indexed owner, address indexed spender, uint256 value);
-}
 contract Recoverable is Ownable {
 
   /// @dev This will be invoked by the owner, when owner wants to rescue tokens
@@ -250,6 +241,15 @@ contract Haltable is Ownable {
     halted = false;
   }
 
+}
+contract ERC20 is ERC20Basic {
+  function allowance(address owner, address spender) public view returns (uint256);
+
+  function transferFrom(address from, address to, uint256 value) public returns (bool);
+
+  function approve(address spender, uint256 value) public returns (bool);
+
+  event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 contract StandardToken is ERC20, SafeMath {
 
@@ -301,18 +301,18 @@ contract StandardToken is ERC20, SafeMath {
   }
 
 }
-contract FractionalERC20Ext is ERC20 {
-
-  uint public decimals;
-  uint public minCap;
-
-}
 contract StandardTokenExt is StandardToken, Recoverable {
 
   /* Interface declaration */
   function isToken() public view returns (bool weAre) {
     return true;
   }
+}
+contract FractionalERC20Ext is ERC20 {
+
+  uint public decimals;
+  uint public minCap;
+
 }
 contract MintableTokenExt is StandardTokenExt {
 
@@ -508,6 +508,84 @@ contract ReleasableToken is StandardTokenExt {
     // Call StandardToken.transferForm()
     return super.transferFrom(_from, _to, _value);
   }
+}
+
+contract CrowdsaleTokenExt is ReleasableToken, MintableTokenExt {
+
+    event ClaimedTokens(address indexed _token, address indexed _controller, uint _amount);
+
+    string public name;
+
+    string public symbol;
+
+    uint public decimals;
+
+    /* Minimum ammount of tokens every buyer can buy. */
+    uint public minCap;
+
+    constructor() {
+
+    }
+
+    /**
+     * Construct the token.
+     * This token must be created through a team multisig wallet, so that it is owned by that wallet.
+     * @param _name Token name
+     * @param _symbol Token symbol - should be all caps
+     * @param _initialSupply How many tokens we start with
+     * @param _decimals Number of decimal places
+     * @param _mintable Are new tokens created over the crowdsale or do we distribute only the initial supply? Note that when the token becomes transferable the minting always ends.
+     */
+    function setParam(string _name, string _symbol, uint _initialSupply, uint _decimals, bool _mintable, uint _globalMinCap) public onlyOwner paramNotSet {
+
+        // No more new supply allowed after the token creation
+        if (!_mintable) {
+            mintingFinished = true;
+            if (_initialSupply == 0) {
+                revert();
+                // Cannot create a token without supply and no minting
+            }
+        }
+
+        name = _name;
+        symbol = _symbol;
+        totalSupply = _initialSupply;
+        decimals = _decimals;
+        minCap = _globalMinCap;
+
+        isParamSet = true;
+
+        if (totalSupply > 0) {
+            
+            // Create initially all balance on the team multisig
+            balances[owner] = totalSupply;
+
+            Transfer(0, owner, totalSupply);
+            Minted(owner, totalSupply);
+        }
+    }
+
+    /**
+     * When token is released to be transferable, enforce no new tokens can be created.
+     */
+    function releaseTokenTransfer() public onlyReleaseAgent {
+        mintingFinished = true;
+        super.releaseTokenTransfer();
+    }
+
+    /**
+     * Claim tokens that were accidentally sent to this contract.
+     * @param _token The address of the token contract that you want to recover.
+     */
+    function claimTokens(address _token) public onlyOwner {
+        require(_token != address(0));
+
+        ERC20 token = ERC20(_token);
+        uint balance = token.balanceOf(this);
+        token.transfer(owner, balance);
+
+        ClaimedTokens(_token, owner, balance);
+    }
 }
 
 contract CrowdsaleExt is Haltable, SafeMath {
@@ -1023,84 +1101,6 @@ contract CrowdsaleExt is Haltable, SafeMath {
      * Create new tokens or transfer issued tokens to the investor depending on the cap model.
      */
     function assignTokens(address receiver, uint tokenAmount) private {}
-}
-
-contract CrowdsaleTokenExt is ReleasableToken, MintableTokenExt {
-
-    event ClaimedTokens(address indexed _token, address indexed _controller, uint _amount);
-
-    string public name;
-
-    string public symbol;
-
-    uint public decimals;
-
-    /* Minimum ammount of tokens every buyer can buy. */
-    uint public minCap;
-
-    constructor() {
-
-    }
-
-    /**
-     * Construct the token.
-     * This token must be created through a team multisig wallet, so that it is owned by that wallet.
-     * @param _name Token name
-     * @param _symbol Token symbol - should be all caps
-     * @param _initialSupply How many tokens we start with
-     * @param _decimals Number of decimal places
-     * @param _mintable Are new tokens created over the crowdsale or do we distribute only the initial supply? Note that when the token becomes transferable the minting always ends.
-     */
-    function setParam(string _name, string _symbol, uint _initialSupply, uint _decimals, bool _mintable, uint _globalMinCap) public onlyOwner paramNotSet {
-
-        // No more new supply allowed after the token creation
-        if (!_mintable) {
-            mintingFinished = true;
-            if (_initialSupply == 0) {
-                revert();
-                // Cannot create a token without supply and no minting
-            }
-        }
-
-        name = _name;
-        symbol = _symbol;
-        totalSupply = _initialSupply;
-        decimals = _decimals;
-        minCap = _globalMinCap;
-
-        isParamSet = true;
-
-        if (totalSupply > 0) {
-            
-            // Create initially all balance on the team multisig
-            balances[owner] = totalSupply;
-
-            Transfer(0, owner, totalSupply);
-            Minted(owner, totalSupply);
-        }
-    }
-
-    /**
-     * When token is released to be transferable, enforce no new tokens can be created.
-     */
-    function releaseTokenTransfer() public onlyReleaseAgent {
-        mintingFinished = true;
-        super.releaseTokenTransfer();
-    }
-
-    /**
-     * Claim tokens that were accidentally sent to this contract.
-     * @param _token The address of the token contract that you want to recover.
-     */
-    function claimTokens(address _token) public onlyOwner {
-        require(_token != address(0));
-
-        ERC20 token = ERC20(_token);
-        uint balance = token.balanceOf(this);
-        token.transfer(owner, balance);
-
-        ClaimedTokens(_token, owner, balance);
-    }
 }
 
 contract MintedTokenCappedCrowdsaleExt is CrowdsaleExt {

@@ -36,6 +36,10 @@ contract TokenVesting is Ownable, SafeMath {
     mapping (address => uint256) private _released;
     mapping (address => bool) private _revoked;
 
+    constructor() {
+
+    }
+
     /**
      * @dev Creates a vesting contract that vests its balance of any ERC20 token to the
      * beneficiary, gradually in a linear fashion until start + duration. By then all
@@ -46,7 +50,8 @@ contract TokenVesting is Ownable, SafeMath {
      * @param duration duration in seconds of the period in which the tokens will vest
      * @param revocable whether the vesting is revocable or not
      */
-    constructor (address beneficiary, uint256 start, uint256 cliffDuration, uint256 duration, bool revocable) public {
+    function setParam(address beneficiary, uint256 start, uint256 cliffDuration, uint256 duration, bool revocable) public onlyOwner paramNotSet {
+
         require(beneficiary != address(0));
         require(cliffDuration <= duration);
         require(duration > 0);
@@ -57,6 +62,8 @@ contract TokenVesting is Ownable, SafeMath {
         _duration = duration;
         _cliff = safeAdd(start, cliffDuration);
         _start = start;
+
+        isParamSet = true;
     }
 
     /**
