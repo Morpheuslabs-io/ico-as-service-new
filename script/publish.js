@@ -22,16 +22,28 @@ exports.publishContract = async (contractAddr, contractName, contractFilePath, g
   var formData = querystring.stringify(form);
   var contentLength = formData.length;
 
-  let result = await request({
-    headers: {
-      'Content-Length': contentLength,
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    uri: global.ETHERSCAN_API_URL,
-    body: formData,
-    method: 'POST'
-  });
-  console.log('Result:', result);
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
+    let result = await request({
+      headers: {
+        'Content-Length': contentLength,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      uri: global.ETHERSCAN_API_URL,
+      body: formData,
+      method: 'POST'
+    });
+
+    console.log('publishContract result:', result);
+    if (result.message !== "NOTOK" || result.result.toLowerCase().indexOf('unable to locate') === -1) {
+      break;
+    }
+    
+    console.log('publishContract retry');
+
+    sleep.sleep(5);
+    retryCnt++;
+  }
 }
 
 exports.getContractSource = (contractFilePath) => {
