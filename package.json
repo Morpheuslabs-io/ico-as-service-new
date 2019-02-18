@@ -65,6 +65,8 @@
     "server-mainnet": "NODE_ENV=mainnet nodemon script/app.js --network mainnet",
     "cron-rinkeby": "NODE_ENV=rinkeby nodemon script/cronjob.js --network rinkeby",
     "cron-mainnet": "NODE_ENV=mainnet nodemon script/cronjob.js --network mainnet",
+    "cronvesting-rinkeby": "NODE_ENV=rinkeby VESTING=1 nodemon script/cronjob.js --network rinkeby",
+    "cronvesting-mainnet": "NODE_ENV=mainnet VESTING=1 nodemon script/cronjob.js --network mainnet",
     "test": "truffle test --network development",
     "ganache": "ganache-cli -m \"concert load couple harbor equip island argue ramp clarify fence smart topic\""
   },

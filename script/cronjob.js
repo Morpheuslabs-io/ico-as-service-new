@@ -2,6 +2,7 @@ var crontab = require('node-crontab');
 var sleep = require('sleep');
 const utils = require('./utils')
 const contract = require('./contract');
+const contractVesting = require('./contractvesting');
 
 var global = require('./global');
 global.initContract(artifacts);
@@ -17,9 +18,11 @@ var jobId = crontab.scheduleJob(global.PREDEPLOY_INTERVAL, async function(){
       // console.log('Cron job exits because previous cron job still running');
       return;
     }
+
+    let isVesting = process.env.VESTING ? true : false;
     
     console.log('------------------------------------------------');
-    console.log('cron job running ...');
+    console.log(`cron job running ... (isVesting: ${isVesting})`);
     isCronRunning = true;
 
     let predeployCnt = await global.SqliteHandler.predeployed('address1');
@@ -31,7 +34,9 @@ var jobId = crontab.scheduleJob(global.PREDEPLOY_INTERVAL, async function(){
     }
 
     let currGasPrice = await utils.checkCurrentGasPrice();
-    if (currGasPrice > global.PREDEPLOY_GAS_PRICE_MAX)
+    if ((predeployCnt >= global.PREDEPLOY_MIN) &&
+        (currGasPrice > global.PREDEPLOY_GAS_PRICE_MAX)
+      )
     {
       console.log(`cron job - current gas price (${currGasPrice}) > maxGasPrice (${global.PREDEPLOY_GAS_PRICE_MAX}) - Not deploy contracts`);
       isCronRunning = false;
@@ -43,7 +48,11 @@ var jobId = crontab.scheduleJob(global.PREDEPLOY_INTERVAL, async function(){
       gas: global.GAS_LIMIT
     };
 
-    await contract.deployContracts(gasOpt, global, true);
+    if (isVesting) {
+      await contractVesting.deployContracts(gasOpt, global, true);
+    } else {
+      await contract.deployContracts(gasOpt, global, true);
+    }
 
     console.log('cron job pausing ...');
 

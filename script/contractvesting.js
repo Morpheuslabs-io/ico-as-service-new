@@ -78,6 +78,56 @@ setParamTokenVesting = async (gasOpt, global, paramTokenVesting, tokenVestingAdd
   }
 }
 
+deployTokenVesting = async (gasOpt, global) => {
+
+  let TokenVestingInst = null;
+  let TokenVestingInstAddr = null;
+
+  let retryCnt = 1;
+  while (retryCnt <= global.RETRY_TIMES) {
+    try {
+      TokenVestingInst = await global.TokenVestingContract.new(gasOpt);
+      TokenVestingInstAddr = TokenVestingInst.address;
+      console.log('TokenVesting creation OK - address:', TokenVestingInstAddr);
+
+      break;
+    } catch (err) {
+      console.log('TokenVesting creation error: ', (err.message || ''), err);
+    }
+    sleep.sleep(5);
+    console.log('TokenVesting creation retry');
+    gasOpt.gasPrice *= global.RETRY_GAS_PRICE_MULTIPLIER; // double the gasPrice for every retry
+    retryCnt++;
+  }
+
+  let contractAddr = TokenVestingInstAddr;
+  let contractName = global.CONTRACT.TOKENVESTING;
+  let contractFilePath = global.CONTRACTS_FLATTEN_DIR + "/" + contractName + global.CONTRACTS_FLATTEN_SUFFIX;
+  await publish.publishContract(contractAddr, contractName, contractFilePath, global);
+
+  return TokenVestingInstAddr;
+}
+
+exports.deployContracts = async (gasOpt, global) => {
+
+  var startTime = new Date();
+  var startDate = dateFormat(startTime, "yyyy-mm-dd h:MM:ss");
+  console.log("\n Started deployment of ICO wizard contracts" +
+    "\nTime: " + startDate);
+
+  let TokenVestingInstAddr = await deployTokenVesting(gasOpt, global);
+  
+  await global.SqliteHandler.push(TokenVestingInstAddr, 'addressVesting');
+
+  var endTime = new Date();
+  var endDate = dateFormat(endTime, "yyyy-mm-dd h:MM:ss");
+  console.log("\n Ended deployment of ICO wizard contracts" +
+    "\nTime: " + endDate);
+
+  var duration = ((endTime - startTime) / 1000) / 60;
+  console.log('\n Total duration: %d minutes', duration);
+}
+
 exports.setParamForVesting = async (res, vestingList, email_address, wallet_address, global) => {
 
   let addressVestingList = [];

@@ -34,6 +34,7 @@ global.globalize = function () {
   global.DB_FILE_PATH = settingData.DB_FILE_PATH;
   global.PREDEPLOY_INTERVAL = settingData.PREDEPLOY_INTERVAL;
   global.PREDEPLOY_MAX = settingData.PREDEPLOY_MAX;
+  global.PREDEPLOY_MIN = settingData.PREDEPLOY_MIN;
   global.PREDEPLOY_MAX_MULTIPLES = settingData.PREDEPLOY_MAX_MULTIPLES;
   global.PREDEPLOY_GAS_PRICE_MAX = settingData.PREDEPLOY_GAS_PRICE_MAX;
   global.DO_NOT_SET_PARAM = settingData.DO_NOT_SET_PARAM;
@@ -72,6 +73,8 @@ global.initContract = function (artifacts) {
   global.CONTRACT.CROWDSALE = 'MintedTokenCappedCrowdsaleExt';
   global.CONTRACT.FLATPRICING = 'FlatPricingExt';
   global.CONTRACT.FINALIZEDAGENT = 'ReservedTokensFinalizeAgent';
+
+  global.CONTRACT.TOKENVESTING = 'TokenVesting';
 
   console.log('global.initContract done');
 }
