@@ -49,7 +49,7 @@ The database includes the following tables:
 
 - `userVesting`: store the TokenVesting wizard data including the data set by user and the notification data sent via email. This is for later administration purpose.
 
-#### Express-based server 
+#### Express-based API server 
 
 Provide rest APIs for handling of:
 
@@ -93,7 +93,7 @@ http://pm2.keymetrics.io/docs/usage/quick-start/
 - In addition, smart contracts must be flattened by executing the script `script_create_flatten.sh` inside folder `pm2`. The flattened contract files, which are stored in folder `contracts-flatten`, are used for publishing to EtherScan.
 
 
-#### Start server
+#### Start API server
 
 **in foreground**
 
