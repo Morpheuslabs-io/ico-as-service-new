@@ -60,6 +60,11 @@ Provide rest APIs for handling of:
 **Notice**
 Error-handling and retry-mechanism are applied for the contract predeployment and setting to ensure that if something is broken inbetween, it will be retried and the breaking won't break the entire lengthy process. The number of retries is configurable.
 
+#### TokenVesting server
+
+- Used to host the GUI content of the token vesting data/chart.
+- Located in a sub-folder `token-vesting-ui`
+
 ## System operation
 
 The system operation includes the following steps
@@ -129,6 +134,18 @@ http://pm2.keymetrics.io/docs/usage/quick-start/
 - `pm2 start pm2/script_cronvesting_rinkeby.sh`: for interacting with testnet rinkeby
 
 - `pm2 start pm2/script_cronvesting_mainnet.sh`: for interacting with mainnet
+
+#### TokenVesting server
+
+- cd to sub-folder `token-vesting-ui`
+
+- Run the installation: `npm i`
+
+- Start server: 
+  
+  - `pm2 start pm2/script_tokenvesting_ui_rinkeby.sh`: for interacting with Rinkeby testnet
+
+  - `pm2 start pm2/script_tokenvesting_ui_mainnet.sh`: for interacting with mainnet
 
 #### View Sqlite database
 
