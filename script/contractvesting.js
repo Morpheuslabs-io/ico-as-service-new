@@ -25,7 +25,7 @@ doSendMail = async (toAddr, addressVestingList, vestingList, global) => {
   return htmlMailContent;
 }
 
-buildReturnedData = (addressVestingList, global) => {
+buildReturnedDataVesting = (addressVestingList, global) => {
   let data = '';
 
   for (let i=0; i < addressVestingList.length; i++) {
@@ -155,7 +155,7 @@ exports.setParamForVesting = async (res, vestingList, email_address, wallet_addr
   }
 
   // Returned data 
-  let returnedData = buildReturnedData(addressVestingList, global);
+  let returnedData = buildReturnedDataVesting(addressVestingList, global);
   res.send({"status":true, "data": returnedData});
   console.log('setParamForVesting - send the predeployed contract addresses');
   /////////////////

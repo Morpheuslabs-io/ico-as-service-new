@@ -631,7 +631,7 @@ doSendMail = async (toAddr, address1MapStr, address2MapStrList, global) => {
   return htmlMailContent;
 }
 
-buildReturnedData = (address1MapStr, address2MapStrList, global) => {
+buildReturnedDataIco = (address1MapStr, address2MapStrList, global) => {
   let data = '';
   let dataToken = '';
   let dataCrowdsale = [];
@@ -694,7 +694,7 @@ exports.setParamForContracts = async (res, step2, step3, global) => {
   }
 
   // Returned data 
-  let returnedData = buildReturnedData(address1MapStr, address2MapStrList, global);
+  let returnedData = buildReturnedDataIco(address1MapStr, address2MapStrList, global);
   res.send({"status":true, "data": returnedData});
   console.log('setParamForContracts - send the predeployed contract addresses');
   /////////////////
