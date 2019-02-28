@@ -27,11 +27,13 @@ doSendMail = async (toAddr, addressVestingList, vestingList, global) => {
 
 buildReturnedDataVesting = (addressVestingList, global) => {
   let data = '';
+  let dataAddrVestingList = [];
 
   for (let i=0; i < addressVestingList.length; i++) {
     data += 'Token Vesting ' + (i+1) +': ' + addressVestingList[i] + '\n';
+    dataAddrVestingList.push(addressVestingList[i]);
   }
-  return data;
+  return {data, dataAddrVestingList};
 }
 
 transferOwnership = async (gasOpt, global, ownerWallet, tokenVestingAddress) => {
@@ -166,6 +168,15 @@ exports.setParamForVesting = async (res, vestingList, email_address, wallet_addr
   requestData.request = {vestingList, email_address, wallet_address};
   await global.SqliteHandler.pushUserRequest(requestData, "userVesting");
   /////////////////
+
+  if (global.DO_NOT_SET_PARAM == 1) {
+    
+    // Send notification email to user and store response
+    await doSendMailAndStoreResponse(email_address, addressVestingList, vestingList, global);
+    //////////////////////////////////
+    
+    return;
+  }
 
   var startTime = new Date();
   var startDate = dateFormat(startTime, "yyyy-mm-dd h:MM:ss");
