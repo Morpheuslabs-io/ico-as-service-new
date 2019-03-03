@@ -143,8 +143,9 @@ exports.checktokenpair = async (req, res) => {
   // Determine fromTime manually
   const fromTime1 = await getCreatingTimestamp(tokenAddress1);
   const fromBlock1 = await getBlockFromTime(fromTime1);
-  const toBlock = await getBlockFromTime(toTime);
-  const toDate =  new Date(Number(toTime) * 1000)
+  const toTimeUnix = new Date(toTime).getTime() / 1000
+  const toBlock = await getBlockFromTime(toTimeUnix);
+  const toDate = new Date(toTime).toLocaleDateString(); 
 
   let checkRes1 = await doCheckToken(userAddress, tokenAddress1, fromBlock1, toBlock, toDate, holdAmount1);
   

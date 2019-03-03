@@ -18,7 +18,7 @@ import 'sweetalert/dist/sweetalert.css';
 class Vesting extends Component {
 
   state = {
-    toTime: moment().add(0, 'day'),
+    toTime: null,
     userAddress: '',
     tokenAddress1: '',
     holdAmount1: '',
@@ -203,7 +203,8 @@ class Vesting extends Component {
 
     try {
       let response = await axios.post("/checktokenpair", {
-        userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime
+        userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, 
+        toTime: toTime.toDate()
       });
 
       console.log('checktokenpair resp: ', response);
