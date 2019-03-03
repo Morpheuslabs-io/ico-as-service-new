@@ -13,7 +13,7 @@ if (NODE_ENV === "RINKEBY") {
 console.log("App is running on %s", NODE_ENV);
 
 // Check if user holds "amount" token from to 
-async function checker(userAddress, tokenAddress, fromTime, toTime, holdAmount) {
+async function checker(userAddress, tokenAddress, toTime, holdAmount) {
 
   tokenAddress = tokenAddress.toLowerCase();
   userAddress = userAddress.toLowerCase();
@@ -22,21 +22,18 @@ async function checker(userAddress, tokenAddress, fromTime, toTime, holdAmount) 
     "Started checker - UserAddress  %s \nTokenAddress %s \nFrom         %s \nTo           %s \nholdAmount  %d",
     userAddress,
     tokenAddress,
-    new Date(Number(fromTime) * 1000),
     new Date(Number(toTime) * 1000),
     holdAmount
   );
 
-  const fromBlock = await getBlockFromTime(fromTime);
   const toBlock = await getBlockFromTime(toTime);
-  const fromDate = new Date(Number(fromTime) * 1000)
   const toDate = new Date(Number(toTime) * 1000)
 
   let tx;
   try {
     const url = `${
       config.url //  
-    }/api?module=account&action=tokentx&address=${userAddress}&startblock=${fromBlock}&endblock=${toBlock}&sort=asc&apikey=CWXAFVFUQXG28RHDUISF6GHSP5WPC7K4HA`;
+    }/api?module=account&action=tokentx&address=${userAddress}&endblock=${toBlock}&sort=asc&apikey=CWXAFVFUQXG28RHDUISF6GHSP5WPC7K4HA`;
     
     console.log("Etherscan URL :", url);
     
@@ -62,7 +59,7 @@ async function checker(userAddress, tokenAddress, fromTime, toTime, holdAmount) 
 
             if (remainingAmount < holdAmount) {
               console.log(`   remainingAmount (${remainingAmount}) < holdAmount (${holdAmount})`);
-              let msg = `\n-------------\nuserAddress ${userAddress} did not hold tokenAddress ${tokenAddress} \nfor the amount ${holdAmount} ${tx.tokenSymbol} \nfrom ${fromDate} to ${toDate}\n-------------\n`
+              let msg = `\n-------------\nuserAddress ${userAddress} did not hold tokenAddress ${tokenAddress} \nfor the amount ${holdAmount} ${tx.tokenSymbol} till ${toDate}\n-------------\n`
               console.log(msg);
               return {status: false, msg: msg}
             }
@@ -82,7 +79,7 @@ async function checker(userAddress, tokenAddress, fromTime, toTime, holdAmount) 
     return {status: false, msg: 'Cannot determine'}
   }
 
-  let msg = `\n-------------\nuserAddress ${userAddress} really hold tokenAddress ${tokenAddress} \nfor the amount ${holdAmount} ${tx.tokenSymbol} \nfrom ${fromDate} to ${toDate}\n-------------\n`
+  let msg = `\n-------------\nuserAddress ${userAddress} really hold tokenAddress ${tokenAddress} \nfor the amount ${holdAmount} ${tx.tokenSymbol} till ${toDate}\n-------------\n`
   console.log(msg);
   return {status: true, msg: msg}
 }
@@ -98,21 +95,21 @@ async function test() {
 }
  
 exports.checktoken = async (req, res) => {
-  const step2 = req.body.step2;
-  const step3 = req.body.step3;
+  
+  let { userAddress, tokenAddress, toTime, holdAmount } = req.body;
 
-  console.log('controller::setparam - step2:', step2, ', step3:', step3);
+  let checkRes = await checker(userAddress, tokenAddress, toTime, holdAmount);
 
-  await contract.setParamForContracts(res, step2, step3, global);
+  res.send(checkRes);
 }
 
-exports.setparam = async (req, res, global) => {
-  const step2 = req.body.step2;
-  const step3 = req.body.step3;
+exports.checktokenpair = async (req, res) => {
+  
+  let { userAddress, tokenAddress, fromTime, toTime, holdAmount } = req.body;
 
-  console.log('controller::setparam - step2:', step2, ', step3:', step3);
+  let checkRes = await checker(userAddress, tokenAddress, fromTime, toTime, holdAmount);
 
-  await contract.setParamForContracts(res, step2, step3, global);
+  res.send(checkRes);
 }
 
-test()
+// test()
