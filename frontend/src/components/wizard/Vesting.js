@@ -18,11 +18,13 @@ import 'sweetalert/dist/sweetalert.css';
 class Vesting extends Component {
 
   state = {
-    startVesting: moment().add(0, 'day'),
-    cliffVesting: moment().add(5, 'day'),
-    endVesting: moment().add(30, 'day'),
-    tokenAddress: '',
-    beneficiaryAddress: '',
+    toTime: moment().add(0, 'day'),
+    userAddress: '',
+    tokenAddress1: '',
+    holdAmount1: '',
+    tokenAddress2: '',
+    holdAmount2: '',
+    
     vestingList: {},
     emailAddress: '',
     walletAddress: '',
@@ -40,9 +42,9 @@ class Vesting extends Component {
     doneShow: false
   };
 
-  handleChangeStartVesting = (date) => {
+  handleChangeCheckPoint = (date) => {
     this.setState({
-      startVesting: date
+      toTime: date
     });
   };
 
@@ -64,10 +66,10 @@ class Vesting extends Component {
     })
   };
 
-  validator = (startVesting, cliffVesting, endVesting, tokenAddress, beneficiaryAddress) => {
+  validator = (toTime, cliffVesting, endVesting, userAddress, holdAmount1) => {
     let alertContent = []
 
-    let diffToday = diffDates(moment(), moment(), startVesting, moment());
+    let diffToday = diffDates(moment(), moment(), toTime, moment());
     if (diffToday < 0) {
       alertContent.push('Start date in the past');
     }
@@ -82,12 +84,12 @@ class Vesting extends Component {
       alertContent.push('End date in the past');
     }
 
-    let diffs = diffDates(startVesting, moment(), endVesting, moment());
+    let diffs = diffDates(toTime, moment(), endVesting, moment());
     if (diffs <= 0) {
       alertContent.push('End date should be later than start date');
     }
 
-    diffs = diffDates(startVesting, moment(), cliffVesting, moment());
+    diffs = diffDates(toTime, moment(), cliffVesting, moment());
     if (diffs <= 0) {
       alertContent.push('Cliff date should be later than start date');
     }
@@ -97,11 +99,11 @@ class Vesting extends Component {
       alertContent.push('End date should be later than cliff date');
     }
 
-    if (!isValidAddress(tokenAddress)) {
+    if (!isValidAddress(userAddress)) {
       alertContent.push('Invalid token address');
     }
 
-    if (!isValidAddress(beneficiaryAddress)) {
+    if (!isValidAddress(holdAmount1)) {
       alertContent.push('Invalid beneficiary address');
     }
 
@@ -136,8 +138,8 @@ class Vesting extends Component {
   }
 
   handleAddTokenVesting = () => {
-    let {startVesting, cliffVesting, endVesting, tokenAddress, beneficiaryAddress} = this.state;
-    let result = this.validator(startVesting, cliffVesting, endVesting, tokenAddress, beneficiaryAddress)
+    let {toTime, cliffVesting, endVesting, userAddress, holdAmount1} = this.state;
+    let result = this.validator(toTime, cliffVesting, endVesting, userAddress, holdAmount1)
     if (result.length !== 0) {
       this.setState({
         alertShow: true,
@@ -150,7 +152,7 @@ class Vesting extends Component {
     let currVestingList = this.state.vestingList;
     let currVestingListLength = Object.keys(currVestingList).length;
     currVestingList[currVestingListLength] = {
-      startVesting, cliffVesting, endVesting, tokenAddress, beneficiaryAddress
+      toTime, cliffVesting, endVesting, userAddress, holdAmount1
     };
 
     this.setState({
@@ -179,19 +181,16 @@ class Vesting extends Component {
     })
   };
 
-  handleSubmitTokenVesting = async () => {
-    const {vestingList, emailAddress, walletAddress} = this.state;
+  handleSubmitTokenChecking = async () => {
+    const {
+      toTime,
+      userAddress,
+      tokenAddress1,
+      holdAmount1,
+      tokenAddress2,
+      holdAmount2
+    } = this.state;
 
-    let result = this.validatorAddress(emailAddress, walletAddress)
-    if (result.length !== 0) {
-      this.setState({
-        alertShow: true,
-        alertHeader: 'Token vesting submission with invalid input',
-        alertContent: result
-      })
-      return
-    }
-    
     // Send rest API to server
     axios.defaults.baseURL = process.env.REACT_APP_API_HOST;
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -203,49 +202,34 @@ class Vesting extends Component {
     let data = '';
 
     try {
-      let response = await axios.post("/setvesting", {
-        vestingList, 
-        emailAddress, 
-        walletAddress
+      let response = await axios.post("/checktokenpair", {
+        userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime
       });
 
-      console.log('setvesting resp: ', response);
+      console.log('checktokenpair resp: ', response);
       
-      if (response.data.status == true) {
-        data = response.data.data;
-        data += '\n';
-        data += 'Your token-vesting contracts are being finalized.\n';
-        data += 'This might take long depending on Ethereum network status.\n';
-        data += 'Once done, a notification will be sent to your provided email:\n';
-        data += emailAddress;
-      } else {
-        data = response.data.message;
-      }
-      
+      data = response.data.msg;
+
       this.setState({
-        resultShow: false,
+        resultShow: true,
         resultTitle: 'Success',
-        resultText: data,
+        resultText: response.data.msg,
         resultType: 'success',
       });
     } catch (err) {
-      console.log('setvesting err: ', err);
+      console.log('checktokenpair err: ', err);
       
       this.setState({
-        resultShow: false,
+        resultShow: true,
         resultTitle: 'Internal Service Error',
-        resultText: data,
+        resultText: '',
         resultType: 'error',
       });
     }
 
-    // Wait for a little bit to display result to user
-    setTimeout(() => {
-      this.setState({
-        spinnerShow: false,
-        resultShow: true
-      })
-    }, 2000);
+    this.setState({
+      spinnerShow: false
+    });
   }
 
   onDone = () => {
@@ -260,8 +244,8 @@ class Vesting extends Component {
       <div className='container step-widget widget-2'>
         <div className='widget-header'>
           <div>
-            <p className='title'>Token Vesting</p>
-            <p className='description'>Set token vesting for beneficiary address</p>
+            <p className='title'>Token Checker</p>
+            <p className='description'>Wizard for Token Checker</p>
           </div>
         </div>
         {
@@ -277,109 +261,48 @@ class Vesting extends Component {
             <div className='wg-content'>
               <Row>
                 <Col md={4}>
-                  <label className='wg-label'>Start</label>
-                  <DatePicker selected={this.state.startVesting} onChange={this.handleChangeStartVesting}
+                  <label className='wg-label'>Check Point</label>
+                  <DatePicker selected={this.state.toTime} onChange={this.handleChangeCheckPoint}
                               className='form-control wg-text-field' dateFormat='YYYY/MM/DD'/>
                   <p className={'field-error ' + (this.state.errorStart === '' ? '' : 'field-error-show')}>{this.state.errorStart}</p>
-                  <p className='wg-description'>Choose a start date for the vesting period.</p>
+                  <p className='wg-description'>Choose a check point.</p>
                 </Col>
                 <Col md={4}>
-                  <label className='wg-label'>Cliff</label>
-                  <DatePicker selected={this.state.cliffVesting} onChange={this.handleChangeCliffVesting}
-                              className='form-control wg-text-field' dateFormat='YYYY/MM/DD'/>
-                  <p className={'field-error ' + (this.state.errorCliff === '' ? '' : 'field-error-show')}>{this.state.errorCliff}</p>
-                  <p className='wg-description'>Choose a cliff date for the vesting period.</p>
-                </Col>
-                <Col md={4}>
-                  <label className='wg-label'>End</label>
-                  <DatePicker selected={this.state.endVesting} onChange={this.handleChangeEndVesting}
-                              className='form-control wg-text-field' dateFormat='YYYY/MM/DD'/>
-                  <p className={'field-error ' + (this.state.errorEnd === '' ? '' : 'field-error-show')}>{this.state.errorEnd}</p>
-                  <p className='wg-description'>Choose an end date for the vesting period.</p>
+                  <InputField id='userAddress' nameLabel='User Address' type='text' onChange={this.handleChange} value={this.state.userAddress} description="Wallet address of the user to be checked" hasError={this.state.errorUserAddress}/>
                 </Col>
               </Row>
               <Row>
                 <Col md={4}>
-                  <InputField id='tokenAddress' nameLabel='Token Address' type='text' onChange={this.handleChange} value={this.state.tokenAddress} description="Address of the token to be vested" hasError={this.state.errorTokenAddress}/>
+                  <InputField id='tokenAddress1' nameLabel='Token Address 1' type='text' onChange={this.handleChange} value={this.state.tokenAddress1} description="Address of the first token to be checked" hasError={this.state.errorTokenAddress1}/>
                 </Col>
                 <Col md={4}>
-                  <InputField id='beneficiaryAddress' nameLabel='Beneficiary Address' type='text' onChange={this.handleChange} value={this.state.beneficiaryAddress} description="Beneficiary address of the vested token" hasError={this.state.errorBeneficiaryAddress}/>
-                </Col>
-                <Col md={2}>
-                  <IconButton component='span' className='add-whitelist' onClick={this.handleAddTokenVesting}><i className='fas fa-plus'/></IconButton>
+                  <InputField id='holdAmount1' nameLabel='Hold Amount 1' type='text' onChange={this.handleChange} value={this.state.holdAmount1} description="The amount that user must hold till the check point" hasError={this.state.errorHoldAmount1}/>
                 </Col>
               </Row>
-              {
-                Object.keys(vestingList).length !== 0 &&
-                <div>
-                  <br></br>
-                  <table className='table table-striped table-bordered table-responsive'>
-                    <thead>
-                    <tr>
-                      <th scope="col">Start</th>
-                      <th scope="col">Cliff</th>
-                      <th scope="col">End</th>
-                      <th scope="col">Token Address</th>
-                      <th scope="col">Beneficiary Address</th>
-                      <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                      Object.keys(vestingList).map((key) => (
-                        <tr key={key}>
-                          <td>{vestingList[key].startVesting.format('YYYY/MM/DD')}</td>
-                          <td>{vestingList[key].cliffVesting.format('YYYY/MM/DD')}</td>
-                          <td>{vestingList[key].endVesting.format('YYYY/MM/DD')}</td>
-                          <td>{vestingList[key].tokenAddress}</td>
-                          <td>{vestingList[key].beneficiaryAddress}</td>
-                          <td><i className='far fa-trash-alt small cursor-pointer float-right' onClick={this.handleRemoveVesting} id={key}/></td>
-                        </tr>
-                      ))
-                    }
-                    </tbody>
-                  </table>
-                  <div className='float-right small cursor-pointer' onClick={this.handleRemoveAllVesting}><i className='far fa-trash-alt'/> Clear All
-                  </div>
-                  <div>
-                    <Row>
-                      <Col md={5}>
-                        <InputField id='emailAddress' nameLabel='Email Address' type='text' onChange={this.handleChange} value={this.state.emailAddress} description="Email address to receive result notification"/>
-                      </Col>
-                      <Col md={6}>
-                        <InputField id='walletAddress' nameLabel='Wallet Address' type='text' onChange={this.handleChange} value={this.state.walletAddress} description="Owner address of the deployed token-vesting contract"/>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className='float-left' md={4}>
-                        <Button
-                          onClick={this.handleSubmitTokenVesting}
-                          variant='contained' size='large' color="primary"
-                        >
-                            Submit
-                        </Button>
-                      </Col>
-                      { this.state.doneShow &&
-                          <Col className='float-right' md={4}>
-                            <Button
-                              onClick={this.onDone}
-                              variant='contained' size='large' color="primary"
-                            >
-                                Done
-                            </Button>
-                          </Col>
-                      }
-                    </Row>
-    
-                  </div>
-                </div>
-              }
-              <Alert
+              <Row>
+                <Col md={4}>
+                  <InputField id='tokenAddress2' nameLabel='Token Address 2' type='text' onChange={this.handleChange} value={this.state.tokenAddress2} description="Address of the second token to be checked" hasError={this.state.errorTokenAddress2}/>
+                </Col>
+                <Col md={4}>
+                  <InputField id='holdAmount2' nameLabel='Hold Amount 2' type='text' onChange={this.handleChange} value={this.state.holdAmount2} description="The amount that user must hold till the check point" hasError={this.state.errorHoldAmount2}/>
+                </Col>
+              </Row>
+              <Row>
+                <Col className='float-left' md={4}>
+                  <Button
+                    onClick={this.handleSubmitTokenChecking}
+                    variant='contained' size='large' color="primary"
+                  >
+                      Submit
+                  </Button>
+                </Col>
+              </Row>
+              {/* <Alert
                 isOpen={this.state.alertShow}
                 handleToggle={this.handleToggleAlert}
                 alertHeader={this.state.alertHeader}
                 alertContent={this.state.alertContent}
-              />
+              /> */}
             </div>
         }
         <div>
