@@ -9,10 +9,6 @@ const fs = require("fs");
 
 const controller= require('./controller');
 
-const global = require('./global');
-global.initContract(artifacts);
-global.initDb();
-
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 // parse application/json
@@ -21,40 +17,18 @@ app.use('/', express.static('public_static'));
 app.use(cors());
 
 const port = 4000 || process.env.PORT;
-// app.listen(port, () => {
-//     console.log("Express Listening at http://localhost:" + port);
-// });
 
 server.listen(port, () => {
   console.log('Server is running on port ', port);
 });
 
-app.post('/test/deploycontract', async function (req, res) {
-    try {
-        await controller.deploycontract(req, res);
-    }
-    catch (err) {
-        console.log(err);
-    }
-    
-});
-
-app.post('/test/deploycontractminted', async function (req, res) {
-    try {
-        await controller.deploycontractminted(req, res);
-    }
-    catch (err) {
-        console.log(err);
-    }
-    
-});
 
 app.post('/setparam', async function (req, res) {
   await controller.setparam(req, res, global);
 });
 
-app.post('/setvesting', async function (req, res) {
-  await controller.setvesting(req, res, global);
+app.post('/checktoken', async function (req, res) {
+  await controller.checktoken(req, res);
 });
 
 module.exports = function (deployer) {}
