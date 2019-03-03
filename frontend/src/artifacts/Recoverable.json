@@ -1,0 +1,1117 @@
+{
+  "contractName": "Recoverable",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address"
+        }
+      ],
+      "name": "recoverTokens",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address"
+        }
+      ],
+      "name": "tokensToBeReturned",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610817806100606000396000f300608060405260043610610078576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806316114acd1461007d578063715018a6146100c05780638da5cb5b146100d75780638f32d59b1461012e578063c45d19db1461015d578063f2fde38b146101b4575b600080fd5b34801561008957600080fd5b506100be600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506101f7565b005b3480156100cc57600080fd5b506100d561037e565b005b3480156100e357600080fd5b506100ec6104a1565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561013a57600080fd5b506101436104ca565b604051808215151515815260200191505060405180910390f35b34801561016957600080fd5b5061019e600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610521565b6040518082815260200191505060405180910390f35b3480156101c057600080fd5b506101f5600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610600565b005b6101ff6104ca565b1515610273576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260098152602001807f4e6f74206f776e6572000000000000000000000000000000000000000000000081525060200191505060405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff1663a9059cbb6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff166102ba84610521565b6040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182815260200192505050602060405180830381600087803b15801561033f57600080fd5b505af1158015610353573d6000803e3d6000fd5b505050506040513d602081101561036957600080fd5b81019080805190602001909291905050505050565b6103866104ca565b15156103fa576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260098152602001807f4e6f74206f776e6572000000000000000000000000000000000000000000000081525060200191505060405180910390fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482060405160405180910390a260008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614905090565b60008173ffffffffffffffffffffffffffffffffffffffff166370a08231306040518263ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001915050602060405180830381600087803b1580156105be57600080fd5b505af11580156105d2573d6000803e3d6000fd5b505050506040513d60208110156105e857600080fd5b81019080805190602001909291905050509050919050565b6106086104ca565b151561067c576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260098152602001807f4e6f74206f776e6572000000000000000000000000000000000000000000000081525060200191505060405180910390fd5b61068581610688565b50565b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561072d576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260168152602001807f4e6577206f776e6572206164647265737320697320300000000000000000000081525060200191505060405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a7230582021173f9500a65fb629e8721098e032a4db0c272f9d4c95eacd54a8b4e1986f640029",
+  "deployedBytecode": "0x608060405260043610610078576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806316114acd1461007d578063715018a6146100c05780638da5cb5b146100d75780638f32d59b1461012e578063c45d19db1461015d578063f2fde38b146101b4575b600080fd5b34801561008957600080fd5b506100be600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506101f7565b005b3480156100cc57600080fd5b506100d561037e565b005b3480156100e357600080fd5b506100ec6104a1565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561013a57600080fd5b506101436104ca565b604051808215151515815260200191505060405180910390f35b34801561016957600080fd5b5061019e600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610521565b6040518082815260200191505060405180910390f35b3480156101c057600080fd5b506101f5600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610600565b005b6101ff6104ca565b1515610273576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260098152602001807f4e6f74206f776e6572000000000000000000000000000000000000000000000081525060200191505060405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff1663a9059cbb6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff166102ba84610521565b6040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182815260200192505050602060405180830381600087803b15801561033f57600080fd5b505af1158015610353573d6000803e3d6000fd5b505050506040513d602081101561036957600080fd5b81019080805190602001909291905050505050565b6103866104ca565b15156103fa576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260098152602001807f4e6f74206f776e6572000000000000000000000000000000000000000000000081525060200191505060405180910390fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482060405160405180910390a260008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614905090565b60008173ffffffffffffffffffffffffffffffffffffffff166370a08231306040518263ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001915050602060405180830381600087803b1580156105be57600080fd5b505af11580156105d2573d6000803e3d6000fd5b505050506040513d60208110156105e857600080fd5b81019080805190602001909291905050509050919050565b6106086104ca565b151561067c576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260098152602001807f4e6f74206f776e6572000000000000000000000000000000000000000000000081525060200191505060405180910390fd5b61068581610688565b50565b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561072d576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260168152602001807f4e6577206f776e6572206164647265737320697320300000000000000000000081525060200191505060405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a7230582021173f9500a65fb629e8721098e032a4db0c272f9d4c95eacd54a8b4e1986f640029",
+  "sourceMap": "137:697:15:-;;;213:19;8:9:-1;5:2;;;30:1;27;20:12;5:2;213:19:15;631:10:13;623:5;;:18;;;;;;;;;;;;;;;;;;137:697:15;;;;;;",
+  "deployedSourceMap": "137:697:15:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;393:117;;8:9:-1;5:2;;;30:1;27;20:12;5:2;393:117:15;;;;;;;;;;;;;;;;;;;;;;;;;;;;1348:111:13;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1348:111:13;;;;;;701:70;;8:9:-1;5:2;;;30:1;27;20:12;5:2;701:70:13;;;;;;;;;;;;;;;;;;;;;;;;;;;1001:83;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1001:83:13;;;;;;;;;;;;;;;;;;;;;;;;;;;725:107:15;;8:9:-1;5:2;;;30:1;27;20:12;5:2;725:107:15;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1620:101:13;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1620:101:13;;;;;;;;;;;;;;;;;;;;;;;;;;;;393:117:15;886:9:13;:7;:9::i;:::-;878:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;457:5:15;:14;;;472:5;;;;;;;;;;;479:25;498:5;479:18;:25::i;:::-;457:48;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;457:48:15;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;457:48:15;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;457:48:15;;;;;;;;;;;;;;;;;393:117;:::o;1348:111:13:-;886:9;:7;:9::i;:::-;878:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1424:5;;;;;;;;;;;1405:25;;;;;;;;;;;;1452:1;1436:5;;:18;;;;;;;;;;;;;;;;;;1348:111::o;701:70::-;739:7;761:5;;;;;;;;;;;754:12;;701:70;:::o;1001:83::-;1041:4;1074:5;;;;;;;;;;;1060:19;;:10;:19;;;1053:26;;1001:83;:::o;725:107:15:-;787:4;806:5;:15;;;822:4;806:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;806:21:15;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;806:21:15;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;806:21:15;;;;;;;;;;;;;;;;799:28;;725:107;;;:::o;1620:101:13:-;886:9;:7;:9::i;:::-;878:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1688:28;1707:8;1688:18;:28::i;:::-;1620:101;:::o;1855:193::-;1944:1;1924:22;;:8;:22;;;;1916:57;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2012:8;1984:37;;2005:5;;;;;;;;;;;1984:37;;;;;;;;;;;;2035:8;2027:5;;:16;;;;;;;;;;;;;;;;;;1855:193;:::o",
+  "source": "/**\n * Issued by Morpheus Labs ICO as a Service Wizard\n */\npragma solidity ^0.4.19;\n\nimport \"./Ownable.sol\";\nimport \"./ERC20Basic.sol\";\n\ncontract Recoverable is Ownable {\n\n  /// @dev Empty constructor (for now)\n  constructor() {\n  }\n\n  /// @dev This will be invoked by the owner, when owner wants to rescue tokens\n  /// @param token Token which will we rescue to the owner from the contract\n  function recoverTokens(ERC20Basic token) onlyOwner public {\n    token.transfer(owner, tokensToBeReturned(token));\n  }\n\n  /// @dev Interface function, can be overwritten by the superclass\n  /// @param token Token which balance we will check and return\n  /// @return The amount of tokens (in smallest denominator) the contract owns\n  function tokensToBeReturned(ERC20Basic token) public returns (uint) {\n    return token.balanceOf(this);\n  }\n}",
+  "sourcePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/Recoverable.sol",
+  "ast": {
+    "absolutePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/Recoverable.sol",
+    "exportedSymbols": {
+      "Recoverable": [
+        3539
+      ]
+    },
+    "id": 3540,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3500,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".19"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "59:24:15"
+      },
+      {
+        "absolutePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/Ownable.sol",
+        "file": "./Ownable.sol",
+        "id": 3501,
+        "nodeType": "ImportDirective",
+        "scope": 3540,
+        "sourceUnit": 3444,
+        "src": "85:23:15",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/ERC20Basic.sol",
+        "file": "./ERC20Basic.sol",
+        "id": 3502,
+        "nodeType": "ImportDirective",
+        "scope": 3540,
+        "sourceUnit": 2877,
+        "src": "109:26:15",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 3503,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3443,
+              "src": "161:7:15",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$3443",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 3504,
+            "nodeType": "InheritanceSpecifier",
+            "src": "161:7:15"
+          }
+        ],
+        "contractDependencies": [
+          3443
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 3539,
+        "linearizedBaseContracts": [
+          3539,
+          3443
+        ],
+        "name": "Recoverable",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 3507,
+              "nodeType": "Block",
+              "src": "227:5:15",
+              "statements": []
+            },
+            "documentation": "@dev Empty constructor (for now)",
+            "id": 3508,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3505,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "224:2:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3506,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "227:0:15"
+            },
+            "scope": 3539,
+            "src": "213:19:15",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3524,
+              "nodeType": "Block",
+              "src": "451:59:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3518,
+                        "name": "owner",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [
+                          3342
+                        ],
+                        "referencedDeclaration": 3342,
+                        "src": "472:5:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 3520,
+                            "name": "token",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 3510,
+                            "src": "498:5:15",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                              "typeString": "contract ERC20Basic"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                              "typeString": "contract ERC20Basic"
+                            }
+                          ],
+                          "id": 3519,
+                          "name": "tokensToBeReturned",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 3538,
+                          "src": "479:18:15",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_nonpayable$_t_contract$_ERC20Basic_$2876_$returns$_t_uint256_$",
+                            "typeString": "function (contract ERC20Basic) returns (uint256)"
+                          }
+                        },
+                        "id": 3521,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "479:25:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 3515,
+                        "name": "token",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3510,
+                        "src": "457:5:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                          "typeString": "contract ERC20Basic"
+                        }
+                      },
+                      "id": 3517,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "transfer",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 2867,
+                      "src": "457:14:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$returns$_t_bool_$",
+                        "typeString": "function (address,uint256) external returns (bool)"
+                      }
+                    },
+                    "id": 3522,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "457:48:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 3523,
+                  "nodeType": "ExpressionStatement",
+                  "src": "457:48:15"
+                }
+              ]
+            },
+            "documentation": "@dev This will be invoked by the owner, when owner wants to rescue tokens\n @param token Token which will we rescue to the owner from the contract",
+            "id": 3525,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 3513,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 3512,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 3379,
+                  "src": "434:9:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "434:9:15"
+              }
+            ],
+            "name": "recoverTokens",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3511,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3510,
+                  "name": "token",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3525,
+                  "src": "416:16:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                    "typeString": "contract ERC20Basic"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 3509,
+                    "name": "ERC20Basic",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 2876,
+                    "src": "416:10:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                      "typeString": "contract ERC20Basic"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "415:18:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3514,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "451:0:15"
+            },
+            "scope": 3539,
+            "src": "393:117:15",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3537,
+              "nodeType": "Block",
+              "src": "793:39:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3534,
+                        "name": "this",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4246,
+                        "src": "822:4:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_Recoverable_$3539",
+                          "typeString": "contract Recoverable"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_Recoverable_$3539",
+                          "typeString": "contract Recoverable"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 3532,
+                        "name": "token",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3527,
+                        "src": "806:5:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                          "typeString": "contract ERC20Basic"
+                        }
+                      },
+                      "id": 3533,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "balanceOf",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 2858,
+                      "src": "806:15:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_view$_t_address_$returns$_t_uint256_$",
+                        "typeString": "function (address) view external returns (uint256)"
+                      }
+                    },
+                    "id": 3535,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "806:21:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 3531,
+                  "id": 3536,
+                  "nodeType": "Return",
+                  "src": "799:28:15"
+                }
+              ]
+            },
+            "documentation": "@dev Interface function, can be overwritten by the superclass\n @param token Token which balance we will check and return\n @return The amount of tokens (in smallest denominator) the contract owns",
+            "id": 3538,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "tokensToBeReturned",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3528,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3527,
+                  "name": "token",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3538,
+                  "src": "753:16:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                    "typeString": "contract ERC20Basic"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 3526,
+                    "name": "ERC20Basic",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 2876,
+                    "src": "753:10:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                      "typeString": "contract ERC20Basic"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "752:18:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3531,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3530,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3538,
+                  "src": "787:4:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3529,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "787:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "786:6:15"
+            },
+            "scope": 3539,
+            "src": "725:107:15",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 3540,
+        "src": "137:697:15"
+      }
+    ],
+    "src": "59:775:15"
+  },
+  "legacyAST": {
+    "absolutePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/Recoverable.sol",
+    "exportedSymbols": {
+      "Recoverable": [
+        3539
+      ]
+    },
+    "id": 3540,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3500,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".19"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "59:24:15"
+      },
+      {
+        "absolutePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/Ownable.sol",
+        "file": "./Ownable.sol",
+        "id": 3501,
+        "nodeType": "ImportDirective",
+        "scope": 3540,
+        "sourceUnit": 3444,
+        "src": "85:23:15",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/ERC20Basic.sol",
+        "file": "./ERC20Basic.sol",
+        "id": 3502,
+        "nodeType": "ImportDirective",
+        "scope": 3540,
+        "sourceUnit": 2877,
+        "src": "109:26:15",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 3503,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3443,
+              "src": "161:7:15",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$3443",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 3504,
+            "nodeType": "InheritanceSpecifier",
+            "src": "161:7:15"
+          }
+        ],
+        "contractDependencies": [
+          3443
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 3539,
+        "linearizedBaseContracts": [
+          3539,
+          3443
+        ],
+        "name": "Recoverable",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 3507,
+              "nodeType": "Block",
+              "src": "227:5:15",
+              "statements": []
+            },
+            "documentation": "@dev Empty constructor (for now)",
+            "id": 3508,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3505,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "224:2:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3506,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "227:0:15"
+            },
+            "scope": 3539,
+            "src": "213:19:15",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3524,
+              "nodeType": "Block",
+              "src": "451:59:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3518,
+                        "name": "owner",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [
+                          3342
+                        ],
+                        "referencedDeclaration": 3342,
+                        "src": "472:5:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 3520,
+                            "name": "token",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 3510,
+                            "src": "498:5:15",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                              "typeString": "contract ERC20Basic"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                              "typeString": "contract ERC20Basic"
+                            }
+                          ],
+                          "id": 3519,
+                          "name": "tokensToBeReturned",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 3538,
+                          "src": "479:18:15",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_nonpayable$_t_contract$_ERC20Basic_$2876_$returns$_t_uint256_$",
+                            "typeString": "function (contract ERC20Basic) returns (uint256)"
+                          }
+                        },
+                        "id": 3521,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "479:25:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 3515,
+                        "name": "token",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3510,
+                        "src": "457:5:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                          "typeString": "contract ERC20Basic"
+                        }
+                      },
+                      "id": 3517,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "transfer",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 2867,
+                      "src": "457:14:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$returns$_t_bool_$",
+                        "typeString": "function (address,uint256) external returns (bool)"
+                      }
+                    },
+                    "id": 3522,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "457:48:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 3523,
+                  "nodeType": "ExpressionStatement",
+                  "src": "457:48:15"
+                }
+              ]
+            },
+            "documentation": "@dev This will be invoked by the owner, when owner wants to rescue tokens\n @param token Token which will we rescue to the owner from the contract",
+            "id": 3525,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 3513,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 3512,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 3379,
+                  "src": "434:9:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "434:9:15"
+              }
+            ],
+            "name": "recoverTokens",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3511,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3510,
+                  "name": "token",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3525,
+                  "src": "416:16:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                    "typeString": "contract ERC20Basic"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 3509,
+                    "name": "ERC20Basic",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 2876,
+                    "src": "416:10:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                      "typeString": "contract ERC20Basic"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "415:18:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3514,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "451:0:15"
+            },
+            "scope": 3539,
+            "src": "393:117:15",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3537,
+              "nodeType": "Block",
+              "src": "793:39:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3534,
+                        "name": "this",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4246,
+                        "src": "822:4:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_Recoverable_$3539",
+                          "typeString": "contract Recoverable"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_Recoverable_$3539",
+                          "typeString": "contract Recoverable"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 3532,
+                        "name": "token",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3527,
+                        "src": "806:5:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                          "typeString": "contract ERC20Basic"
+                        }
+                      },
+                      "id": 3533,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "balanceOf",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 2858,
+                      "src": "806:15:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_view$_t_address_$returns$_t_uint256_$",
+                        "typeString": "function (address) view external returns (uint256)"
+                      }
+                    },
+                    "id": 3535,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "806:21:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 3531,
+                  "id": 3536,
+                  "nodeType": "Return",
+                  "src": "799:28:15"
+                }
+              ]
+            },
+            "documentation": "@dev Interface function, can be overwritten by the superclass\n @param token Token which balance we will check and return\n @return The amount of tokens (in smallest denominator) the contract owns",
+            "id": 3538,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "tokensToBeReturned",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3528,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3527,
+                  "name": "token",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3538,
+                  "src": "753:16:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                    "typeString": "contract ERC20Basic"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 3526,
+                    "name": "ERC20Basic",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 2876,
+                    "src": "753:10:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20Basic_$2876",
+                      "typeString": "contract ERC20Basic"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "752:18:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3531,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3530,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3538,
+                  "src": "787:4:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3529,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "787:4:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "786:6:15"
+            },
+            "scope": 3539,
+            "src": "725:107:15",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 3540,
+        "src": "137:697:15"
+      }
+    ],
+    "src": "59:775:15"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-10-09T12:25:08.066Z"
+}

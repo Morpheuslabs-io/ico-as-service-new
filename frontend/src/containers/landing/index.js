@@ -33,6 +33,11 @@ class Landing extends Component {
     }
   }
 
+  handleWizard = () => {
+    this.props.history.push('/wizard');
+    this.props.setStep(1);
+  };
+
   handleTokenVesing = () => {
     this.props.history.push('/tokenvesting');
   };
@@ -52,7 +57,7 @@ class Landing extends Component {
           <div className='buttons'>
             <Button 
               onClick={this.handleTokenVesing}
-              variant='contained' size='large' color="primary" className='choose-contract'>Token Vesting</Button>
+              variant='contained' size='large' color="primary" className='choose-contract'>Token Checker</Button>
           </div>
         </div>
         <div className='back-line'></div>

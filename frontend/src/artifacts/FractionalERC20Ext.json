@@ -1,0 +1,475 @@
+{
+  "contractName": "FractionalERC20Ext",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "decimals",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "minCap",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "who",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "name": "spender",
+          "type": "address"
+        }
+      ],
+      "name": "allowance",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Approval",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "/**\n * Issued by Morpheus Labs ICO as a Service Wizard\n */\npragma solidity ^0.4.19;\nimport \"./ERC20.sol\";\n\n/**\n * A token that defines fractional units as decimals.\n */\ncontract FractionalERC20Ext is ERC20 {\n\n  uint public decimals;\n  uint public minCap;\n\n}",
+  "sourcePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/FractionalERC20Ext.sol",
+  "ast": {
+    "absolutePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/FractionalERC20Ext.sol",
+    "exportedSymbols": {
+      "FractionalERC20Ext": [
+        2918
+      ]
+    },
+    "id": 2919,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2910,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".19"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "59:24:10"
+      },
+      {
+        "absolutePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/ERC20.sol",
+        "file": "./ERC20.sol",
+        "id": 2911,
+        "nodeType": "ImportDirective",
+        "scope": 2919,
+        "sourceUnit": 2848,
+        "src": "84:21:10",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2912,
+              "name": "ERC20",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2847,
+              "src": "200:5:10",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ERC20_$2847",
+                "typeString": "contract ERC20"
+              }
+            },
+            "id": 2913,
+            "nodeType": "InheritanceSpecifier",
+            "src": "200:5:10"
+          }
+        ],
+        "contractDependencies": [
+          2847,
+          2876
+        ],
+        "contractKind": "contract",
+        "documentation": "A token that defines fractional units as decimals.",
+        "fullyImplemented": false,
+        "id": 2918,
+        "linearizedBaseContracts": [
+          2918,
+          2847,
+          2876
+        ],
+        "name": "FractionalERC20Ext",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 2915,
+            "name": "decimals",
+            "nodeType": "VariableDeclaration",
+            "scope": 2918,
+            "src": "211:20:10",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2914,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "211:4:10",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 2917,
+            "name": "minCap",
+            "nodeType": "VariableDeclaration",
+            "scope": 2918,
+            "src": "235:18:10",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2916,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "235:4:10",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2919,
+        "src": "169:88:10"
+      }
+    ],
+    "src": "59:198:10"
+  },
+  "legacyAST": {
+    "absolutePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/FractionalERC20Ext.sol",
+    "exportedSymbols": {
+      "FractionalERC20Ext": [
+        2918
+      ]
+    },
+    "id": 2919,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2910,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".19"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "59:24:10"
+      },
+      {
+        "absolutePath": "/Volumes/Workspace/Ongoing/Morpheus_Labs/wizard/ico-as-service/contracts/lib/ERC20.sol",
+        "file": "./ERC20.sol",
+        "id": 2911,
+        "nodeType": "ImportDirective",
+        "scope": 2919,
+        "sourceUnit": 2848,
+        "src": "84:21:10",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2912,
+              "name": "ERC20",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2847,
+              "src": "200:5:10",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ERC20_$2847",
+                "typeString": "contract ERC20"
+              }
+            },
+            "id": 2913,
+            "nodeType": "InheritanceSpecifier",
+            "src": "200:5:10"
+          }
+        ],
+        "contractDependencies": [
+          2847,
+          2876
+        ],
+        "contractKind": "contract",
+        "documentation": "A token that defines fractional units as decimals.",
+        "fullyImplemented": false,
+        "id": 2918,
+        "linearizedBaseContracts": [
+          2918,
+          2847,
+          2876
+        ],
+        "name": "FractionalERC20Ext",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 2915,
+            "name": "decimals",
+            "nodeType": "VariableDeclaration",
+            "scope": 2918,
+            "src": "211:20:10",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2914,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "211:4:10",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 2917,
+            "name": "minCap",
+            "nodeType": "VariableDeclaration",
+            "scope": 2918,
+            "src": "235:18:10",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2916,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "235:4:10",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2919,
+        "src": "169:88:10"
+      }
+    ],
+    "src": "59:198:10"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-10-09T12:25:08.063Z"
+}
