@@ -22,13 +22,12 @@ server.listen(port, () => {
   console.log('Server is running on port ', port);
 });
 
-
-app.post('/setparam', async function (req, res) {
-  await controller.setparam(req, res, global);
-});
-
 app.post('/checktoken', async function (req, res) {
   await controller.checktoken(req, res);
+});
+
+app.post('/checktokenpair', async function (req, res) {
+  await controller.checktokenpair(req, res);
 });
 
 module.exports = function (deployer) {}

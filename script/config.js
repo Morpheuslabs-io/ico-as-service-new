@@ -1,10 +1,19 @@
 module.exports = {
   testnet: {
     url: "http://api-rinkeby.etherscan.io",
+    
     userAddress: "0x175FeA8857f7581B971C5a41F27Ea4BB43356298",
-    tokenAddress: "0xe880141c45d66a131c99dacc88dbc32f85b454b2", // MITx token
     toTime: "1551721300", // Monday, March 4, 2019
+
+    tokenAddress: "0xe880141c45d66a131c99dacc88dbc32f85b454b2", // MITx token
     holdAmount: 1000,
+
+    tokenAddress1: "0xe880141c45d66a131c99dacc88dbc32f85b454b2", // MITx token
+    holdAmount1: 1000,
+
+    tokenAddress2: "0x5d9d18e52db4043ca3f12039489464c9a2c83a0e", // SHR token
+    holdAmount2: 100,
+    
     infuraUrl: "https://rinkeby.infura.io/KD0tyiBLlHULRInWEMaJ"
   },
   mainnet: {

@@ -12,28 +12,50 @@ if (NODE_ENV === "RINKEBY") {
 }
 console.log("App is running on %s", NODE_ENV);
 
-// Check if user holds "amount" token from to 
-async function checker(userAddress, tokenAddress, toTime, holdAmount) {
+// Get creating timestamp of token
+async function getCreatingTimestamp(tokenAddress) {
+  tokenAddress = tokenAddress.toLowerCase();
+
+  try {
+    const url = `${
+      config.url //  
+    }/api?module=account&action=txlist&address=${tokenAddress}&sort=asc&apikey=CWXAFVFUQXG28RHDUISF6GHSP5WPC7K4HA`;
+    
+    console.log("Etherscan URL :", url);
+    let { data } = await xhr.get(url);
+
+    if (data && data.result && data.result[0]) {
+      let timeStamp = data.result[0].timeStamp;
+      console.log('getCreatingTimestamp - data.result[0]', timeStamp);
+      return timeStamp;
+    }
+    
+  } catch (err) {
+    console.log('getCreatingTimestamp - Error:', err);
+  }
+
+  return null;
+}
+
+// Check if user holds "amount" token till 
+async function doCheckToken(userAddress, tokenAddress, fromBlock, toBlock, toDate, holdAmount) {
 
   tokenAddress = tokenAddress.toLowerCase();
   userAddress = userAddress.toLowerCase();
 
   console.log(
-    "Started checker - UserAddress  %s \nTokenAddress %s \nFrom         %s \nTo           %s \nholdAmount  %d",
+    "doCheckToken - UserAddress:%s, TokenAddress:%s, \nFrom:%s, To:%s, holdAmount:%d",
     userAddress,
     tokenAddress,
-    new Date(Number(toTime) * 1000),
+    toDate,
     holdAmount
   );
-
-  const toBlock = await getBlockFromTime(toTime);
-  const toDate = new Date(Number(toTime) * 1000)
 
   let tx;
   try {
     const url = `${
       config.url //  
-    }/api?module=account&action=tokentx&address=${userAddress}&endblock=${toBlock}&sort=asc&apikey=CWXAFVFUQXG28RHDUISF6GHSP5WPC7K4HA`;
+    }/api?module=account&action=tokentx&address=${userAddress}&startblock=${fromBlock}&endblock=${toBlock}&sort=asc&apikey=CWXAFVFUQXG28RHDUISF6GHSP5WPC7K4HA`;
     
     console.log("Etherscan URL :", url);
     
@@ -75,7 +97,7 @@ async function checker(userAddress, tokenAddress, toTime, holdAmount) {
       }
     }
   } catch (error) {
-    console.log("checker error", error);
+    console.log("doCheckToken error", error);
     return {status: false, msg: 'Cannot determine'}
   }
 
@@ -91,25 +113,57 @@ async function test() {
   const toTime = config.toTime;
   const holdAmount = config.holdAmount;
 
-  const res = await checker(userAddress, tokenAddress, fromTime, toTime, holdAmount);
+  const res = await doCheckToken(userAddress, tokenAddress, fromTime, toTime, holdAmount);
 }
  
 exports.checktoken = async (req, res) => {
   
   let { userAddress, tokenAddress, toTime, holdAmount } = req.body;
+  console.log('checktoken - req.body:', req.body);
 
-  let checkRes = await checker(userAddress, tokenAddress, toTime, holdAmount);
+  // Determine fromTime manually
+  let fromTime = await getCreatingTimestamp(tokenAddress);
+
+  const fromDate = new Date(Number(fromTime) * 1000);
+  const toDate =  new Date(Number(toTime) * 1000)
+
+  const fromBlock = await getBlockFromTime(fromTime);
+  const toBlock = await getBlockFromTime(toTime);
+
+  let checkRes = await doCheckToken(userAddress, tokenAddress, fromBlock, toBlock, fromDate, toDate, holdAmount);
 
   res.send(checkRes);
 }
 
 exports.checktokenpair = async (req, res) => {
   
-  let { userAddress, tokenAddress, fromTime, toTime, holdAmount } = req.body;
+  let { userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime } = req.body;
+  console.log('checktokenpair - req.body:', req.body);
 
-  let checkRes = await checker(userAddress, tokenAddress, fromTime, toTime, holdAmount);
+  // Determine fromTime manually
+  const fromTime1 = await getCreatingTimestamp(tokenAddress1);
+  const fromBlock1 = await getBlockFromTime(fromTime1);
+  const toBlock = await getBlockFromTime(toTime);
+  const toDate =  new Date(Number(toTime) * 1000)
 
-  res.send(checkRes);
+  let checkRes1 = await doCheckToken(userAddress, tokenAddress1, fromBlock1, toBlock, toDate, holdAmount1);
+  
+  if (checkRes1.status === false) {
+    res.send(checkRes1);
+    return;
+  }
+
+  const fromTime2 = await getCreatingTimestamp(tokenAddress2);
+  const fromBlock2 = await getBlockFromTime(fromTime2);
+
+  let checkRes2 = await doCheckToken(userAddress, tokenAddress2, fromBlock2, toBlock, toDate, holdAmount2);
+  
+  // Get the final "status"
+  checkRes1.status = checkRes2.status
+  // But concat "msg"
+  checkRes1.msg += '\n' + checkRes2.msg
+
+  res.send(checkRes1);
 }
 
 // test()
