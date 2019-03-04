@@ -60,8 +60,8 @@
     "style-loader": "^0.13.1"
   },
   "scripts": {
-    "rinkeby": "NODE_ENV=RINKEBY node script/app.js",
-    "mainnet": "NODE_ENV=MAINNET node script/app.js",
+    "rinkeby": "NODE_ENV=RINKEBY PORT=5000 node script/app.js",
+    "mainnet": "NODE_ENV=MAINNET PORT=6000 node script/app.js",
     "test": "NODE_ENV=RINKEBY node script/controller.js"
   },
   "author": "",
