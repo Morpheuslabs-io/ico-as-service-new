@@ -18,7 +18,7 @@ class Index extends Component {
             <Route path="/" exact component={Landing}/>
             <Route path="/wizard" exact component={Wizard}/>
             <Route path='/invest' exact component={Invest}/>
-            <Route path='/tokenvesting' exact component={TokenVesting}/>
+            <Route path='/tokencheck' exact component={TokenVesting}/>
           </Switch>
           <Footer/>
         </div>

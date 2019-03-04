@@ -39,7 +39,7 @@ class Landing extends Component {
   };
 
   handleTokenVesing = () => {
-    this.props.history.push('/tokenvesting');
+    this.props.history.push('/tokencheck');
   };
 
   render() {
