@@ -61,7 +61,7 @@
   },
   "scripts": {
     "rinkeby": "NODE_ENV=RINKEBY PORT=5000 node script/app.js",
-    "mainnet": "NODE_ENV=MAINNET PORT=6000 node script/app.js",
+    "mainnet": "NODE_ENV=MAINNET PORT=4000 node script/app.js",
     "test": "NODE_ENV=RINKEBY node script/controller.js"
   },
   "author": "",
