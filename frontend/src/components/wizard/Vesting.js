@@ -204,7 +204,8 @@ class Vesting extends Component {
     try {
       let response = await axios.post("/checktokenpair", {
         userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, 
-        toTime: toTime.toDate()
+        toTime: new Date(toTime).getTime()/1000,
+        toTimeStr: toTime.format()
       });
 
       console.log('checktokenpair resp: ', response);
