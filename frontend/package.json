@@ -77,7 +77,8 @@
   },
   "scripts": {
     "mainnet": "REACT_APP_API_HOST=http://104.248.144.168:6000 node scripts/start.js",
-    "rinkeby": "REACT_APP_API_HOST=http://localhost:5000 node scripts/start.js",
+    "rinkeby": "REACT_APP_API_HOST=http://104.248.144.168:5000 node scripts/start.js",
+    "dev": "REACT_APP_API_HOST=http://localhost:5000 node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
