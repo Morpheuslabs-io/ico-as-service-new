@@ -81,7 +81,7 @@ async function doCheckToken(userAddress, tokenAddress, fromBlock, toBlock, toDat
 
             if (remainingAmount < holdAmount) {
               console.log(`   remainingAmount (${remainingAmount}) < holdAmount (${holdAmount})`);
-              let msg = `\nUser Address ${userAddress} did not hold Token Address ${tokenAddress} for the amount ${holdAmount} ${tx.tokenSymbol} till ${toDate}\n`
+              let msg = `\nUser Address ${userAddress} did not hold Token Address ${tokenAddress} for the amount ${holdAmount} tokens till ${toDate}\n`
               console.log(msg);
               return {status: false, msg: msg}
             }
@@ -101,7 +101,7 @@ async function doCheckToken(userAddress, tokenAddress, fromBlock, toBlock, toDat
     return {status: false, msg: 'Cannot determine'}
   }
 
-  let msg = `\nUser Address ${userAddress} really hold Token Address ${tokenAddress} for the amount ${holdAmount} ${tx.tokenSymbol} till ${toDate}\n`
+  let msg = `\nUser Address ${userAddress} really hold Token Address ${tokenAddress} for the amount ${holdAmount} tokens till ${toDate}\n`
   console.log(msg);
   return {status: true, msg: msg}
 }
