@@ -2,6 +2,7 @@ const utils = require('./utils')
 const dateFormat = require('dateformat');
 const xhr = require("axios");
 const { getBlockFromTime } = require("./web3Helper");
+const mail = require('./mail')
 
 const NODE_ENV = process.env.NODE_ENV || "RINKEBY";
 let config;
@@ -86,24 +87,24 @@ async function doCheckToken(userAddress, tokenAddress, fromBlock, toBlock, toDat
           if (tx.from === userAddress) {
             let msg = `\nUser Address ${userAddress} did not hold Token Address ${tokenAddress} for the amount ${holdAmount} tokens till ${toDate}\nOut-transfer tx detected: ${tx.hash}\n`
             console.log(msg);
-            return {status: false, msg: msg}
+            return {status: false, reason: `Out-transfer tx detected: ${tx.hash}`}
           } 
         }
       }
     }
   } catch (error) {
     console.log("doCheckToken error", error);
-    return {status: false, msg: 'Cannot determine due to internal failure'}
+    return {status: false, error: 'Cannot determine due to internal failure'}
   }
 
   if (inAmountTotal >= holdAmount) {
     let msg = `\nUser Address ${userAddress} really hold Token Address ${tokenAddress} for the amount ${holdAmount} tokens till ${toDate}\n`
     console.log(msg);
-    return {status: true, msg: msg}
+    return {status: true}
   } else {
     let msg = `\nUser Address ${userAddress} did not hold Token Address ${tokenAddress} till ${toDate}\nRemaining balance  (${inAmountTotal}) lower than the amount (${holdAmount})`
     console.log(msg);
-    return {status: true, msg: msg}
+    return {status: false, reason: `Remaining balance  (${inAmountTotal}) lower than the amount (${holdAmount})`}
   }
 }
 
@@ -210,11 +211,7 @@ exports.checktoken = async (req, res) => {
   res.send(checkRes);
 }
 
-exports.checktokenpair = async (req, res) => {
-  
-  let { userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr } = req.body;
-  console.log('checktokenpair - req.body:', req.body);
-
+async function doCheckTokenPair(userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr) {
   // Determine fromTime manually
   const fromTime1 = await getCreatingTimestamp(tokenAddress1);
   const fromBlock1 = await getBlockFromTime(fromTime1);
@@ -224,24 +221,63 @@ exports.checktokenpair = async (req, res) => {
   holdAmount1 = parseFloat(holdAmount1)
   holdAmount2 = parseFloat(holdAmount2)
 
-  let checkRes1 = await doCheckToken(userAddress, tokenAddress1, fromBlock1, toBlock, toDate, holdAmount1);
+  let checkRes = await doCheckToken(userAddress, tokenAddress1, fromBlock1, toBlock, toDate, holdAmount1);
   
-  if (checkRes1.status === false) {
-    res.send(checkRes1);
-    return;
+  if (checkRes.error || checkRes.status === false) {
+    return checkRes;
   }
 
   const fromTime2 = await getCreatingTimestamp(tokenAddress2);
   const fromBlock2 = await getBlockFromTime(fromTime2);
 
-  let checkRes2 = await doCheckToken(userAddress, tokenAddress2, fromBlock2, toBlock, toDate, holdAmount2);
+  checkRes = await doCheckToken(userAddress, tokenAddress2, fromBlock2, toBlock, toDate, holdAmount2);
   
-  // Get the final "status"
-  checkRes1.status = checkRes2.status
-  // But concat "msg"
-  checkRes1.msg += '\n' + checkRes2.msg
+  return checkRes;
+}
 
-  res.send(checkRes1);
+exports.checktokenpair = async (req, res) => {
+  
+  let { userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr } = req.body;
+  console.log('checktokenpair - req.body:', req.body);
+
+  let checkRes = await doCheckTokenPair(userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr);
+
+  if (checkRes.error) {
+    res.send(checkRes.error);
+  } else {
+    if (checkRes.status === true) {
+      let msg = `User ${userAddress} really hold token1 ${tokenAddress1} for the amount ${holdAmount1} \nand token2 ${tokenAddress2} for the amount ${holdAmount2} till ${toDate}\n`;
+
+      res.send(msg);
+    } else if (checkRes.reason) {
+      res.send(`User ${userAddress} did not hold. \nReason: ${checkRes.reason}`);
+    } else {
+      res.send('Unknown');
+    }
+  }
+}
+
+exports.checktokenpairBulk = async (req, res) => {
+
+  let dataList = req.body.dataList;
+  let email = req.body.email;
+  console.log('checktokenpairBulk - req.body:', req.body);
+
+  res.send('Your request is progress. Once done, a notification will be sent to your provided email');
+
+  let checkResList = [];
+
+  for (let i=0; i < dataList.length; i++) {
+    let { userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr } = dataList[i];
+
+    let checkRes = await doCheckTokenPair(userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr);
+
+    checkResList.push(checkRes);
+  }
+  
+  let mailContent = mail.buildHtmlMailContentTokenCheck(checkResList, dataList);
+
+  await mail.sendMail(email, mailContent);
 }
 
 // test()

@@ -8,3 +8,4 @@ token-vesting-ui/npm-debug.log
 token-vesting-ui/pm2/npm-debug.log
 yarn.lock
 build/
+*.txt
