@@ -37,8 +37,80 @@ async function getCreatingTimestamp(tokenAddress) {
   return null;
 }
 
-// Check if user holds "amount" token till 
+// "toBlock" is specified by user
+// "fromBlock" is the creating block of token (determined internally)
+// Version2: not allow out-transfer and remaining balance >= hold-amount
 async function doCheckToken(userAddress, tokenAddress, fromBlock, toBlock, toDate, holdAmount) {
+
+  tokenAddress = tokenAddress.toLowerCase();
+  userAddress = userAddress.toLowerCase();
+
+  console.log(
+    "doCheckToken - UserAddress:%s, TokenAddress:%s, \nFrom:%s, To:%s, holdAmount:%d",
+    userAddress,
+    tokenAddress,
+    toDate,
+    holdAmount
+  );
+
+  let tx;
+  let inAmountTotal = 0;
+  try {
+    const url = `${
+      config.url //  
+    }/api?module=account&action=tokentx&address=${userAddress}&startblock=${fromBlock}&endblock=${toBlock}&sort=asc&apikey=CWXAFVFUQXG28RHDUISF6GHSP5WPC7K4HA`;
+    
+    console.log("Etherscan URL :", url);
+    
+    let { data } = await xhr.get(url);
+
+    if (data && data.result && data.result.length > 0) {
+      const len = data.result.length;
+      
+      for (let i = 0; i < len; i++) {
+        tx = data.result[i];
+        
+        if (tx.contractAddress === tokenAddress) {
+
+          // Suppose that, till the check-point, the "in-transfer" happens at first
+          // as user should receive tokens before the check-point
+
+          // In transfer  
+          if (tx.to === userAddress) {
+            let inAmount = parseInt(tx.value)/(10**parseInt(tx.tokenDecimal));
+            inAmountTotal += inAmount;
+            console.log(`Got tx (${tx.hash}) - inAmount: ${inAmount}, inAmountTotal: ${inAmountTotal}`);
+          }
+
+          // Out transfer
+          if (tx.from === userAddress) {
+            let msg = `\nUser Address ${userAddress} did not hold Token Address ${tokenAddress} for the amount ${holdAmount} tokens till ${toDate}\nOut-transfer tx detected: ${tx.hash}\n`
+            console.log(msg);
+            return {status: false, msg: msg}
+          } 
+        }
+      }
+    }
+  } catch (error) {
+    console.log("doCheckToken error", error);
+    return {status: false, msg: 'Cannot determine due to internal failure'}
+  }
+
+  if (inAmountTotal >= holdAmount) {
+    let msg = `\nUser Address ${userAddress} really hold Token Address ${tokenAddress} for the amount ${holdAmount} tokens till ${toDate}\n`
+    console.log(msg);
+    return {status: true, msg: msg}
+  } else {
+    let msg = `\nUser Address ${userAddress} did not hold Token Address ${tokenAddress} till ${toDate}\nRemaining balance  (${inAmountTotal}) lower than the amount (${holdAmount})`
+    console.log(msg);
+    return {status: true, msg: msg}
+  }
+}
+
+// "toBlock" is specified by user
+// "fromBlock" is the creating block of token (determined internally)
+// Version1: still allow out-transfer and remaining balance >= hold-amount
+async function doCheckTokenV1(userAddress, tokenAddress, fromBlock, toBlock, toDate, holdAmount) {
 
   tokenAddress = tokenAddress.toLowerCase();
   userAddress = userAddress.toLowerCase();
@@ -71,6 +143,16 @@ async function doCheckToken(userAddress, tokenAddress, fromBlock, toBlock, toDat
         
         if (tx.contractAddress === tokenAddress) {
 
+          // Suppose that, till the check-point, the "in-transfer" happens at first
+          // as user should receive tokens before the check-point
+
+          // In transfer  
+          if (tx.to === userAddress) {
+            let inAmount = parseInt(tx.value)/(10**parseInt(tx.tokenDecimal));
+            inAmountTotal += inAmount;
+            console.log(`Got tx (${tx.hash}) - inAmount: ${inAmount}, inAmountTotal: ${inAmountTotal}`);
+          }
+
           // Out transfer
           if (tx.from === userAddress) {
             let outAmount = parseInt(tx.value)/(10**parseInt(tx.tokenDecimal));
@@ -85,13 +167,6 @@ async function doCheckToken(userAddress, tokenAddress, fromBlock, toBlock, toDat
               console.log(msg);
               return {status: false, msg: msg}
             }
-          }
-          
-          // In transfer  
-          if (tx.to === userAddress) {
-            let inAmount = parseInt(tx.value)/(10**parseInt(tx.tokenDecimal));
-            inAmountTotal += inAmount;
-            console.log(`Got tx (${tx.hash}) - inAmount: ${inAmount}, inAmountTotal: ${inAmountTotal}`);
           } 
         }
       }
