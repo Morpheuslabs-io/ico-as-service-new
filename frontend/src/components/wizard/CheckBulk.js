@@ -14,24 +14,14 @@ import axios from "axios";
 import Spinner from 'react-spinkit';
 import SweetAlert from 'sweetalert-react';
 import 'sweetalert/dist/sweetalert.css';
+import Papa from 'papaparse';
 
-class Vesting extends Component {
+class TokenCheckBulk extends Component {
 
   state = {
-    toTime: null,
-    userAddress: '',
-    tokenAddress1: '',
-    holdAmount1: '',
-    tokenAddress2: '',
-    holdAmount2: '',
-    
-    vestingList: {},
     emailAddress: '',
-    walletAddress: '',
 
-    alertShow: false,
-    alertContent: [],
-    alertHeader: '',
+    dataList: [],
 
     resultShow: false,
     resultTitle: 'Success',
@@ -239,6 +229,49 @@ class Vesting extends Component {
     // console.log('onDone - this.props:', this.props);
   }
 
+  handleUploadCSV = event => {
+    const file = event.target.files[0];
+    if (file) {
+      let fileReader = new FileReader();
+      fileReader.onloadend = (e) => {
+        let csv = Papa.parse(fileReader.result);
+        let dataList = [];
+        for (const id in csv.data) {
+          let line = csv.data[id];
+          dataList.push({
+            userAddress: line[0], 
+            tokenAddress1: line[1], 
+            holdAmount1: line[2], 
+            tokenAddress2: line[3], 
+            holdAmount2: line[4], 
+            toTime: new Date(line[5]).getTime()/1000,
+            toTimeStr: line[5]
+          });
+        }
+        this.setState({
+          dataList: dataList,
+          resultShow: true,
+          resultTitle: 'Success',
+          resultText: 'CSV file imported',
+          resultType: 'success',
+        });
+      };
+      fileReader.readAsText(file);
+      event.target.value = null;
+    } else {
+      this.setState({
+        resultShow: true,
+        resultTitle: 'Error',
+        resultText: 'Failed to import CSV file',
+        resultType: 'error',
+      });
+    }
+  }
+
+  addDataList = (csvDataArr) => {
+
+  }
+
   render() {
     const {vestingList} = this.state;
 
@@ -247,7 +280,7 @@ class Vesting extends Component {
         <div className='widget-header'>
           <div>
             <p className='title'>Token Checker</p>
-            <p className='description'>Wizard for Token Checker</p>
+            <p className='description'>Wizard for bulk check</p>
           </div>
         </div>
         {
@@ -262,49 +295,62 @@ class Vesting extends Component {
             :
             <div className='wg-content'>
               <Row>
-                <Col md={4}>
-                  <label className='wg-label'>Check Point</label>
-                  <DatePicker selected={this.state.toTime} onChange={this.handleChangeCheckPoint}
-                              className='form-control wg-text-field' dateFormat='YYYY/MM/DD'/>
-                  <p className={'field-error ' + (this.state.errorStart === '' ? '' : 'field-error-show')}>{this.state.errorStart}</p>
-                  <p className='wg-description'>Choose a check point.</p>
+                <Col>
+                  <input id={'upload-csv'} className='upload-csv' multiple type='file' accept=".csv" onChange={this.handleUploadCSV}/>
+                  <label htmlFor={'upload-csv'}>
+                    <Button variant="contained" component='span' className='upload-btn'>
+                      <i className='fas fa-upload'/>
+                      &nbsp; Upload CSV
+                    </Button>
+                  </label>
                 </Col>
-                <Col md={4}>
-                  <InputField id='userAddress' nameLabel='User Address' type='text' onChange={this.handleChange} value={this.state.userAddress} description="Wallet address of the user to be checked" hasError={this.state.errorUserAddress}/>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={4}>
-                  <InputField id='tokenAddress1' nameLabel='Token Address 1' type='text' onChange={this.handleChange} value={this.state.tokenAddress1} description="Address of the first token to be checked" hasError={this.state.errorTokenAddress1}/>
-                </Col>
-                <Col md={4}>
-                  <InputField id='holdAmount1' nameLabel='Hold Amount 1' type='text' onChange={this.handleChange} value={this.state.holdAmount1} description="The amount that user must hold till the check point" hasError={this.state.errorHoldAmount1}/>
+                <Col>
+                  <a className='float-right' href='/sample.csv'>Download Sample CSV</a>
                 </Col>
               </Row>
-              <Row>
-                <Col md={4}>
-                  <InputField id='tokenAddress2' nameLabel='Token Address 2' type='text' onChange={this.handleChange} value={this.state.tokenAddress2} description="Address of the second token to be checked" hasError={this.state.errorTokenAddress2}/>
-                </Col>
-                <Col md={4}>
-                  <InputField id='holdAmount2' nameLabel='Hold Amount 2' type='text' onChange={this.handleChange} value={this.state.holdAmount2} description="The amount that user must hold till the check point" hasError={this.state.errorHoldAmount2}/>
-                </Col>
-              </Row>
-              <Row>
-                <Col className='float-left' md={4}>
-                  <Button
-                    onClick={this.handleSubmitTokenChecking}
-                    variant='contained' size='large' color="primary"
-                  >
-                      Submit
-                  </Button>
-                </Col>
-              </Row>
-              {/* <Alert
-                isOpen={this.state.alertShow}
-                handleToggle={this.handleToggleAlert}
-                alertHeader={this.state.alertHeader}
-                alertContent={this.state.alertContent}
-              /> */}
+              <br></br>
+              <div>
+                {
+                  this.state.dataList.length !== 0 &&
+                  <div>
+                      <table className='table table-striped table-bordered table-responsive'>
+                        <thead>
+                        <tr>
+                          <th>Check Point</th>
+                          <th>User Address</th>
+                          <th>Token Address 1</th>
+                          <th>Hold Amount 1</th>
+                          <th>Token Address 2</th>
+                          <th>Hold Amount 2</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {
+                          this.state.dataList.map((val, key) => (
+                            <tr key={key}>
+                              <td>{val.toTimeStr}</td>
+                              <td>{val.userAddress}</td>
+                              <td>{val.tokenAddress1}</td>
+                              <td>{val.holdAmount1}</td>
+                              <td>{val.tokenAddress2}</td>
+                              <td>{val.holdAmount2}</td>
+                            </tr>
+                          ))
+                        }
+                        </tbody>
+                      </table>
+                      <br></br>  
+                      <Button
+                        className='float-left'
+                        onClick={this.handleSubmitTokenChecking}
+                        variant='contained' size='large' color="primary"
+                      >
+                          Submit
+                      </Button>
+                      <br></br>
+                  </div>
+                }
+              </div>  
             </div>
         }
         <div>
@@ -325,7 +371,7 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-//export default connect(mapStateToProps, mapDispatchToProps)(Vesting);
+//export default connect(mapStateToProps, mapDispatchToProps)(TokenCheckBulk);
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Vesting)
+  connect(mapStateToProps, mapDispatchToProps)(TokenCheckBulk)
 );

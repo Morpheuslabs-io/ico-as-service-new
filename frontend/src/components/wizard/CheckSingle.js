@@ -15,7 +15,7 @@ import Spinner from 'react-spinkit';
 import SweetAlert from 'sweetalert-react';
 import 'sweetalert/dist/sweetalert.css';
 
-class Vesting extends Component {
+class TokenCheckSingle extends Component {
 
   state = {
     toTime: null,
@@ -247,7 +247,7 @@ class Vesting extends Component {
         <div className='widget-header'>
           <div>
             <p className='title'>Token Checker</p>
-            <p className='description'>Wizard for Token Checker</p>
+            <p className='description'>Wizard for single check</p>
           </div>
         </div>
         {
@@ -325,7 +325,7 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-//export default connect(mapStateToProps, mapDispatchToProps)(Vesting);
+//export default connect(mapStateToProps, mapDispatchToProps)(TokenCheckSingle);
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Vesting)
+  connect(mapStateToProps, mapDispatchToProps)(TokenCheckSingle)
 );
