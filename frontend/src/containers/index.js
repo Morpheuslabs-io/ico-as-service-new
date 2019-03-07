@@ -5,7 +5,8 @@ import Footer from './layouts/footer';
 import Landing from './landing';
 import Wizard from './wizard';
 import Invest from './Invest';
-import TokenVesting from './tokenvesting';
+import CheckSingle from './tokenchecksingle';
+import CheckBulk from './tokencheckbulk';
 
 class Index extends Component {
 
@@ -18,7 +19,8 @@ class Index extends Component {
             <Route path="/" exact component={Landing}/>
             <Route path="/wizard" exact component={Wizard}/>
             <Route path='/invest' exact component={Invest}/>
-            <Route path='/tokencheck' exact component={TokenVesting}/>
+            <Route path='/checksingle' exact component={CheckSingle}/>
+            <Route path='/checkbulk' exact component={CheckBulk}/>
           </Switch>
           <Footer/>
         </div>

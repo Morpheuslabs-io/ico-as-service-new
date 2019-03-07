@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Vesting from '../../components/wizard/Vesting';
+import CheckSingle from '../../components/wizard/CheckSingle';
 
-class TokenVesting extends Component {
+class TokenCheckSingle extends Component {
   constructor(props) {
     super(props);
   };
@@ -13,7 +13,7 @@ class TokenVesting extends Component {
         <div className='page-wrapper d-flex flex-column'>
           <div className='step-content'>
             <div className='container step-widget pt-0'>
-              <Vesting
+              <CheckSingle
               />
             </div>
           </div>
@@ -28,4 +28,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(TokenVesting);
+export default connect(mapStateToProps)(TokenCheckSingle);
