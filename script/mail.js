@@ -5,7 +5,7 @@ var mailgun = null;
 exports.buildHtmlMailContentTokenCheck = (checkResList, dataList) => {
   let mailContent='<p><b>Hello</b></p>';
 
-  mailContent += '<p>Please be informed of your Token-Checking request result as follows. </p>';
+  mailContent += '<p>Please be informed of your Token-Checking request result on <b>' + process.env.NODE_ENV + '</b> as follows. </p>';
   
   for (let i=0; i<checkResList.length; i++) {
     let checkRes = checkResList[i];
@@ -44,13 +44,13 @@ const MAILGUN = {
 exports.sendMail = async (toAddr, mailContent) => {
 
   if (!mailgun) {
-    mailgun = new Mailgun({apiKey: API_KEY, domain: DOMAIN});
+    mailgun = new Mailgun({apiKey: MAILGUN.API_KEY, domain: MAILGUN.DOMAIN});
   }
 
   const data = {
-    from: FROM,
+    from: MAILGUN.FROM,
     to: toAddr,
-    subject: SUBJECT,
+    subject: MAILGUN.SUBJECT,
     html: mailContent
   };
   

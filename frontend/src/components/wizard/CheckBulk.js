@@ -102,7 +102,7 @@ class TokenCheckBulk extends Component {
 
       console.log('checkbulk resp: ', response);
       
-      data = response.data.msg;
+      data = response.data;
 
       this.setState({
         resultShow: true,

@@ -47,7 +47,7 @@ async function doCheckToken(userAddress, tokenAddress, fromBlock, toBlock, toDat
   userAddress = userAddress.toLowerCase();
 
   console.log(
-    "doCheckToken - UserAddress:%s, TokenAddress:%s, \nFrom:%s, To:%s, holdAmount:%d",
+    "doCheckToken - UserAddress:%s, TokenAddress:%s, To:%s, holdAmount:%d",
     userAddress,
     tokenAddress,
     toDate,
@@ -263,7 +263,7 @@ exports.checktokenpairBulk = async (req, res) => {
   let email = req.body.email;
   console.log('checktokenpairBulk - req.body:', req.body);
 
-  res.send('Your request is progress. Once done, a notification will be sent to your provided email');
+  res.send(`Your request is in progress. \nOnce done, a notification will be sent to your provided email:\n ${email}`);
 
   let checkResList = [];
 
