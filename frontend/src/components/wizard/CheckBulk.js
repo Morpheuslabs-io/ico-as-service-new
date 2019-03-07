@@ -19,7 +19,7 @@ import Papa from 'papaparse';
 class TokenCheckBulk extends Component {
 
   state = {
-    emailAddress: '',
+    email: '',
 
     dataList: [],
 
@@ -32,95 +32,11 @@ class TokenCheckBulk extends Component {
     doneShow: false
   };
 
-  handleChangeCheckPoint = (date) => {
-    this.setState({
-      toTime: date
-    });
-  };
-
-  handleChangeCliffVesting = (date) => {
-    this.setState({
-      cliffVesting: date
-    });
-  };
-
-  handleChangeEndVesting = (date) => {
-    this.setState({
-      endVesting: date,
-    });
-  };
-
   handleChange = (name, value) => {
     this.setState({
       [name]: value,
     })
   };
-
-  validator = (toTime, cliffVesting, endVesting, userAddress, holdAmount1) => {
-    let alertContent = []
-
-    let diffToday = diffDates(moment(), moment(), toTime, moment());
-    if (diffToday < 0) {
-      alertContent.push('Start date in the past');
-    }
-
-    diffToday = diffDates(moment(), moment(), cliffVesting, moment());
-    if (diffToday <= 0) {
-      alertContent.push('Cliff date in the past');
-    }
-
-    diffToday = diffDates(moment(), moment(), endVesting, moment());
-    if (diffToday <= 0) {
-      alertContent.push('End date in the past');
-    }
-
-    let diffs = diffDates(toTime, moment(), endVesting, moment());
-    if (diffs <= 0) {
-      alertContent.push('End date should be later than start date');
-    }
-
-    diffs = diffDates(toTime, moment(), cliffVesting, moment());
-    if (diffs <= 0) {
-      alertContent.push('Cliff date should be later than start date');
-    }
-
-    diffs = diffDates(cliffVesting, moment(), endVesting, moment());
-    if (diffs <= 0) {
-      alertContent.push('End date should be later than cliff date');
-    }
-
-    if (!isValidAddress(userAddress)) {
-      alertContent.push('Invalid token address');
-    }
-
-    if (!isValidAddress(holdAmount1)) {
-      alertContent.push('Invalid beneficiary address');
-    }
-
-    return alertContent
-  }
-
-  validatorAddress = (emailAddress, walletAddress) => {
-    let alertContent = []
-
-    if (emailAddress === '') {
-      alertContent.push('Please specify an email address');
-    } else {
-      if (!isValidEmailAddress(emailAddress)) {
-        alertContent.push('Invalid email address');
-      }
-    }
-
-    if (walletAddress === '') {
-      alertContent.push('Please specify a wallet address');
-    } else {
-      if (!isValidAddress(walletAddress)) {
-        alertContent.push('Invalid wallet address');
-      }
-    }
-
-    return alertContent
-  }
 
   handleToggleAlert = () => {
     const { alertShow } = this.state
@@ -152,33 +68,20 @@ class TokenCheckBulk extends Component {
     console.log('handleAddTokenVesting - vestingList:', this.state.vestingList);
   };
 
-  handleRemoveVesting = (evt) => {
-    let id = evt.target.id;
-    console.log('handleRemoveVesting - id:', id);
-    let currVestingList = this.state.vestingList;
-    if (currVestingList[id]) delete currVestingList[id];
+  handleSubmit = async () => {
+    if (this.state.email === '') {
+      this.setState({
+        resultShow: true,
+        resultTitle: 'Warning',
+        resultText: 'Please enter your email address',
+        resultType: 'warning',
+      });
+      return
+    }
 
-    this.setState({
-      vestingList: currVestingList
-    })
-
-    console.log('handleRemoveVesting - vestingList:', this.state.vestingList);
-  };
-
-  handleRemoveAllVesting = () => {
-    this.setState({
-      vestingList: {}
-    })
-  };
-
-  handleSubmitTokenChecking = async () => {
     const {
-      toTime,
-      userAddress,
-      tokenAddress1,
-      holdAmount1,
-      tokenAddress2,
-      holdAmount2
+      email,
+      dataList
     } = this.state;
 
     // Send rest API to server
@@ -192,24 +95,23 @@ class TokenCheckBulk extends Component {
     let data = '';
 
     try {
-      let response = await axios.post("/checktokenpair", {
-        userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, 
-        toTime: new Date(toTime).getTime()/1000,
-        toTimeStr: toTime.format()
+      let response = await axios.post("/checkbulk", {
+        email,
+        dataList
       });
 
-      console.log('checktokenpair resp: ', response);
+      console.log('checkbulk resp: ', response);
       
       data = response.data.msg;
 
       this.setState({
         resultShow: true,
         resultTitle: 'Success',
-        resultText: response.data.msg,
+        resultText: data,
         resultType: 'success',
       });
     } catch (err) {
-      console.log('checktokenpair err: ', err);
+      console.log('checkbulk err: ', err);
       
       this.setState({
         resultShow: true,
@@ -222,11 +124,6 @@ class TokenCheckBulk extends Component {
     this.setState({
       spinnerShow: false
     });
-  }
-
-  onDone = () => {
-    this.props.history.push('/');
-    // console.log('onDone - this.props:', this.props);
   }
 
   handleUploadCSV = event => {
@@ -268,13 +165,7 @@ class TokenCheckBulk extends Component {
     }
   }
 
-  addDataList = (csvDataArr) => {
-
-  }
-
   render() {
-    const {vestingList} = this.state;
-
     return (
       <div className='container step-widget widget-2'>
         <div className='widget-header'>
@@ -294,6 +185,10 @@ class TokenCheckBulk extends Component {
             </div>
             :
             <div className='wg-content'>
+              <Row>
+                <InputField id='email' nameLabel='Email' type='text' onChange={this.handleChange} value={this.state.email} description="Email address for receiving the token checking result"/>
+              </Row>
+              <br></br>
               <Row>
                 <Col>
                   <input id={'upload-csv'} className='upload-csv' multiple type='file' accept=".csv" onChange={this.handleUploadCSV}/>
@@ -342,7 +237,7 @@ class TokenCheckBulk extends Component {
                       <br></br>  
                       <Button
                         className='float-left'
-                        onClick={this.handleSubmitTokenChecking}
+                        onClick={this.handleSubmit}
                         variant='contained' size='large' color="primary"
                       >
                           Submit

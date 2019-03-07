@@ -215,7 +215,7 @@ class TokenCheckSingle extends Component {
       this.setState({
         resultShow: true,
         resultTitle: 'Success',
-        resultText: response.data.msg,
+        resultText: data,
         resultType: 'success',
       });
     } catch (err) {
