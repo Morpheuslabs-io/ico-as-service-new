@@ -2,13 +2,8 @@ import React, {Component} from 'react';
 import { withRouter } from 'react-router-dom';
 import {Row, Col, Table} from 'reactstrap';
 import InputField from './InputField';
-import IconButton from '@material-ui/core/IconButton';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {diffDates, isValidAddress, isValidEmailAddress} from './Utils';
-import DatePicker from "react-datepicker/es/index";
-import moment from "moment";
-import Alert from '../layouts/Alert';
+import {getNetwork} from './Utils';
 import Button from '@material-ui/core/Button';
 import axios from "axios";
 import Spinner from 'react-spinkit';
@@ -170,7 +165,7 @@ class TokenCheckBulk extends Component {
       <div className='container step-widget widget-2'>
         <div className='widget-header'>
           <div>
-            <p className='title'>Token Checker</p>
+            <p className='title'>Token Checker on {getNetwork()}</p>
             <p className='description'>Wizard for bulk check</p>
           </div>
         </div>

@@ -8,6 +8,9 @@ import { keccak256 } from 'js-sha3';
 const Buf = require('safe-buffer').Buffer;
 let web3 = null;
 
+export function getNetwork () {
+  return process.env.REACT_APP_API_HOST.indexOf('4000') !== -1? 'Mainnet' : 'Rinkeby Testnet';
+}
 
 /**
  * Checks if the given string is an address

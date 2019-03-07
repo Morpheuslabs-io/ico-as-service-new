@@ -13,7 +13,7 @@ import step2Asset from '../../assets/img/step2.svg';
 import step3Asset from '../../assets/img/step3.svg';
 import step4Asset from '../../assets/img/step4.svg';
 import step5Asset from '../../assets/img/step5.svg';
-import {decrypt, validMetamask} from '../../components/wizard/Utils';
+import {getNetwork} from '../../components/wizard/Utils';
 import StepInfo from '../../components/landing/StepInfo';
 import {setStep, setToken} from "../../redux/actions";
 
@@ -51,7 +51,7 @@ class Landing extends Component {
       <div className='page-content landing'>
         <div className='icobox'>
           <img className='icobox-icon' src={icoBox}/>
-          <h1>Welcome to Token Checker</h1>
+          <h1>Welcome to Token Checker on {getNetwork()}</h1>
           <div className='buttons'>
             <Button 
               onClick={this.handleSingleCheck}

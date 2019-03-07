@@ -5,7 +5,7 @@ import InputField from './InputField';
 import IconButton from '@material-ui/core/IconButton';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {diffDates, isValidAddress, isValidEmailAddress} from './Utils';
+import {diffDates, isValidAddress, isValidEmailAddress, getNetwork} from './Utils';
 import DatePicker from "react-datepicker/es/index";
 import moment from "moment";
 import Alert from '../layouts/Alert';
@@ -246,7 +246,7 @@ class TokenCheckSingle extends Component {
       <div className='container step-widget widget-2'>
         <div className='widget-header'>
           <div>
-            <p className='title'>Token Checker</p>
+            <p className='title'>Token Checker on {getNetwork()}</p>
             <p className='description'>Wizard for single check</p>
           </div>
         </div>
