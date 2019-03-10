@@ -210,7 +210,7 @@ class TokenCheckSingle extends Component {
 
       console.log('checktokenpair resp: ', response);
       
-      data = response.data.msg;
+      data = response.data;
 
       this.setState({
         resultShow: true,
