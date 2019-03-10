@@ -125,6 +125,7 @@ async function doCheckTokenV1(userAddress, tokenAddress, fromBlock, toBlock, toD
   );
 
   let tx;
+  let inAmountTotal = 0;
   try {
     const url = `${
       config.url //  
@@ -137,7 +138,6 @@ async function doCheckTokenV1(userAddress, tokenAddress, fromBlock, toBlock, toD
     if (data && data.result && data.result.length > 0) {
       const len = data.result.length;
       let outAmountTotal = 0;
-      let inAmountTotal = 0;
       
       for (let i = 0; i < len; i++) {
         tx = data.result[i];
@@ -177,9 +177,15 @@ async function doCheckTokenV1(userAddress, tokenAddress, fromBlock, toBlock, toD
     return {status: false, msg: 'Cannot determine'}
   }
 
-  let msg = `\nUser Address ${userAddress} really hold Token Address ${tokenAddress} for the amount ${holdAmount} tokens till ${toDate}\n`
-  console.log(msg);
-  return {status: true, msg: msg}
+  if (inAmountTotal > 0) {
+    let msg = `\nUser Address ${userAddress} really hold Token Address ${tokenAddress} for the amount ${holdAmount} tokens till ${toDate}\n`
+    console.log(msg);
+    return {status: true, msg: msg}
+  } else {
+    let msg = `\nUser Address ${userAddress} does not have any Token Address ${tokenAddress} till ${toDate}\n`
+    console.log(msg);
+    return {status: false, msg: msg}
+  }
 }
 
 async function test() {
