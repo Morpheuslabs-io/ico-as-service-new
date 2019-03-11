@@ -39,7 +39,13 @@ class Landing extends Component {
   };
 
   handleSingleCheck = () => {
-    this.props.history.push('/checksingle');
+    //this.props.history.push('/checksingle');
+    this.setState({
+      alertShow: true,
+      alertTitle: '',
+      alertText: 'Please use "Bulk Check"',
+      alertType: 'info',
+    })
   };
 
   handleBulkCheck = () => {
@@ -53,7 +59,7 @@ class Landing extends Component {
           <img className='icobox-icon' src={icoBox}/>
           <h1>Welcome to Token Checker on {getNetwork()}</h1>
           <div className='buttons'>
-            <Button 
+            <Button
               onClick={this.handleSingleCheck}
               variant='contained' size='large' color="primary" className='choose-contract'>Single Check
             </Button>
