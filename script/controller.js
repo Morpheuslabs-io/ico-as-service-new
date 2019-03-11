@@ -370,7 +370,7 @@ exports.checktoken = async (req, res) => {
   res.send(checkRes);
 }
 
-async function doCheckTokenPairNew(userAddress, token1, token2, toTime) {
+async function doCheckTokenPairNew(userAddress, token1, token2, toBlock) {
   if (!isValidAddress(userAddress)) {
     console.log('doCheckTokenPairNew - Invalid address:', userAddress);
     return 'Invalid address,'
@@ -383,8 +383,6 @@ async function doCheckTokenPairNew(userAddress, token1, token2, toTime) {
   const fromBlock2 = 5718081
 
   const fromBlock = fromBlock1 <= fromBlock2 ? fromBlock1 : fromBlock2
-
-  const toBlock = await getBlockFromTime(toTime);
 
   let checkRes = await doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock);
   
@@ -475,10 +473,12 @@ exports.checktokenpairBulk = async (req, res) => {
 
   let outputCSV = 'User,Check Point,Remark/Error,MITx Out-Tx,QKC Out-Tx,MITx balance,QKC balance,Holding 100K MITx,Holding 30K QKC,Holding 30K MITx,Holding 10K QKC,Holding 15K MITx,Holding 5K QKC'
 
+  const toBlock = await getBlockFromTime(toTime);
+
   for (let i=0; i < userList.length; i++) {
     let userAddress = userList[i];
     let outputUser = `${userAddress},${toTimeStr},`
-    let checkRes = await doCheckTokenPairNew(userAddress, token1, token2, toTime);
+    let checkRes = await doCheckTokenPairNew(userAddress, token1, token2, toBlock);
     outputUser += checkRes
     outputCSV += '\n' + outputUser
   }
