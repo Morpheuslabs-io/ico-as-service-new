@@ -116,7 +116,7 @@ async function getBlockFromTime(
 }
 
 function isValidAddress(addr) {
-  return web3.utils.isAddress(addr.toLowerCase());
+  return web3.utils.isAddress(addr);
 }
 
 module.exports = { getBlockFromTime, isValidAddress };
