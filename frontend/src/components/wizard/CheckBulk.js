@@ -278,12 +278,12 @@ class TokenCheckBulk extends Component {
                   <label htmlFor={'upload-csv'}>
                     <Button variant="contained" component='span' className='upload-btn'>
                       <i className='fas fa-upload'/>
-                      &nbsp; Upload CSV
+                      &nbsp; Upload User Address List
                     </Button>
                   </label>
                 </Col>
                 <Col>
-                  <a className='float-right' href='/sample.csv'>Download Sample CSV</a>
+                  <a className='float-right' href='/sample.csv'>Download Sample File</a>
                 </Col>
               </Row>
               <br></br>
