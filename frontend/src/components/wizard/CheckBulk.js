@@ -24,6 +24,7 @@ class TokenCheckBulk extends Component {
     doneShow: false,
 
     email: '',
+    outputName: '',
     userList: [],
     toTime: null,
 
@@ -68,6 +69,7 @@ class TokenCheckBulk extends Component {
 
     const {
       email,
+      outputName,
       userList,
       toTime,
       
@@ -95,6 +97,7 @@ class TokenCheckBulk extends Component {
 
     const params = {
       email,
+      outputName,
       userList,
       toTime: new Date(toTime).getTime()/1000,
       toTimeStr: toTime.format().split('T')[0],
@@ -240,8 +243,10 @@ class TokenCheckBulk extends Component {
                   <DatePicker selected={this.state.toTime} onChange={this.handleChangeCheckPoint}
                               className='form-control wg-text-field' dateFormat='YYYY/MM/DD'/>
                 </Col>
+                <Col md={4}>
+                  <InputField id='outputName' nameLabel='Output File Name' type='text' onChange={this.handleChange} value={this.state.outputName} description='Optional field to specify the output file name. Otherwise, random name is used' />
+                </Col>
               </Row>
-              <br></br>
               <Row>
                 <Col md={3}>
                   <InputField id='tokenAddress1' nameLabel='MITx Token' type='text' onChange={this.handleChange} value={this.state.tokenAddress1} />

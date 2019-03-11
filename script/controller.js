@@ -430,6 +430,7 @@ exports.checktokenpair = async (req, res) => {
 exports.checktokenpairBulk = async (req, res) => {
   let {
     email,
+    outputName,
     userList,
     toTime,
     toTimeStr,
@@ -483,7 +484,7 @@ exports.checktokenpairBulk = async (req, res) => {
 
   const storageDir = './frontend/public/'
   const currTimeStamp = Date.now()
-  const fileName = currTimeStamp + '.csv'
+  const fileName = (!outputName || outputName === '') ? currTimeStamp : outputName + '.csv'
   const filePath = path.resolve(storageDir + fileName)
   try {
     fs.writeFileSync(filePath, outputCSV, 'utf8');
