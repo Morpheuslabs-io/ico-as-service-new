@@ -90,7 +90,7 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
             console.log(`Got out-tx on MITx (${tx.hash}) - outAmount: ${outAmount}, outAmountTotal1: ${outAmountTotal1}`);
 
             if (remainingAmount < token1.holdAmount1) {
-              let remark = `For MITx, remaining balance: ${remainingAmount} < hold amount: ${token1.holdAmount1}`
+              let remark = `MITx balance: ${remainingAmount} < hold amount: ${token1.holdAmount1}`
               return `${remark},${tx.hash},,,,No,No,No,No,No,No`
             }
           }
@@ -126,7 +126,7 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
             console.log(`Got out-tx on QKC (${tx.hash}) - outAmount: ${outAmount}, outAmountTotal2: ${outAmountTotal2}`);
 
             if (remainingAmount < token2.holdAmount1) {
-              let remark = `For QKC, remaining balance: ${remainingAmount} < hold amount: ${token2.holdAmount1}`
+              let remark = `QKC balance: ${remainingAmount} < hold amount: ${token2.holdAmount1}`
               return `${remark},,${tx.hash},,,No,No,No,No,No,No`
             }
           }
