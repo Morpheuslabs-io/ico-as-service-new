@@ -97,7 +97,7 @@ class TokenCheckBulk extends Component {
       email,
       userList,
       toTime: new Date(toTime).getTime()/1000,
-      toTimeStr: toTime.format(),
+      toTimeStr: toTime.format().split('T')[0],
       
       tokenAddress1,
       holdAmount11,

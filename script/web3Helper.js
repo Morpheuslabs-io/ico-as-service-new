@@ -12,6 +12,8 @@ if (NODE_ENV === "RINKEBY") {
   INFURA_ENDPOINT = config.mainnet.infuraUrl;
 }
 
+console.log('Env: ', NODE_ENV);
+
 function toDate(timeStamp) {
   return new Date(timeStamp * 1000);
 }
@@ -117,4 +119,9 @@ async function getBlockFromTime(
   return block.number;
 }
 
-module.exports = { getBlockFromTime };
+function isValidAddress(addr) {
+  const web3 = new Web3(INFURA_ENDPOINT);
+  return web3.utils.isAddress(addr);
+}
+
+module.exports = { getBlockFromTime, isValidAddress };

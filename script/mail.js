@@ -2,31 +2,16 @@ var Mailgun = require('mailgun-js');
 var mailgun = null;
 
 
-exports.buildHtmlMailContentTokenCheck = (checkResList, dataList) => {
+exports.buildHtmlMailContentTokenCheck = (fileName) => {
+  let link = `http://104.248.144.168:4001/${fileName}`
   let mailContent='<p><b>Hello</b></p>';
 
-  mailContent += '<p>Please be informed of your Token-Checking request result on <b>' + process.env.NODE_ENV + '</b> as follows. </p>';
+  mailContent += '<p>Please be informed that your Token-Checking request (on <b>' + process.env.NODE_ENV + '</b>) has been completed.</p>';
+
+  mailContent += '<p>CSV file result is available at here:</p>';
+
+  mailContent += `<a href=${link}>${link}</a>`
   
-  for (let i=0; i<checkResList.length; i++) {
-    let checkRes = checkResList[i];
-    let { userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr } = dataList[i];
-
-    let result = checkRes.error || (checkRes.status ? 'really hold' : 'did not hold'); 
-
-    mailContent += '<h4>' + (i+1) + '. User ' + userAddress + ' (check-point: ' + toTimeStr + ')</h4>';
-
-    mailContent += '<ul>';
-    mailContent += '<li>Token 1: ' + tokenAddress1 + '</li>';
-    mailContent += '<li>Hold amount 1: ' + holdAmount1 + '</li>';
-    mailContent += '<li>Token 2: ' + tokenAddress2 + '</li>';
-    mailContent += '<li>Hold amount 2: ' + holdAmount2 + '</li>';
-    mailContent += '<li><b>Result:</b> ' + result + '</li>';
-    if (checkRes.reason) {
-      mailContent += '<li><u>Reason:</u> ' + checkRes.reason + '</li>';
-    }
-    mailContent += '</ul>';
-  }
-
   mailContent += '<br>'
 
   mailContent += '<a href="https://morpheuslabs.io/"><b>@ Morpheus Labs. Inc | 2017 All rights reserved</b></a>';

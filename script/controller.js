@@ -1,8 +1,10 @@
 const utils = require('./utils')
 const dateFormat = require('dateformat');
 const xhr = require("axios");
-const { getBlockFromTime } = require("./web3Helper");
+const { getBlockFromTime, isValidAddress } = require("./web3Helper");
 const mail = require('./mail')
+var fs = require("fs");
+var path = require('path')
 
 const NODE_ENV = process.env.NODE_ENV || "RINKEBY";
 let config;
@@ -16,7 +18,6 @@ console.log("App is running on %s", NODE_ENV);
 // Get creating timestamp of token
 async function getCreatingTimestamp(tokenAddress) {
   tokenAddress = tokenAddress.toLowerCase();
-
   try {
     const url = `${
       config.url //  
@@ -36,6 +37,158 @@ async function getCreatingTimestamp(tokenAddress) {
   }
 
   return null;
+}
+
+async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) {
+
+  console.log(`doCheckTokenNew - userAddress:${userAddress}, token1:${JSON.stringify(token1)}, token2:${JSON.stringify(token2)}, fromBlock:${fromBlock}, toBlock:${toBlock}`);
+
+  let tx;
+  let inAmountTotal1 = 0;
+  let inAmountTotal2 = 0;
+  let txOnToken1 = false;
+  let txOnToken2 = false;
+  try {
+    const url = `${
+      config.url //  
+    }/api?module=account&action=tokentx&address=${userAddress.toLowerCase()}&startblock=${fromBlock}&endblock=${toBlock}&sort=asc&apikey=CWXAFVFUQXG28RHDUISF6GHSP5WPC7K4HA`;
+    
+    console.log("Etherscan URL :", url);
+    
+    let { data } = await xhr.get(url);
+
+    if (data && data.result && data.result.length > 0) {
+      const len = data.result.length;
+      
+      for (let i = 0; i < len; i++) {
+        tx = data.result[i];
+        
+        if (tx.contractAddress === token1.address) {
+
+          txOnToken1 = true;
+
+          // Suppose that, till the check-point, the "in-transfer" happens at first
+          // as user should receive tokens before the check-point
+
+          // In transfer  
+          if (tx.to === userAddress) {
+            let inAmount = parseInt(tx.value)/(10**parseInt(tx.tokenDecimal));
+            inAmountTotal1 += inAmount;
+            console.log(`Got tx on MITx (${tx.hash}) - inAmount: ${inAmount}, inAmountTotal1: ${inAmountTotal1}`);
+          }
+
+          // Out transfer
+          if (tx.from === userAddress) {
+            let msg = `Out-Tx on MITx detected: ${tx.hash}\n`
+            console.log(msg);
+            return `,${tx.hash},,,,No,No,No,No,No,No`
+          } 
+        }
+
+        if (tx.contractAddress === token2.address) {
+
+          txOnToken2 = true;
+
+          // Suppose that, till the check-point, the "in-transfer" happens at first
+          // as user should receive tokens before the check-point
+
+          // In transfer  
+          if (tx.to === userAddress) {
+            let inAmount = parseInt(tx.value)/(10**parseInt(tx.tokenDecimal));
+            inAmountTotal2 += inAmount;
+            console.log(`Got tx on QKC (${tx.hash}) - inAmount: ${inAmount}, inAmountTotal2: ${inAmountTotal2}`);
+          }
+
+          // Out transfer
+          if (tx.from === userAddress) {
+            let msg = `Out-Tx on QKC detected: ${tx.hash}\n`
+            console.log(msg);
+            return `,,${tx.hash},,,No,No,No,No,No,No`
+          } 
+        }
+      }
+    } else {
+      return 'No transaction found on Etherscan,'
+    } 
+
+  } catch (error) {
+    console.log("doCheckToken error", error);
+    return 'Error: cannot determine due to internal failure,'
+  }
+
+  // if (!txOnToken1) {
+  //   return 'No transaction on MITx '
+  // }
+
+  // if (!txOnToken2) {
+  //   return 'No transaction on QKC '
+  // }
+
+  if (inAmountTotal1 === 0) {
+    return `,,,0,,No,No,No,No,No,No`
+  }
+
+  if (inAmountTotal2 === 0) {
+    return `,,,,0,No,No,No,No,No,No`
+  }
+
+  // if (inAmountTotal1 >= token1.holdAmount3) {
+  //   if (inAmountTotal2 >= token2.holdAmount3) {
+  //     return `,,,inAmountTotal1,inAmountTotal2,Yes,Yes,Yes,Yes,Yes,Yes`
+  //   } else {
+  //     if (inAmountTotal2 >= token2.holdAmount2) {
+  //       return `,,,inAmountTotal1,inAmountTotal2,Yes,No,Yes,Yes,Yes,Yes`
+  //     } else {
+  //       if (inAmountTotal2 >= token2.holdAmount1) {
+  //         return `,,,inAmountTotal1,inAmountTotal2,Yes,No,Yes,No,Yes,Yes`
+  //       } else {
+  //         return `,,,inAmountTotal1,inAmountTotal2,Yes,No,Yes,No,Yes,No`
+  //       }
+  //     }
+  //   }
+  // } else if (inAmountTotal1 >= token1.holdAmount2) {
+
+  // }
+
+  let result = ',,,inAmountTotal1,inAmountTotal2,'
+
+  if (inAmountTotal1 >= token1.holdAmount3) {
+    result += 'Yes,'
+  } else {
+    result += 'No,'
+  }
+
+  if (inAmountTotal2 >= token2.holdAmount3) {
+    result += 'Yes,'
+  } else {
+    result += 'No,'
+  }
+
+  if (inAmountTotal1 >= token1.holdAmount2) {
+    result += 'Yes,'
+  } else {
+    result += 'No,'
+  }
+
+  if (inAmountTotal2 >= token2.holdAmount2) {
+    result += 'Yes,'
+  } else {
+    result += 'No,'
+  }
+
+  if (inAmountTotal1 >= token1.holdAmount1) {
+    result += 'Yes,'
+  } else {
+    result += 'No,'
+  }
+
+  if (inAmountTotal2 >= token2.holdAmount1) {
+    result += 'Yes,'
+  } else {
+    result += 'No,'
+  }
+
+  return result
 }
 
 // "toBlock" is specified by user
@@ -217,6 +370,27 @@ exports.checktoken = async (req, res) => {
   res.send(checkRes);
 }
 
+async function doCheckTokenPairNew(userAddress, token1, token2, toTime) {
+  if (!isValidAddress(userAddress)) {
+    console.log('doCheckTokenPairNew - Invalid address:', userAddress);
+    return 'Invalid address,'
+  }
+
+  const MITx = '0x4a527d8fc13C5203AB24BA0944F4Cb14658D1Db6'
+  const fromBlock1 = 5090186
+  
+  const QKC = '0xEA26c4aC16D4a5A106820BC8AEE85fd0b7b2b664'
+  const fromBlock2 = 5718081
+
+  const fromBlock = fromBlock1 <= fromBlock2 ? fromBlock1 : fromBlock2
+
+  const toBlock = await getBlockFromTime(toTime);
+
+  let checkRes = await doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock);
+  
+  return checkRes;
+}
+
 async function doCheckTokenPair(userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr) {
   // Determine fromTime manually
   const fromTime1 = await getCreatingTimestamp(tokenAddress1);
@@ -264,24 +438,62 @@ exports.checktokenpair = async (req, res) => {
 }
 
 exports.checktokenpairBulk = async (req, res) => {
+  let {
+    email,
+    userList,
+    toTime,
+    toTimeStr,
+    
+    tokenAddress1,
+    holdAmount11,
+    holdAmount12,
+    holdAmount13,
+    
+    tokenAddress2,
+    holdAmount21,
+    holdAmount22,
+    holdAmount23
+  } = req.body;
 
-  let dataList = req.body.dataList;
-  let email = req.body.email;
   console.log('checktokenpairBulk - req.body:', req.body);
 
   res.send(`Your request is in progress. \nOnce done, a notification will be sent to your provided email:\n ${email}`);
 
-  let checkResList = [];
+  let token1 = {
+    address: tokenAddress1,
+    holdAmount1: holdAmount11,
+    holdAmount2: holdAmount12,
+    holdAmount3: holdAmount13
+  }
 
-  for (let i=0; i < dataList.length; i++) {
-    let { userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr } = dataList[i];
+  let token2 = {
+    address: tokenAddress2,
+    holdAmount1: holdAmount21,
+    holdAmount2: holdAmount22,
+    holdAmount3: holdAmount23
+  }
 
-    let checkRes = await doCheckTokenPair(userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr);
+  let outputCSV = 'User,Check Point,Remark/Error,MITx Out-Tx,QKC Out-Tx,MITx balance,QKC balance,Holding 100K MITx,Holding 30K QKC,Holding 30K MITx,Holding 10K QKC,Holding 15K MITx,Holding 5K QKC'
 
-    checkResList.push(checkRes);
+  for (let i=0; i < userList.length; i++) {
+    let userAddress = userList[i];
+    let outputUser = `${userAddress},${toTimeStr},`
+    let checkRes = await doCheckTokenPairNew(userAddress, token1, token2, toTime);
+    outputUser += checkRes
+    outputCSV += '\n' + outputUser
+  }
+
+  const storageDir = './frontend/public/'
+  const currTimeStamp = Date.now()
+  const fileName = currTimeStamp + '.csv'
+  const filePath = path.resolve(storageDir + fileName)
+  try {
+    fs.writeFileSync(filePath, outputCSV, 'utf8');
+  } catch (err){
+      console.log("Cannot write file", err)
   }
   
-  let mailContent = mail.buildHtmlMailContentTokenCheck(checkResList, dataList);
+  let mailContent = mail.buildHtmlMailContentTokenCheck(fileName);
 
   await mail.sendMail(email, mailContent);
 }
