@@ -12,6 +12,11 @@ if (NODE_ENV === "RINKEBY") {
   INFURA_ENDPOINT = config.mainnet.infuraUrl;
 }
 
+let web3 = null;
+if (!web3) {
+  web3 = new Web3(INFURA_ENDPOINT);
+}
+
 console.log('Env: ', NODE_ENV);
 
 function toDate(timeStamp) {
@@ -35,7 +40,7 @@ async function getBlockFromTime(
       .unix();
 
   //   const config = await getConfig()
-  const web3 = new Web3(INFURA_ENDPOINT);
+  // const web3 = new Web3(INFURA_ENDPOINT);
 
   // decreasing average block size will decrease precision and also
   // decrease the amount of requests made in order to find the closest
@@ -107,20 +112,10 @@ async function getBlockFromTime(
     }
   }
 
-  //   console.log("tgt timestamp   ->", targetTimestamp);
-  //   console.log("tgt date        ->", toDate(targetTimestamp));
-  //   console.log("");
-
-  //   console.log("block timestamp ->", block.timestamp);
-  //   console.log("block timestamp ->", block.number);
-  //   console.log("block date      ->", toDate(block.timestamp));
-  //   console.log("");
-  //   console.log("requests made   ->", requestsMade);
   return block.number;
 }
 
 function isValidAddress(addr) {
-  const web3 = new Web3(INFURA_ENDPOINT);
   return web3.utils.isAddress(addr);
 }
 
