@@ -12,7 +12,8 @@ exports.buildHtmlMailContentTokenCheck = (fileName) => {
 
   mailContent += `<a href=${link}>${link}</a>`
   
-  mailContent += '<br>'
+  mailContent += '<br></br>'
+  mailContent += '<br></br>'
 
   mailContent += '<a href="https://morpheuslabs.io/"><b>@ Morpheus Labs. Inc | 2017 All rights reserved</b></a>';
 
