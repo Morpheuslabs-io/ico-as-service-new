@@ -45,7 +45,11 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
 
   let tx;
   let inAmountTotal1 = 0;
+  let outAmountTotal1 = 0;
+
   let inAmountTotal2 = 0;
+  let outAmountTotal2 = 0;
+
   let txOnToken1 = false;
   let txOnToken2 = false;
   try {
@@ -74,15 +78,29 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
           if (tx.to === userAddress) {
             let inAmount = parseInt(tx.value)/(10**parseInt(tx.tokenDecimal));
             inAmountTotal1 += inAmount;
-            console.log(`Got tx on MITx (${tx.hash}) - inAmount: ${inAmount}, inAmountTotal1: ${inAmountTotal1}`);
+            console.log(`Got in-tx on MITx (${tx.hash}) - inAmount: ${inAmount}, inAmountTotal1: ${inAmountTotal1}`);
           }
 
           // Out transfer
           if (tx.from === userAddress) {
-            let msg = `Out-Tx on MITx detected: ${tx.hash}\n`
-            console.log(msg);
-            return `,${tx.hash},,,,No,No,No,No,No,No`
-          } 
+            let outAmount = parseInt(tx.value)/(10**parseInt(tx.tokenDecimal));
+            outAmountTotal1 += outAmount;
+            let remainingAmount = inAmountTotal1 - outAmountTotal1; 
+            
+            console.log(`Got out-tx on MITx (${tx.hash}) - outAmount: ${outAmount}, outAmountTotal1: ${outAmountTotal1}`);
+
+            if (remainingAmount < token1.holdAmount1) {
+              let remark = `For MITx, remaining balance: ${remainingAmount} < hold amount: ${token1.holdAmount1}`
+              return `${remark},${tx.hash},,,,No,No,No,No,No,No`
+            }
+          }
+
+          // Out transfer
+          // if (tx.from === userAddress) {
+          //   let msg = `Out-Tx on MITx detected: ${tx.hash}\n`
+          //   console.log(msg);
+          //   return `,${tx.hash},,,,No,No,No,No,No,No`
+          // }
         }
 
         if (tx.contractAddress === token2.address) {
@@ -101,10 +119,24 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
 
           // Out transfer
           if (tx.from === userAddress) {
-            let msg = `Out-Tx on QKC detected: ${tx.hash}\n`
-            console.log(msg);
-            return `,,${tx.hash},,,No,No,No,No,No,No`
-          } 
+            let outAmount = parseInt(tx.value)/(10**parseInt(tx.tokenDecimal));
+            outAmountTotal2 += outAmount;
+            let remainingAmount = inAmountTotal2 - outAmountTotal2; 
+            
+            console.log(`Got out-tx on QKC (${tx.hash}) - outAmount: ${outAmount}, outAmountTotal2: ${outAmountTotal2}`);
+
+            if (remainingAmount < token2.holdAmount1) {
+              let remark = `For QKC, remaining balance: ${remainingAmount} < hold amount: ${token2.holdAmount1}`
+              return `${remark},,${tx.hash},,,No,No,No,No,No,No`
+            }
+          }
+
+          // Out transfer
+          // if (tx.from === userAddress) {
+          //   let msg = `Out-Tx on QKC detected: ${tx.hash}\n`
+          //   console.log(msg);
+          //   return `,,${tx.hash},,,No,No,No,No,No,No`
+          // } 
         }
       }
     } else {
@@ -115,14 +147,6 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
     console.log("doCheckToken error", error);
     return 'Error: cannot determine due to internal failure,'
   }
-
-  // if (!txOnToken1) {
-  //   return 'No transaction on MITx '
-  // }
-
-  // if (!txOnToken2) {
-  //   return 'No transaction on QKC '
-  // }
 
   if (inAmountTotal1 === 0) {
     return `,,,0,,No,No,No,No,No,No`
@@ -150,39 +174,42 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
 
   // }
 
-  let result = ',,,inAmountTotal1,inAmountTotal2,'
+  const remainingBalance1 = inAmountTotal1 - outAmountTotal1;
+  const remainingBalance2 = inAmountTotal2 - outAmountTotal2;
 
-  if (inAmountTotal1 >= token1.holdAmount3) {
+  let result = `,,,${remainingBalance1},${remainingBalance2},`
+
+  if (remainingBalance1 >= token1.holdAmount3) {
     result += 'Yes,'
   } else {
     result += 'No,'
   }
 
-  if (inAmountTotal2 >= token2.holdAmount3) {
+  if (remainingBalance2 >= token2.holdAmount3) {
     result += 'Yes,'
   } else {
     result += 'No,'
   }
 
-  if (inAmountTotal1 >= token1.holdAmount2) {
+  if (remainingBalance1 >= token1.holdAmount2) {
     result += 'Yes,'
   } else {
     result += 'No,'
   }
 
-  if (inAmountTotal2 >= token2.holdAmount2) {
+  if (remainingBalance2 >= token2.holdAmount2) {
     result += 'Yes,'
   } else {
     result += 'No,'
   }
 
-  if (inAmountTotal1 >= token1.holdAmount1) {
+  if (remainingBalance1 >= token1.holdAmount1) {
     result += 'Yes,'
   } else {
     result += 'No,'
   }
 
-  if (inAmountTotal2 >= token2.holdAmount1) {
+  if (remainingBalance2 >= token2.holdAmount1) {
     result += 'Yes,'
   } else {
     result += 'No,'
