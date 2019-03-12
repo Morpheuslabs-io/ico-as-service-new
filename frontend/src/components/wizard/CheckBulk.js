@@ -97,7 +97,7 @@ class TokenCheckBulk extends Component {
 
     const params = {
       email,
-      outputName,
+      outputName: outputName.replace(/\s+/g, '-'),
       userList,
       toTime: new Date(toTime).getTime()/1000,
       toTimeStr: toTime.format().split('T')[0],
@@ -114,6 +114,7 @@ class TokenCheckBulk extends Component {
     }
 
     console.log('params:', params);
+    return
 
     try {
       let response = await axios.post("/checkbulk", params);

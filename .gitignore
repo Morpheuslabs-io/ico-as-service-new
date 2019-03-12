@@ -9,3 +9,5 @@ token-vesting-ui/pm2/npm-debug.log
 yarn.lock
 build/
 *.txt
+/frontend/public/*.csv
+/input
