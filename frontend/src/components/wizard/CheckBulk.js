@@ -102,12 +102,12 @@ class TokenCheckBulk extends Component {
       toTime: new Date(toTime).getTime()/1000,
       toTimeStr: toTime.format().split('T')[0],
       
-      tokenAddress1,
+      tokenAddress1: tokenAddress1.toLowerCase(),
       holdAmount11,
       holdAmount12,
       holdAmount13,
       
-      tokenAddress2,
+      tokenAddress2: tokenAddress2.toLowerCase(),
       holdAmount21,
       holdAmount22,
       holdAmount23
@@ -154,7 +154,7 @@ class TokenCheckBulk extends Component {
         for (const id in csv.data) {
           let line = csv.data[id];
           if (line[0] && line[0] !== '') {
-            userList.push(line[0].replace(/\s+/g, ''));
+            userList.push(line[0].replace(/\s+/g, '').toLowerCase());
           }
         }
         this.setState({
