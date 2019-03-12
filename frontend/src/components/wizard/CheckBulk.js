@@ -114,7 +114,6 @@ class TokenCheckBulk extends Component {
     }
 
     console.log('params:', params);
-    return
 
     try {
       let response = await axios.post("/checkbulk", params);
