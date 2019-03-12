@@ -52,6 +52,7 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
 
   let txOnToken1 = false;
   let txOnToken2 = false;
+  let breakQKCRemark = '';
   try {
     const url = `${
       config.url //  
@@ -89,18 +90,12 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
             
             console.log(`Got out-tx on MITx (${tx.hash}) - outAmount: ${outAmount}, outAmountTotal1: ${outAmountTotal1}`);
 
+            // If doesn't hold MITx, then no need to check QKC
             if (remainingAmount < token1.holdAmount1) {
-              let remark = `MITx balance: ${remainingAmount} < hold amount: ${token1.holdAmount1}`
+              let remark = `MITx token - ever had ${inAmountTotal1} but sent out ${outAmountTotal1} and thus remaining balance: ${remainingAmount} < hold amount: ${token1.holdAmount1}`
               return `${remark},${tx.hash},,,,No,No,No,No,No,No`
             }
           }
-
-          // Out transfer
-          // if (tx.from === userAddress) {
-          //   let msg = `Out-Tx on MITx detected: ${tx.hash}\n`
-          //   console.log(msg);
-          //   return `,${tx.hash},,,,No,No,No,No,No,No`
-          // }
         }
 
         if (tx.contractAddress === token2.address) {
@@ -126,8 +121,10 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
             console.log(`Got out-tx on QKC (${tx.hash}) - outAmount: ${outAmount}, outAmountTotal2: ${outAmountTotal2}`);
 
             if (remainingAmount < token2.holdAmount1) {
-              let remark = `QKC balance: ${remainingAmount} < hold amount: ${token2.holdAmount1}`
-              return `${remark},,${tx.hash},,,No,No,No,No,No,No`
+              let remark = `QKC token - ever had ${inAmountTotal2} but sent out ${outAmountTotal2} and thus remaining balance: ${remainingAmount} < hold amount: ${token2.holdAmount1}`
+              //return `${remark},,${tx.hash},,,No,No,No,No,No,No`
+              breakQKCRemark = `${remark},,${tx.hash}`;
+              break;
             }
           }
 
@@ -149,35 +146,24 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
   }
 
   if (inAmountTotal1 === 0) {
-    return `,,,0,,No,No,No,No,No,No`
+    let remark = 'does not have any MITx tokens'
+    return `${remark},,,0,,No,No,No,No,No,No`
   }
 
-  if (inAmountTotal2 === 0) {
-    return `,,,,0,No,No,No,No,No,No`
-  }
-
-  // if (inAmountTotal1 >= token1.holdAmount3) {
-  //   if (inAmountTotal2 >= token2.holdAmount3) {
-  //     return `,,,inAmountTotal1,inAmountTotal2,Yes,Yes,Yes,Yes,Yes,Yes`
-  //   } else {
-  //     if (inAmountTotal2 >= token2.holdAmount2) {
-  //       return `,,,inAmountTotal1,inAmountTotal2,Yes,No,Yes,Yes,Yes,Yes`
-  //     } else {
-  //       if (inAmountTotal2 >= token2.holdAmount1) {
-  //         return `,,,inAmountTotal1,inAmountTotal2,Yes,No,Yes,No,Yes,Yes`
-  //       } else {
-  //         return `,,,inAmountTotal1,inAmountTotal2,Yes,No,Yes,No,Yes,No`
-  //       }
-  //     }
-  //   }
-  // } else if (inAmountTotal1 >= token1.holdAmount2) {
-
+  // If no QKC tokens, then user can still get bonus for MITx
+  // if (inAmountTotal2 === 0) {
+  //   return `,,,,0,No,No,No,No,No,No`
   // }
 
   const remainingBalance1 = inAmountTotal1 - outAmountTotal1;
   const remainingBalance2 = inAmountTotal2 - outAmountTotal2;
 
-  let result = `,,,${remainingBalance1},${remainingBalance2},`
+  let result = ''
+  if (breakQKCRemark !== '') {
+    result = `${breakQKCRemark},${remainingBalance1},${remainingBalance2},`
+  } else {
+    result = `,,,${remainingBalance1},${remainingBalance2},`
+  }
 
   if (remainingBalance1 >= token1.holdAmount3) {
     result += 'Yes,'
