@@ -153,7 +153,9 @@ class TokenCheckBulk extends Component {
         let userList = [];
         for (const id in csv.data) {
           let line = csv.data[id];
-          userList.push(line[0]);
+          if (line[0] && line[0] !== '') {
+            userList.push(line[0].replace(/\s+/g, ''));
+          }
         }
         this.setState({
           userList: userList,
