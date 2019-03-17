@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use('/', express.static('public_static'));
 app.use(cors());
 
-const port = 4000 || process.env.PORT;
+const port = process.env.PORT || 4000;
 // app.listen(port, () => {
 //     console.log("Express Listening at http://localhost:" + port);
 // });

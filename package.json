@@ -5,6 +5,17 @@
   "directories": {
     "test": "test"
   },
+  "scripts": {
+    "build": "rm -rf build && truffle compile --all",
+    "server-rinkeby": "NODE_ENV=rinkeby PORT=4000 nodemon script/app.js --network rinkeby",
+    "server-mainnet": "NODE_ENV=mainnet PORT=4002 nodemon script/app.js --network mainnet",
+    "cron-rinkeby": "NODE_ENV=rinkeby nodemon script/cronjob.js --network rinkeby",
+    "cron-mainnet": "NODE_ENV=mainnet nodemon script/cronjob.js --network mainnet",
+    "cronvesting-rinkeby": "NODE_ENV=rinkeby VESTING=1 nodemon script/cronjob.js --network rinkeby",
+    "cronvesting-mainnet": "NODE_ENV=mainnet VESTING=1 nodemon script/cronjob.js --network mainnet",
+    "test": "truffle test --network development",
+    "ganache": "ganache-cli -m \"concert load couple harbor equip island argue ramp clarify fence smart topic\""
+  },
   "dependencies": {
     "asyncawait": "^1.0.6",
     "body-parser": "^1.17.2",
@@ -58,17 +69,6 @@
     "css-loader": "^0.26.1",
     "json-loader": "^0.5.4",
     "style-loader": "^0.13.1"
-  },
-  "scripts": {
-    "build": "rm -rf build && truffle compile --all",
-    "server-rinkeby": "NODE_ENV=rinkeby nodemon script/app.js --network rinkeby",
-    "server-mainnet": "NODE_ENV=mainnet nodemon script/app.js --network mainnet",
-    "cron-rinkeby": "NODE_ENV=rinkeby nodemon script/cronjob.js --network rinkeby",
-    "cron-mainnet": "NODE_ENV=mainnet nodemon script/cronjob.js --network mainnet",
-    "cronvesting-rinkeby": "NODE_ENV=rinkeby VESTING=1 nodemon script/cronjob.js --network rinkeby",
-    "cronvesting-mainnet": "NODE_ENV=mainnet VESTING=1 nodemon script/cronjob.js --network mainnet",
-    "test": "truffle test --network development",
-    "ganache": "ganache-cli -m \"concert load couple harbor equip island argue ramp clarify fence smart topic\""
   },
   "author": "",
   "license": "ISC",
