@@ -7,8 +7,8 @@
   },
   "scripts": {
     "build": "rm -rf build && truffle compile --all",
-    "server-rinkeby": "NODE_ENV=rinkeby PORT=4000 nodemon script/app.js --network rinkeby",
-    "server-mainnet": "NODE_ENV=mainnet PORT=4002 nodemon script/app.js --network mainnet",
+    "server-rinkeby": "NODE_ENV=rinkeby PORT=4005 nodemon script/app.js --network rinkeby",
+    "server-mainnet": "NODE_ENV=mainnet PORT=4006 nodemon script/app.js --network mainnet",
     "cron-rinkeby": "NODE_ENV=rinkeby nodemon script/cronjob.js --network rinkeby",
     "cron-mainnet": "NODE_ENV=mainnet nodemon script/cronjob.js --network mainnet",
     "cronvesting-rinkeby": "NODE_ENV=rinkeby VESTING=1 nodemon script/cronjob.js --network rinkeby",
