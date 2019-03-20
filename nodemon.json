@@ -7,8 +7,8 @@
     ],
     "watch": false,
     "execMap": {
-        "js": "truffle exec",
-        "file": "truffle exec"
+        "js": "node",
+        "file": "node"
     },
     "ext": "js file"
 }

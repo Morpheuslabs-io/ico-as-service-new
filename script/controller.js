@@ -444,7 +444,6 @@ exports.checktokenpairBulk = async (req, res) => {
   let {
     email,
     outputName,
-    userList,
     toTime,
     toTimeStr,
     
@@ -457,9 +456,34 @@ exports.checktokenpairBulk = async (req, res) => {
     holdAmount21,
     holdAmount22,
     holdAmount23
-  } = req.body;
+  } = JSON.parse(req.body.params);
 
-  console.log('checktokenpairBulk - req.body:', req.body);
+  let inputFilePath = req.files.file.path;
+  let inputFileData = null
+  try {
+    inputFileData = await fs.readFileSync(inputFilePath, 'utf8');
+  } catch (err){
+    console.log("Failed to read uploaded file:", err)
+  }
+
+  // Always delete tmp file
+  await fs.unlinkSync(inputFilePath)
+
+  if (!inputFileData) {
+    return res.send('Failed to read uploaded file');
+  }
+
+  let userList = [];
+  let userListTmp = inputFileData.split('\n');
+  for (const id in userListTmp) {
+    let line = userListTmp[id];
+    if (line && line !== '') {
+      userList.push(line.replace(/\s+/g, '').toLowerCase());
+    }
+  }
+
+  console.log('checktokenpairBulk - req.body.params:', req.body.params);
+  console.log('checktokenpairBulk - userListSize:', userListTmp.length);
 
   res.send(`Your request is in progress. \nOnce done, a notification will be sent to your provided email:\n ${email}`);
 

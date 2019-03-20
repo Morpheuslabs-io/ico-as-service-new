@@ -28,6 +28,8 @@ class TokenCheckBulk extends Component {
     userList: [],
     toTime: null,
 
+    file: null,
+
     tokenAddress1: '0x4a527d8fc13c5203ab24ba0944f4cb14658d1db6',
     holdAmount11: 15000,
     holdAmount12: 30000,
@@ -70,7 +72,6 @@ class TokenCheckBulk extends Component {
     const {
       email,
       outputName,
-      userList,
       toTime,
       
       tokenAddress1,
@@ -87,7 +88,7 @@ class TokenCheckBulk extends Component {
 
     // Send rest API to server
     axios.defaults.baseURL = process.env.REACT_APP_API_HOST;
-    axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+    axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
     this.setState({
       spinnerShow: true
@@ -95,10 +96,11 @@ class TokenCheckBulk extends Component {
 
     let data = '';
 
+    var bodyFormData = new FormData();
+
     const params = {
       email,
       outputName: outputName.replace(/\s+/g, '-'),
-      userList,
       toTime: new Date(toTime).getTime()/1000,
       toTimeStr: toTime.format().split('T')[0],
       
@@ -113,10 +115,13 @@ class TokenCheckBulk extends Component {
       holdAmount23
     }
 
+    bodyFormData.set('params', JSON.stringify(params))
+    bodyFormData.append('file', this.state.file);
+
     console.log('params:', params);
 
     try {
-      let response = await axios.post("/checkbulk", params);
+      let response = await axios.post("/checkbulk", bodyFormData);
 
       console.log('checkbulk resp: ', response);
       
@@ -144,77 +149,21 @@ class TokenCheckBulk extends Component {
     });
   }
 
-  handleUploadCSV = event => {
+  handleUploadUserListFile = event => {
     const file = event.target.files[0];
     if (file) {
-      let fileReader = new FileReader();
-      fileReader.onloadend = (e) => {
-        let csv = Papa.parse(fileReader.result);
-        let userList = [];
-        for (const id in csv.data) {
-          let line = csv.data[id];
-          if (line[0] && line[0] !== '') {
-            userList.push(line[0].replace(/\s+/g, '').toLowerCase());
-          }
-        }
-        this.setState({
-          userList: userList,
-          resultShow: true,
-          resultTitle: 'Success',
-          resultText: 'CSV file imported',
-          resultType: 'success',
-        });
-      };
-      fileReader.readAsText(file);
-      event.target.value = null;
+      this.setState({
+        file
+      })
     } else {
       this.setState({
         resultShow: true,
         resultTitle: 'Error',
-        resultText: 'Failed to import CSV file',
+        resultText: 'Failed to upload CSV file',
         resultType: 'error',
       });
     }
   }
-
-  // handleUploadCSV = event => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     let fileReader = new FileReader();
-  //     fileReader.onloadend = (e) => {
-  //       let csv = Papa.parse(fileReader.result);
-  //       let userList = [];
-  //       for (const id in csv.data) {
-  //         let line = csv.data[id];
-  //         userList.push({
-  //           userAddress: line[0], 
-  //           tokenAddress1: line[1], 
-  //           holdAmount1: line[2], 
-  //           tokenAddress2: line[3], 
-  //           holdAmount2: line[4], 
-  //           toTime: new Date(line[5]).getTime()/1000,
-  //           toTimeStr: line[5]
-  //         });
-  //       }
-  //       this.setState({
-  //         userList: userList,
-  //         resultShow: true,
-  //         resultTitle: 'Success',
-  //         resultText: 'CSV file imported',
-  //         resultType: 'success',
-  //       });
-  //     };
-  //     fileReader.readAsText(file);
-  //     event.target.value = null;
-  //   } else {
-  //     this.setState({
-  //       resultShow: true,
-  //       resultTitle: 'Error',
-  //       resultText: 'Failed to import CSV file',
-  //       resultType: 'error',
-  //     });
-  //   }
-  // }
 
   render() {
     return (
@@ -281,7 +230,7 @@ class TokenCheckBulk extends Component {
               <br></br>
               <Row>
                 <Col>
-                  <input id={'upload-csv'} className='upload-csv' multiple type='file' accept=".csv" onChange={this.handleUploadCSV}/>
+                  <input id={'upload-csv'} className='upload-csv' multiple type='file' onChange={this.handleUploadUserListFile}/>
                   <label htmlFor={'upload-csv'}>
                     <Button variant="contained" component='span' className='upload-btn'>
                       <i className='fas fa-upload'/>
@@ -296,34 +245,8 @@ class TokenCheckBulk extends Component {
               <br></br>
               <div>
                 {
-                  this.state.userList.length !== 0 &&
+                  this.state.file &&
                   <div>
-                      {/* <table className='table table-striped table-bordered table-responsive'>
-                        <thead>
-                        <tr>
-                          <th>Check Point</th>
-                          <th>User Address</th>
-                          <th>Token Address 1</th>
-                          <th>Hold Amount 1</th>
-                          <th>Token Address 2</th>
-                          <th>Hold Amount 2</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                          this.state.userList.map((val, key) => (
-                            <tr key={key}>
-                              <td>{val.toTimeStr}</td>
-                              <td>{val.userAddress}</td>
-                              <td>{val.tokenAddress1}</td>
-                              <td>{val.holdAmount1}</td>
-                              <td>{val.tokenAddress2}</td>
-                              <td>{val.holdAmount2}</td>
-                            </tr>
-                          ))
-                        }
-                        </tbody>
-                      </table> */}
                       <br></br>  
                       <Button
                         className='float-left'
