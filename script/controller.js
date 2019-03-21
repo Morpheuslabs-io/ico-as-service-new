@@ -394,52 +394,6 @@ async function doCheckTokenPairNew(userAddress, token1, token2, fromBlock, toBlo
   return checkRes;
 }
 
-async function doCheckTokenPair(userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr) {
-  // Determine fromTime manually
-  const fromTime1 = await getCreatingTimestamp(tokenAddress1);
-  const fromBlock1 = await getBlockFromTime(fromTime1);
-  const toBlock = await getBlockFromTime(toTime);
-  let toDate =  toTimeStr.split('T')[0];
-
-  holdAmount1 = parseFloat(holdAmount1)
-  holdAmount2 = parseFloat(holdAmount2)
-
-  let checkRes = await doCheckToken(userAddress, tokenAddress1, fromBlock1, toBlock, toDate, holdAmount1);
-  
-  if (checkRes.error || checkRes.status === false) {
-    return checkRes;
-  }
-
-  const fromTime2 = await getCreatingTimestamp(tokenAddress2);
-  const fromBlock2 = await getBlockFromTime(fromTime2);
-
-  checkRes = await doCheckToken(userAddress, tokenAddress2, fromBlock2, toBlock, toDate, holdAmount2);
-  
-  return checkRes;
-}
-
-exports.checktokenpair = async (req, res) => {
-  
-  let { userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr } = req.body;
-  console.log('checktokenpair - req.body:', req.body);
-
-  let checkRes = await doCheckTokenPair(userAddress, tokenAddress1, holdAmount1, tokenAddress2, holdAmount2, toTime, toTimeStr);
-
-  if (checkRes.error) {
-    res.send(checkRes.error);
-  } else {
-    if (checkRes.status === true) {
-      let msg = `User ${userAddress} really hold token1 ${tokenAddress1} for the amount ${holdAmount1} \nand token2 ${tokenAddress2} for the amount ${holdAmount2} till ${toDate}\n`;
-
-      res.send(msg);
-    } else if (checkRes.reason) {
-      res.send(`User ${userAddress} did not hold. \nReason: ${checkRes.reason}`);
-    } else {
-      res.send('Unknown');
-    }
-  }
-}
-
 exports.checktokenpairBulk = async (req, res) => {
   let {
     email,

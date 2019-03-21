@@ -26,10 +26,6 @@ app.post('/checktoken', async function (req, res) {
   await controller.checktoken(req, res);
 });
 
-app.post('/checktokenpair', async function (req, res) {
-  await controller.checktokenpair(req, res);
-});
-
 app.post('/checkbulk', multipartMiddleware, async function (req, res) {
   await controller.checktokenpairBulk(req, res);
 });
