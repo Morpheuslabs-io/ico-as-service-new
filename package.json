@@ -17,6 +17,7 @@
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",
     "dateformat": "^3.0.3",
+    "deasync": "^0.1.14",
     "dotenv": "^5.0.1",
     "ethereumjs-wallet": "^0.6.0",
     "etherscan-api": "^10.0.0",
@@ -49,6 +50,7 @@
     "truffle-hdwallet-provider-privkey": "^0.3.0",
     "web3": "^1.0.0-beta.30",
     "web3-provider-engine": "^8.6.1",
+    "worker-farm": "^1.6.0",
     "zeppelin-solidity": "^1.7.0"
   },
   "devDependencies": {
