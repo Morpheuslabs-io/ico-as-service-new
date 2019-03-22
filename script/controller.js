@@ -6,9 +6,6 @@ const mail = require('./mail')
 var fs = require("fs");
 var path = require('path')
 
-const workerFarm = require('worker-farm')
-const worker = workerFarm(require.resolve('./checkTokenPairWorker.js'))
-
 let numCpu = require('os').cpus().length
 
 const NODE_ENV = process.env.NODE_ENV || "RINKEBY";
@@ -388,6 +385,14 @@ async function doCheckTokenPairNew(userAddress, token1, token2, fromBlock, toBlo
 }
 
 exports.checktokenpairBulk = async (req, res) => {
+
+  let workerFarm = require('worker-farm')
+  let worker = workerFarm(require.resolve('./checkTokenPairWorker.js'))
+
+  var startTime = new Date();
+  var startDate = dateFormat(startTime, "yyyy-mm-dd h:MM:ss");
+  console.log("\n Started checktokenpairBulk at " + startDate);
+
   let {
     email,
     outputName,
@@ -474,7 +479,7 @@ exports.checktokenpairBulk = async (req, res) => {
   let i=0
   let chunk = parseInt(userList.length/numCpu);
   console.log('num CPUs:', numCpu, ', chunk:', chunk);
-  
+
   for (let cnt=1; cnt <= numCpu; cnt++) {
     let userListSliced
     if (cnt == numCpu) {
@@ -517,8 +522,16 @@ exports.checktokenpairBulk = async (req, res) => {
   } catch (err){
       console.log("Cannot write file", err)
   }
+
+  var endTime = new Date();
+  var endDate = dateFormat(endTime, "yyyy-mm-dd h:MM:ss");
+  console.log("\n Ended checktokenpairBulk at " + endDate);
+
+  var duration = ((endTime - startTime) / 1000) / 60;
+  duration = duration.toFixed(2);
+  console.log('\n Total duration: %d minutes', duration);
   
-  let mailContent = mail.buildHtmlMailContentTokenCheck(fileName);
+  let mailContent = mail.buildHtmlMailContentTokenCheck(fileName, duration);
 
   await mail.sendMail(email, mailContent);
 }
