@@ -9,6 +9,8 @@ var path = require('path')
 const workerFarm = require('worker-farm')
 const worker = workerFarm(require.resolve('./checkTokenPairWorker.js'))
 
+let numCpu = require('os').cpus().length
+
 const NODE_ENV = process.env.NODE_ENV || "RINKEBY";
 let config;
 if (NODE_ENV === "RINKEBY") {
@@ -448,6 +450,8 @@ exports.checktokenpairBulk = async (req, res) => {
 
   let outputCSV = 'User,Check Point,Remark/Error,MITx Out-Tx,QKC Out-Tx,MITx balance,QKC balance,Holding 100K MITx,Holding 30K QKC,Holding 30K MITx,Holding 10K QKC,Holding 15K MITx,Holding 5K QKC'
 
+  outputCSV += '\n'
+
   const toBlock = await getBlockFromTime(toTime);
   
   const MITx = '0x4a527d8fc13C5203AB24BA0944F4Cb14658D1Db6'
@@ -457,7 +461,7 @@ exports.checktokenpairBulk = async (req, res) => {
   const fromBlock = fromBlock1 <= fromBlock2 ? fromBlock1 : fromBlock2
 
   let params = {
-    userAddress: null,
+    userAddressList: null,
     toTimeStr,
     token1, 
     token2, 
@@ -465,25 +469,44 @@ exports.checktokenpairBulk = async (req, res) => {
     toBlock
   }
 
-  let ret = 0
   let done = false
-  for (let i=0; i < userList.length; i++) {
-    params.userAddress = userList[i];
+  let workerDoneCnt=0
+  let i=0
+  let chunk = parseInt(userList.length/numCpu);
+  console.log('num CPUs:', numCpu, ', chunk:', chunk);
+  
+  for (let cnt=1; cnt <= numCpu; cnt++) {
+    let userListSliced
+    if (cnt == numCpu) {
+      console.log('slice from:', i);
+      userListSliced = userList.slice(i);
+    } else {
+      console.log('slice from:', i, ' to:', i+chunk);
+      userListSliced = userList.slice(i,i+chunk);
+    }
+    i+=chunk
+
+    params.userAddressList = userListSliced
+
     worker(params, (err, result) => {
+      workerDoneCnt++
       if (err) {
         console.log('checkTokenPairWorker Error:', err);
       } else {
-        outputCSV += '\n' + result
-        if (++ret == userList.length) {
+        outputCSV += result
+        if (workerDoneCnt >= numCpu) {
           workerFarm.end(worker)
           done = true
         }
       }
-      // workerFarm.end(workers)
     })
   }
 
+  console.log('busy waiting');
+
   require('deasync').loopWhile(function(){return !done;});
+
+  console.log('done waiting');
 
   const storageDir = './frontend/public/'
   const currTimeStamp = Date.now()

@@ -176,9 +176,9 @@ async function doCheckTokenPairNew(userAddress, token1, token2, fromBlock, toBlo
 }
 
 module.exports = async function (params, callback = (err, result) => ({})) {
-  // callback(null, i*2)
+
   let {
-    userAddress,
+    userAddressList,
     toTimeStr,
     token1, 
     token2, 
@@ -186,8 +186,19 @@ module.exports = async function (params, callback = (err, result) => ({})) {
     toBlock
   } = params
 
-  let outputUser = `${userAddress},${toTimeStr},`
-  let checkRes = await doCheckTokenPairNew(userAddress, token1, token2, fromBlock, toBlock);
-  outputUser += checkRes
-  callback(null, outputUser)
+  let checkResult = ''
+
+  for (let i=0; i < userAddressList.length; i++) {
+    let userAddress = userAddressList[i]
+    let outputUser = `${userAddress},${toTimeStr},`
+    let checkRes = await doCheckTokenPairNew(userAddress, token1, token2, fromBlock, toBlock);
+    outputUser += checkRes
+
+    checkResult += outputUser + '\n'
+    
+  }
+
+  console.log('worker done');
+
+  callback(null, checkResult)
 }
