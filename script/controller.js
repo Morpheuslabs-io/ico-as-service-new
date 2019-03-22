@@ -6,6 +6,9 @@ const mail = require('./mail')
 var fs = require("fs");
 var path = require('path')
 
+const workerFarm = require('worker-farm')
+const worker = workerFarm(require.resolve('./checkTokenPairWorker.js'))
+
 const NODE_ENV = process.env.NODE_ENV || "RINKEBY";
 let config;
 if (NODE_ENV === "RINKEBY") {
@@ -58,7 +61,7 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
       config.url //  
     }/api?module=account&action=tokentx&address=${userAddress.toLowerCase()}&startblock=${fromBlock}&endblock=${toBlock}&sort=asc&apikey=CWXAFVFUQXG28RHDUISF6GHSP5WPC7K4HA`;
     
-    console.log("Etherscan URL :", url);
+    //console.log("Etherscan URL :", url);
     
     let { data } = await xhr.get(url);
 
@@ -127,13 +130,6 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
               break;
             }
           }
-
-          // Out transfer
-          // if (tx.from === userAddress) {
-          //   let msg = `Out-Tx on QKC detected: ${tx.hash}\n`
-          //   console.log(msg);
-          //   return `,,${tx.hash},,,No,No,No,No,No,No`
-          // } 
         }
       }
     } else {
@@ -149,11 +145,6 @@ async function doCheckTokenNew(userAddress, token1, token2, fromBlock, toBlock) 
     let remark = 'does not have any MITx tokens'
     return `${remark},,,0,,No,No,No,No,No,No`
   }
-
-  // If no QKC tokens, then user can still get bonus for MITx
-  // if (inAmountTotal2 === 0) {
-  //   return `,,,,0,No,No,No,No,No,No`
-  // }
 
   const remainingBalance1 = inAmountTotal1 - outAmountTotal1;
   const remainingBalance2 = inAmountTotal2 - outAmountTotal2;
@@ -465,13 +456,34 @@ exports.checktokenpairBulk = async (req, res) => {
   const fromBlock2 = 5718081
   const fromBlock = fromBlock1 <= fromBlock2 ? fromBlock1 : fromBlock2
 
-  for (let i=0; i < userList.length; i++) {
-    let userAddress = userList[i];
-    let outputUser = `${userAddress},${toTimeStr},`
-    let checkRes = await doCheckTokenPairNew(userAddress, token1, token2, fromBlock, toBlock);
-    outputUser += checkRes
-    outputCSV += '\n' + outputUser
+  let params = {
+    userAddress: null,
+    toTimeStr,
+    token1, 
+    token2, 
+    fromBlock, 
+    toBlock
   }
+
+  let ret = 0
+  let done = false
+  for (let i=0; i < userList.length; i++) {
+    params.userAddress = userList[i];
+    worker(params, (err, result) => {
+      if (err) {
+        console.log('checkTokenPairWorker Error:', err);
+      } else {
+        outputCSV += '\n' + result
+        if (++ret == userList.length) {
+          workerFarm.end(worker)
+          done = true
+        }
+      }
+      // workerFarm.end(workers)
+    })
+  }
+
+  require('deasync').loopWhile(function(){return !done;});
 
   const storageDir = './frontend/public/'
   const currTimeStamp = Date.now()
