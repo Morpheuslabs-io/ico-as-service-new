@@ -2,7 +2,7 @@ var Mailgun = require('mailgun-js');
 var mailgun = null;
 
 
-exports.buildHtmlMailContentTokenCheck = (fileName) => {
+exports.buildHtmlMailContentTokenCheck = (fileName, duration) => {
   let link = `http://104.248.144.168:4001/${fileName}`
   let mailContent='<p><b>Hello</b></p>';
 
@@ -12,7 +12,8 @@ exports.buildHtmlMailContentTokenCheck = (fileName) => {
 
   mailContent += `<a href=${link}>${link}</a>`
   
-  mailContent += '<br></br>'
+  mailContent += `<p>Total duration: <b>${duration} minutes</b></p>`;
+  
   mailContent += '<br></br>'
 
   mailContent += '<a href="https://morpheuslabs.io/"><b>@ Morpheus Labs. Inc | 2017 All rights reserved</b></a>';

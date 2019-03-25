@@ -382,6 +382,11 @@ exports.checktoken = async (req, res) => {
 }
 
 exports.checktokenpairBulk = async (req, res) => {
+
+  var startTime = new Date();
+  var startDate = dateFormat(startTime, "yyyy-mm-dd h:MM:ss");
+  console.log("\n Started checktokenpairBulk at " + startDate);
+
   let {
     email,
     outputName,
@@ -460,26 +465,31 @@ exports.checktokenpairBulk = async (req, res) => {
       .then(async function (checkRes) {
         cnt++
         outputCSV += '\n' + checkRes
-
-        if (cnt >= userList.length) {
-          console.log('checktokenpairBulk Done - writing to file and sending email');
-
-          const storageDir = './frontend/public/'
-          const currTimeStamp = Date.now()
-          const fileName = (!outputName || outputName === '') ? currTimeStamp : outputName + '.csv'
-          const filePath = path.resolve(storageDir + fileName)
-          try {
-            fs.writeFileSync(filePath, outputCSV, 'utf8');
-          } catch (err){
-              console.log("Cannot write file", err)
-          }
-          
-          let mailContent = mail.buildHtmlMailContentTokenCheck(fileName);
-
-          await mail.sendMail(email, mailContent)
-        }
       })
   }
+
+  console.log('Busy waiting ...');
+  require('deasync').loopWhile(function(){return (cnt < userList.length);});
+  
+  var endTime = new Date();
+  var endDate = dateFormat(endTime, "yyyy-mm-dd h:MM:ss");
+  var duration = ((endTime - startTime) / 1000) / 60;
+  duration = duration.toFixed(2);
+  console.log("\n Ended checktokenpairBulk at " + endDate);
+  console.log('\n Total duration: %d minutes', duration);
+
+  const storageDir = './frontend/public/'
+  const currTimeStamp = Date.now()
+  const fileName = (!outputName || outputName === '') ? currTimeStamp : outputName + '.csv'
+  const filePath = path.resolve(storageDir + fileName)
+  try {
+    fs.writeFileSync(filePath, outputCSV, 'utf8');
+  } catch (err){
+      console.log("Cannot write file", err)
+  }
+  
+  let mailContent = mail.buildHtmlMailContentTokenCheck(fileName, duration);
+  await mail.sendMail(email, mailContent)
 }
 
 // test()
