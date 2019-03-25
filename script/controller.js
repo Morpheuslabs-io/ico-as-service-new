@@ -458,17 +458,44 @@ exports.checktokenpairBulk = async (req, res) => {
   const fromBlock = fromBlock1 <= fromBlock2 ? fromBlock1 : fromBlock2
 
   let cnt = 0;
+  const MAX_ASYNC = 30;
+  let busyWaiting = false;
   for (let i=0; i < userList.length; i++) {
     let userAddress = userList[i];
     
     doCheckTokenPairNew(userAddress, token1, token2, fromBlock, toBlock, toTimeStr)
       .then(async function (checkRes) {
-        cnt++
+        
         outputCSV += '\n' + checkRes
+
+        if (cnt == userList.length-1) {
+          busyWaiting = false
+          console.log('All addresses checked and returned, no longer busy waiting');
+        } else {
+          if (cnt !== 0 && cnt % MAX_ASYNC == 0) {
+            busyWaiting = !busyWaiting;
+            console.log('busyWaiting:', busyWaiting, ', alread-checked address amount:', cnt);
+          }
+        }
+
+        cnt++
+
       })
+
+    if (i == userList.length-1) {
+      busyWaiting = false
+      console.log('Last address to check, no longer busy waiting');
+    } else {
+      if (i !== 0 && i % MAX_ASYNC == 0) {
+        busyWaiting = !busyWaiting;
+        console.log('busyWaiting:', busyWaiting, ', started-to-check address amount:', i);
+      }
+    }
+
+    require('deasync').loopWhile(function(){return (busyWaiting);});    
   }
 
-  console.log('Busy waiting ...');
+  console.log('Busy waiting for all done');
   require('deasync').loopWhile(function(){return (cnt < userList.length);});
   
   var endTime = new Date();
