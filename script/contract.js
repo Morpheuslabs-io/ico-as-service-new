@@ -635,6 +635,8 @@ buildReturnedDataIco = (address1MapStr, address2MapStrList, global) => {
   let data = '';
   let dataToken = '';
   let dataCrowdsale = [];
+  let dataPricing = [];
+  let dataFinalizedAgent = [];
 
   let address1Map = JSON.parse(address1MapStr);
   data += global.CONTRACT.TOKEN + ': ' + address1Map[global.CONTRACT.TOKEN] + '\n\n';
@@ -648,8 +650,10 @@ buildReturnedDataIco = (address1MapStr, address2MapStrList, global) => {
     data += global.CONTRACT.FINALIZEDAGENT + ': ' + address2Map[global.CONTRACT.FINALIZEDAGENT] + '\n\n';
 
     dataCrowdsale.push(address2Map[global.CONTRACT.CROWDSALE]);
+    dataPricing.push(address2Map[global.CONTRACT.FLATPRICING]);
+    dataFinalizedAgent.push(address2Map[global.CONTRACT.FINALIZEDAGENT]);
   }
-  return {data, dataToken, dataCrowdsale};
+  return {data, dataToken, dataCrowdsale, dataPricing, dataFinalizedAgent};
 }
 
 exports.setParamForContracts = async (res, step2, step3, global) => {
