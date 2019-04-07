@@ -13,7 +13,7 @@ module.exports = {
     networks: {
         rinkeby: {
             provider: function () {
-                return new HDWalletProvider(privKeyArr, 'https://rinkeby.infura.io/KD0tyiBLlHULRInWEMaJ/')
+                return new HDWalletProvider(privKeyArr, 'https://rinkeby.infura.io/v3/426e2bd78c974009982c19b2e49f89e3')
             },
             network_id: "*",
             gas: 1497877,
@@ -21,7 +21,7 @@ module.exports = {
         },
         mainnet: {
             provider: function () {
-                return new HDWalletProvider(privKeyArr, 'https://mainnet.infura.io/v3/b60933b14358403d8646546c405d5962')
+                return new HDWalletProvider(privKeyArr, 'https://mainnet.infura.io/v3/426e2bd78c974009982c19b2e49f89e3')
             },
             network_id: "*",
             gas: 8007817,
