@@ -9,8 +9,8 @@ exports.getTxFee = async (contractAddr, global) => {
   try {
     var txlistResult = await api.account.txlist(contractAddr, 1, 'latest', 1, 100, 'asc');
     if (!txlistResult) {
-      console.log('getTxFee - empty txlist !!');
-      return null;  
+      console.log(`getTxFee (contractAddr:${contractAddr}) - empty txlist !!`);
+      return 0;  
     }
     let txlist = txlistResult.result;
     for (let i=0; i<txlist.length; i++) {
@@ -24,10 +24,11 @@ exports.getTxFee = async (contractAddr, global) => {
     }
     // console.log(`getTxFee - total: ${txFee}`);
   } catch (err) {
-    console.log('getTxFee - txlist error:', err);
-    return null;
+    console.log('getTxFee (contractAddr:', contractAddr,' - txlist error:', err);
+    return 0;
   }
   
+  console.log(`getTxFee - contractAddr: ${contractAddr} - fee: ${txFee}`);
   return txFee; 
 }
 
