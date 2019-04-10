@@ -161,7 +161,7 @@ exports.setParamForVesting = async (res, vestingList, email_address, wallet_addr
   res.send({"status":true, "data": returnedData});
   console.log('setParamForVesting - send the predeployed contract addresses');
   /////////////////
-return
+
   // Store user request
   let requestData = {};
   requestData.email = email_address;

@@ -29,5 +29,5 @@
   "MAILGUN_FROM": "Morpheus ICO Wizard <support@morpheuslabs.io>",
   "MAILGUN_SUBJECT": "ICO Contract Finalization Confirmation",
 
-  "TOKEN_VESTING_URL": "http://104.248.144.168:3001/"
+  "TOKEN_VESTING_URL": "http://104.248.144.168:4003/"
 }
