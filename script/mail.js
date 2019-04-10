@@ -43,6 +43,7 @@ exports.buildHtmlMailContentVesting = async (addressVestingList, vestingList, gl
 }
 
 exports.buildHtmlMailContent = async (tokenAddr, tierList, global) => {
+  console.log('buildHtmlMailContent - tokenAddr:', tokenAddr, ', tierList:', tierList);
   let mailContent='<p><b>Hello</b></p>';
   let txFee = 0;
   let txFeeTotal = 0;

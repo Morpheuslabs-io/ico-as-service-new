@@ -5,6 +5,8 @@ exports.getTxFee = async (contractAddr, global) => {
     api = require('etherscan-api').init(global.ETHERSCAN_API_KEY, global.ETHERSCAN_NETWORK, '3000');
   }
 
+  console.log(`getTxFee - contractAddr: ${contractAddr}`);
+
   let txFee=0;
   try {
     var txlistResult = await api.account.txlist(contractAddr, 1, 'latest', 1, 100, 'asc');
