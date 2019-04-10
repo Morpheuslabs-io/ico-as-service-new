@@ -589,10 +589,10 @@ toFixed = (x) => {
   return x;
 }
 
-doSendMailAndStoreResponse = async (toAddr, address1MapStr, address2MapStrList, global) => {
+doSendMailAndStoreResponseICO = async (toAddr, address1MapStr, address2MapStrList, global) => {
   
   // Send notification email to user
-  let htmlMailContent = await doSendMail(toAddr, address1MapStr, address2MapStrList, global);
+  let htmlMailContent = await doSendMailICO(toAddr, address1MapStr, address2MapStrList, global);
   //////////////////////////////////
 
   // Store user response
@@ -600,7 +600,7 @@ doSendMailAndStoreResponse = async (toAddr, address1MapStr, address2MapStrList, 
   //////////////////////////////////
 }
 
-doSendMail = async (toAddr, address1MapStr, address2MapStrList, global) => {
+doSendMailICO = async (toAddr, address1MapStr, address2MapStrList, global) => {
 
   let address1Map = JSON.parse(address1MapStr);
   let tokenAddr = address1Map[global.CONTRACT.TOKEN];
@@ -713,7 +713,7 @@ exports.setParamForContracts = async (res, step2, step3, global) => {
   if (global.DO_NOT_SET_PARAM == 1) {
     
     // Send notification email to user and store response
-    await doSendMailAndStoreResponse(email_address, address1MapStr, address2MapStrList, global);
+    await doSendMailAndStoreResponseICO(email_address, address1MapStr, address2MapStrList, global);
     //////////////////////////////////
     
     return;
@@ -890,7 +890,7 @@ exports.setParamForContracts = async (res, step2, step3, global) => {
   console.log('\n Total duration: %d minutes', duration);
 
   // Send notification email to user and store response
-  await doSendMailAndStoreResponse(email_address, address1MapStr, address2MapStrList, global);
+  await doSendMailAndStoreResponseICO(email_address, address1MapStr, address2MapStrList, global);
   //////////////////////////////////
 
 }
